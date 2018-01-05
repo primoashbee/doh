@@ -84,7 +84,7 @@ if(checkIfLoggedIn()==false){
 				</ul>
 			</li>
 			
-			<li><a href="logout.php"><em class="fa fa-gear">&nbsp;</em> Settings</a></li>
+			<li><a href="setting.php"><em class="fa fa-gear">&nbsp;</em> Settings</a></li>
 			<li><a href="logout.php"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 		</ul>
 	</div><!--/.sidebar-->
@@ -155,7 +155,7 @@ if(checkIfLoggedIn()==false){
 		
 	</div>	<!--/.main-->
 	<!-- Modal -->
-	<form id="frmUpdatePatient" method="POST" target="<?php echo $_SERVER['PHP_SELF'] ?> ">
+	<form id="frmInsertOutbreak" method="POST" target="<?php echo $_SERVER['PHP_SELF'] ?> ">
 	  <div class="modal fade" id="myModal" role="dialog">
 	    <div class="modal-dialog modal-lg">
 	    
@@ -169,7 +169,7 @@ if(checkIfLoggedIn()==false){
 	        	
 				<div class="form-group col-md-6" id="divUsername">
 					<label class="control-label" for="firstname" id="lblfirstname">First Name</label>
-					<input type="hidden" id="edit_patient_id">
+					<input type="hidden" id="patient_id">
 					
 					<input type="text" class="form-control" id="firstname" name ="firstname" placeholder="firstname" disabled="" ="">
 				</div>
@@ -215,8 +215,8 @@ if(checkIfLoggedIn()==false){
 				</div>
 				<hr><Hr><hr>
 				<div class="form-group col-md-6">
-					<label class="control-label" for="baranggay">Disease</label>
-					<select name="disease" id="disease" class="form-control" style="height:46px" required="">
+					<label class="control-label" for="disease_id">Disease</label>
+					<select name="disease_id" id="disease_id" class="form-control" style="height:46px" required="">
 						<option value="">------</option>
 						<?php 
 								$data = getDiseaseCollection();
@@ -240,10 +240,10 @@ if(checkIfLoggedIn()==false){
 						
 					</select>
 				</div>						
-				<div class="col-md-6">
+				<div class="col-md-6" >
 					<span class="lead"> Disease Description </span>
-					<p id="disease_description"> </p>
-				</div>
+					<p id="disease_description" > </p>
+				</div> 
 
 				<div class="clearfix"></div>
 
@@ -298,7 +298,7 @@ if(checkIfLoggedIn()==false){
 		})
 		$('.outbreak').click(function(){
 
-			$('#edit_patient_id').val($(this).attr('id'))
+			$('#patient_id').val($(this).attr('id'))
 			$('#firstname').val($(this).attr('firstname'))
 			$('#lastname').val($(this).attr('lastname'))
 			$('#birthday').val($(this).attr('birthday'))
@@ -312,16 +312,16 @@ if(checkIfLoggedIn()==false){
 		
 			$('#myModal').modal('show')
 		})
-		$("#disease").change(function(){
-			id=$(this).val()
-			
+		$("#disease_id").change(function(){
+
+			var id=$(this).val()	
 			$.ajax({
 				url:'../api.php',
 				data:{request:"getDiseaseViaID",id:id},
 				dataType:'JSON',
 				type:'POST',
 				success:function(data){
-					$('#disease_description').val(data.description)
+					$('#disease_description').html(data.description)
 				}
 			});
 
@@ -333,39 +333,37 @@ if(checkIfLoggedIn()==false){
 			$('#mdlPatient').html($(this).attr('firstname') +' '+$(this).attr('lastname'))
 
 		})
-		$("#frmUpdatePatient").submit(function(e){
-			console.log($(this).serialize())
-			console.log('$(this).serialize()')
-			var id = $("#edit_patient_id").val()
-			var fname =$('#firstname').val()
-			var lname= $('#lastname').val()
-			var bday = $('#birthday').val()
-			var address = $('#address').val()
-			var contact = $('#contact').val()
-			var gender = $('#gender').val()
-			var baranggay = $('#baranggay').val();
+		$("#frmInsertOutbreak").submit(function(e){
+			
+			var patient_id = $("#patient_id").val()
+			var disease_id =$('#disease_id').val()
+			var status =$('#status').val()
+
 			var error = 0
 
-			if(id=="" || fname=="" || lname=="" || bday=="" || address=="" || contact=="" || gender==""||baranggay==""){
+			if(patient_id=="" || disease_id == "" ||status ==""){
 				error++
-			}e.preventDefault()
+			}
 			
-			$.ajax({
-				url:'../api.php',
-				data:{request:'updatePatientViaID',id:id,fname:fname,lname:lname,bday:bday,address:address,contact:contact,gender:gender,baranggay:baranggay},
-				dataType:'JSON',
-				type:'POST',
-				success:function(data){
-					if(data.msg==200){
-						alert('Patient Updated!')
-						location.reload()
-					}
-				}
-			}) 
 			if(error > 0){
 				e.preventDefault()
 				return false;
 			}
+			$.ajax({
+				url:'../api.php',
+				data:{request:'insertOutbreak',patient_id:patient_id,disease_id:disease_id,status:status},
+				dataType:'JSON',
+				type:'POST',
+				success:function(data){
+					if(data.msg==200){
+						alert('Information Added')
+						location.reload()
+					}else{
+						alert(data.description)
+					}
+				}
+			}) 
+				e.preventDefault()
 		})
 		$('#btnDeleteAccount').click(function(){
 			var id = $('#patient_id').val()

@@ -117,5 +117,23 @@ if($request=="updateDiseaseViaID"){
 	}
 	return false;
 }
+if($request=="insertOutbreak"){
+	$patient_id = $_POST['patient_id'];
+	$disease_id = $_POST['disease_id'];
+	$status = $_POST['status'];
+	$user_id = $_SESSION['user']['id'];
+	if(checkIfExistingOutbreak($patient_id,$disease_id)){
+		echo json_encode(array('msg'=>404,'description'=>'Record Already Exists'));
+
+	}else{		
+		$sql = "Insert into outbreak(patient_id,disease_id,created_by)values('$patient_id','$disease_id','$user_id')";
+		if(mysqli_query($conn,$sql)){
+			echo json_encode(array('msg'=>200,'description'=>'Record Added'));
+		}else{
+				echo json_encode(array('msg'=>404,'description'=>mysqli_error($conn)));
+		}
+	}
+		return 404;
+}
 echo 404;
 ?>

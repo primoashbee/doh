@@ -84,7 +84,7 @@ if(checkIfLoggedIn()==false){
 				</ul>
 			</li>
 			
-			<li><a href="logout.php"><em class="fa fa-gear">&nbsp;</em> Settings</a></li>
+			<li><a href="setting.php"><em class="fa fa-gear">&nbsp;</em> Settings</a></li>
 			<li><a href="logout.php"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 		</ul>
 	</div><!--/.sidebar-->

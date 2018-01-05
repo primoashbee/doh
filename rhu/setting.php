@@ -10,6 +10,10 @@ if(checkIfLoggedIn()==false){
 	header('location:../index.php');
 
 }
+$id = $_SESSION['user']['id'];
+$sql="Select * from accounts where id ='$id'";
+$me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
+
 
 ?>
 <!DOCTYPE html>
@@ -30,6 +34,35 @@ if(checkIfLoggedIn()==false){
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
+	<style>
+		.profile-pic {
+		    border-radius: 50%;
+		    height: 250px;
+		    width: 250px;
+		    background-size: cover;
+		    background-position: center;
+		    background-blend-mode: multiply;
+		    vertical-align: middle;
+		    text-align: center;
+		    color: transparent;
+		    transition: all .3s ease;
+		    text-decoration: none;
+		}
+
+		.profile-pic:hover {
+		    background-color: rgba(0,0,0,.5);
+		    z-index: 10000;
+		    color: #fff;
+		    transition: all .3s ease;
+		    text-decoration: none;
+		}
+
+		.profile-pic span {
+		    display: inline-block;
+		    padding-top: 4.5em;
+		    padding-bottom: 4.5em;
+		}
+	</style>
 </head>
 <body>
 	<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
@@ -101,7 +134,7 @@ if(checkIfLoggedIn()==false){
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Create new Patient
+						Update Information
 						
 					</div>
 					
@@ -118,54 +151,52 @@ if(checkIfLoggedIn()==false){
 							unset($_SESSION['msg']);
 						}
 					?>
-						<form action="create_patient1.php" method="POST" id="frmCreatePatient">
-							<div class="form-group col-md-6" id="divUsername">
-								<label class="control-label" for="firstname" id="lblfirstname">First Name</label>
-								<input type="text" class="form-control" id="firstname" name ="firstname" placeholder="firstname" required="">
+						<form action="create_account1.php" method="POST" id="frmCreateAccount">
+							<div class="col-md-3">
+							  <div class="profile-pic" id="changePhoto" style="background-image: url('../images/avatar/jaq.jpg')" >
+							  	  <div style="padding-top:50px">
+							      <span class="glyphicon glyphicon-camera"></span>
+							      <span>Change Image</span>
+							  </div>
+
+							  </div>
+							<input type="file" name="img_url" id="img_url" style="display: none"	>
 							</div>
-							<div class="form-group col-md-6">
-								<label class="control-label" for="lastname">Last Name</label>
-								<input type="text" class="form-control" id="lastname" name ="lastname" placeholder="lastname" req>
+
+							<div class="form-group col-md-5" id="divUsername" >
+								<label class="control-label" for="username" id="lblUsername">Username</label>
+								<input type="text" class="form-control" id="username" name ="username" placeholder="username" required="" value="<?=$me['username'] ?>">
+							</div>
+							<div class="form-group col-md-4">
+								<label class="control-label" for="firstname">Firstname</label>
+								<input type="text" class="form-control" id="firstname" name ="firstname" placeholder="firstname" required="" value="<?=$me['firstname'] ?>">
 							</div>							
-							<div class="form-group col-md-3">
+							<div class="form-group col-md-5">
+								<label class="control-label" for="lastname">Lastname</label>
+								<input type="text" class="form-control" id="lastname" name ="lastname" placeholder="lastname" required="" value="<?=$me['lastname'] ?>">
+							</div>
+							<div class="form-group col-md-4">
 								<label class="control-label" for="birthday">Birthday</label>
-								<input type="date" class="form-control" id="birthday" name ="birthday" placeholder="birthday" required="" >
+								<input type="date" id="birthday" name="birthday" class="form-control" required="" value="<?=$me['birthday'] ?>">
 							</div>
-							<div class="form-group col-md-9">
-								<label class="control-label" for="address">Address</label>
-								<input type="text" id="address" name="address" class="form-control" required="">
-							</div>
-							<div class="form-group col-md-6">
-								<label class="control-label" for="contact">Contact # <i>(09191234567)</i></label>
-								<input type="tel" id="contact" name="contact" class="form-control" required="">
-							</div>
-							<div class="form-group col-md-3">
+							<div class="form-group col-md-2">
 								<label class="control-label" for="gender">Gender</label>
 								<select name="gender" id="gender" class="form-control" style="height:46px" required="">
-									<option value="">------</option>
+									<option value="<?=$me['gender'] ?>"><?=$me['gender'] ?></option>
 									<option value="Male">Male</option>
 									<option value="Female">Female</option>
 								</select>
-							</div>								
-							<div class="form-group col-md-3">
-								<label class="control-label" for="baranggay">Baranggay</label>
-								<select name="baranggay" id="baranggay" class="form-control" style="height:46px" required="">
-									<option value="">------</option>
-									<?php 
-											$data = getBaranggayCollection();
-											foreach($data as $key=>$value){
-												?>
-										<option value="<?=$value['id']?>"><?=html_entity_decode($value['name'])?></option>
-												<?php
-												
-											}
-									?>
-								</select>
 							</div>							
 							
-							<div class="clearfix"></div>
-							<hr>
-							<button type="submit" class="btn btn-success">Submit</button>
+							<div class="form-group col-md-3 divPassword" >
+								<label class="control-label" for="password" id="lblPassword">Password</label>
+								<input type="password" class="form-control" id="password" name ="password" placeholder="Password required">
+							</div>
+							<div class="form-group col-md-3 divPassword">
+								<label class="control-label" for="password_confirm">Password Confirm</label>
+								<input type="password" class="form-control" id="password_confirm" name ="password_confirm" placeholder="Retype Password">
+							</div>
+							<button type="submit" class="btn btn-lg btn-success" style="margin-top:25px">Submit</button>
 						</form>
 					</div>
 				</div>
@@ -228,6 +259,10 @@ if(checkIfLoggedIn()==false){
 			}
 				return false;
 		}
+		$("#changePhoto").click(function(){
+			
+			$('#img_url').click();
+		})
 	</script>
 		
 </body>

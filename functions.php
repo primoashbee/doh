@@ -133,4 +133,13 @@ function getBarangay($baranggay_id){
 	$data = mysqli_fetch_assoc(mysqli_query($conn,$sql));
 	return $data['name'];
 }
+function checkIfExistingOutbreak($p_id,$d_id){
+	require "config.php";
+	$sql = "Select * from outbreak where patient_id = '$p_id' and disease_id='$d_id' order by created_at DESC";
+	if(mysqli_num_rows($res = mysqli_query($conn,$sql))>0){
+		return true;
+	}
+	
+	return false;
+}
 ?>
