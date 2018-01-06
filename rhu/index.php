@@ -47,7 +47,7 @@ if(checkIfLoggedIn()==false){
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<div class="profile-sidebar">
 			<div class="profile-userpic">
-				<img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
+				<img src="<?=$_SESSION['user']['img_url']?>" class="img-responsive" alt="">
 			</div>
 			<div class="profile-usertitle">
 				<div class="profile-usertitle-name"><?=$_SESSION['user']['username']?></div>
@@ -105,6 +105,7 @@ if(checkIfLoggedIn()==false){
 						<a href="create_patient.php"><button class="btn btn-success" style="float:right;">Create New Patient</button></a>
 					</div>
 					<div class="panel-body">
+						<div class="table-responsive">
 						<table class="table table-striped" id="myTable">
 							<thead>
 								<th>First Name</th>
@@ -148,6 +149,7 @@ if(checkIfLoggedIn()==false){
 							?>	
 
 						</table>
+					</div>
 					</div>
 				</div>
 			</div>

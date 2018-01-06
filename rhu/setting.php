@@ -80,7 +80,7 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 	<div id="" class="col-sm-3 col-lg-2 sidebar">
 		<div class="profile-sidebar">
 			<div class="profile-userpic">
-				<img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
+				<img src="<?=$_SESSION['user']['img_url']?>" class="img-responsive" alt="">
 			</div>
 			<div class="profile-usertitle">
 				<div class="profile-usertitle-name"><?=$_SESSION['user']['username']?></div>
@@ -151,21 +151,30 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 							unset($_SESSION['msg']);
 						}
 					?>
-						<form action="create_account1.php" method="POST" id="frmCreateAccount">
+						<form action="setting1.php" method="POST" id="frmUpdateAccount" enctype="multipart/form-data">
 							<div class="col-md-3">
-							  <div class="profile-pic" id="changePhoto" style="background-image: url('../images/avatar/jaq.jpg')" >
-							  	  <div style="padding-top:50px">
-							      <span class="glyphicon glyphicon-camera"></span>
-							      <span>Change Image</span>
-							  </div>
 
-							  </div>
-							<input type="file" name="img_url" id="img_url" style="display: none"	>
+							<input type="file" accept="image/*" id="img_src" name="img_src" onchange="loadFile(event)" style="visibility: hidden">
+
+							<img id="output" class="img img-circle" style="width: 300px;height: 300px;margin-left:-25px;margin-top: -30px"/>
+							 <br><br>
+							 <div id="changeImage"><center><b></b></center>
+							 </div>
+							 <center><button type="button" 	id="btnUpload" class="btn btn-success"><span class="glyphicon glyphicon-camera"></span>
+							  <span>Change Image</span></button></center>
+						 	
+
+							<script>
+							  var loadFile = function(event) {
+							    var output = document.getElementById('output');
+							    output.src = URL.createObjectURL(event.target.files[0]);
+							  };
+							</script>
 							</div>
 
 							<div class="form-group col-md-5" id="divUsername" >
 								<label class="control-label" for="username" id="lblUsername">Username</label>
-								<input type="text" class="form-control" id="username" name ="username" placeholder="username" required="" value="<?=$me['username'] ?>">
+								<input type="text" class="form-control" id="username" name ="username" placeholder="username" required="" value="<?=$me['username'] ?>" readonly>
 							</div>
 							<div class="form-group col-md-4">
 								<label class="control-label" for="firstname">Firstname</label>
@@ -190,7 +199,7 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 							
 							<div class="form-group col-md-3 divPassword" >
 								<label class="control-label" for="password" id="lblPassword">Password</label>
-								<input type="password" class="form-control" id="password" name ="password" placeholder="Password required">
+								<input type="password" class="form-control" id="password" name ="password" placeholder="Password required" >
 							</div>
 							<div class="form-group col-md-3 divPassword">
 								<label class="control-label" for="password_confirm">Password Confirm</label>
@@ -216,40 +225,21 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 	<script src="../js/custom.js"></script>
 	<script>
 	
-		$("#frmCreateAccount").submit(function(e){
-			var errors = 0
-			$.ajax({
-					url:'../api.php',
-					data:{request:'checkIfUsernameExists',username:$('#username').val()},
-					type:'POST',
-					success:function(data){
-						console.log(data)
-						if(data==200){
-							console.log('existing')
-							$("#divUsername").addClass('has-error')
-							$("#lblUsername").html('Username (Username already existing)')
-							errors++
-						}else{
-							console.log('pwede')
-							$("#divUsername").removeClass('has-error')
-							$("#lblUsername").html('Username')}
-						
-					}
-				})
-			
-			if(!checkPasswordIfMatched($("#password").val(),$('#password_confirm').val())){
-				$('#lblPassword').html('Password (Password must match)');
-				$('.divPassword').addClass('has-error')
-				errors++
-			}else{
-				$('#lblPassword').html('Password ');
-				$('.divPassword').removeClass('has-error')
+		$("#frmUpdateAccount").submit(function(e){
+			var errors =0
+			if($('#password').val()!="" || $('#password_confirm').val()!=""){
+				if(!checkPasswordIfMatched($("#password").val(),$('#password_confirm').val())){
+					$('#lblPassword').html('Password (Password must match)');
+					$('.divPassword').addClass('has-error')
+					errors++
+				}else{
+					$('#lblPassword').html('Password ');
+					$('.divPassword').removeClass('has-error')
+				}
 			}
-
 			if(errors>0){
 				e.preventDefault()
 			}
-
 		})
 
 	
@@ -259,10 +249,13 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 			}
 				return false;
 		}
-		$("#changePhoto").click(function(){
-			
-			$('#img_url').click();
+		$("#btnUpload").click(function(){
+			$('#img_src').click();
 		})
+		$(function(){
+			$('#output').attr('src',"<?=$me['img_url']."?".rand(1,32000)?>")
+  		});
+
 	</script>
 		
 </body>
