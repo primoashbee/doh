@@ -125,51 +125,19 @@ if(checkIfLoggedIn()==false){
 						<a href="create_patient.php"><button class="btn btn-success" style="float:right;">Create New Patient</button></a>
 					</div>
 					<div class="panel-body">
-						
+						<div id="floating-panel">
+					      <input id="address" type="textbox" value="Olongapo, Philippines">
+					      <input id="submit" type="button" value="Geocode">
+					    </div>asdasd
+					    <div id="map<iframe
+						  width="600"
+						  height="450"
+						  frameborder="0" style="border:0"
+						  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAoaB9H9GDgx6Xo4sFt_YPATI7H63xh40k
+						    &q=Space+Needle,Seattle+WA" allowfullscreen>
+						</iframe>
+					</div>
 
-						<table class="table table-striped" id="myTable" style="margin-top:10000px">
-							<thead>
-								<th>First Name</th>
-								<th>Last Name</th>
-								<th>Gender</th>
-								<th>Age</th>
-								<th>Baranggay</th>
-
-								<th>Created At</th>
-								<th>Actions</th>
-							</thead>
-							<?php 
-								$data = getPatientCollection();
-								if($count = count($data) > 0){
-
-									foreach($data as $key=>$value){
-									?>
-										<tr>
-											<td><?=$value['firstname']?></td>
-											<td><?=$value['lastname']?></td>
-											<td><?=$value['gender']?></td>
-											<td><?=$value['age']?></td>
-											<td><?=$value['baranggay']?></td>
-											<td><?=$value['created_at']?></td>
-											<td>
-												<button class="btn btn-warning outbreak" 
-												id="<?=$value['id']?>" 
-												firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" 
-												birthday="<?=$value['birthday']?>" address="<?=$value['address']?>" 
-												contact="<?=$value['contact']?>" gender="<?=$value['gender']?>"
-												baranggay="<?=$value['baranggay_id']?>"> <span class="fa fa-pencil"></span> </button>
-
-												<button class="btn btn-danger delete" id="<?=$value['id']?>" firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" > <span class="fa fa-trash-o"></span> </button>
-
-											</td>
-										</tr>
-
-									<?php
-									}
-								}
-							?>	
-
-						</table>
 					</div>
 				</div>
 			</div>
@@ -268,7 +236,6 @@ if(checkIfLoggedIn()==false){
 				</div> 
 
 				<div class="clearfix"></div>
-				<iframe src="sample.php" width="870px" height="500px" id="frameMap"></iframe>
 				
 
 	        </div>
@@ -305,184 +272,91 @@ if(checkIfLoggedIn()==false){
 	      
 	    </div>
 	  </div>
-	  
-	<script src="../js/jquery-1.11.1.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/chart.min.js"></script>
-	<script src="../js/chart-data.js"></script>
-	<script src="../js/easypiechart.js"></script>
-	<script src="../js/easypiechart-data.js"></script>
-	<script src="../js/bootstrap-datepicker.js"></script>
-	<script src="../js/custom.js"></script>
-	<script src="../js/datatables.js"></script>
+	      <script>
+    var marker;
+    var result;
+    var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 20,
+          center: {lat: -34.397, lng: 150.644}
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeAddress(geocoder, map);
+        });
+        
+
+        map.addListener('click', function(event) {
+          // 3 seconds after the center of the map has changed, pan back to the
+          // marker.
+         if (marker != undefined){
+                marker.setPosition(event.latLng)
+                    //updateLatLng()
+                } else {
+                    marker = new google.maps.Marker({
+                        position: event.latLng,
+                        map: map,
+                        draggable: true,
+                        animation: google.maps.Animation.DROP,
+                        //icon: "/content/images/map-pin-icon.png"
+                    });
+
+                    //updateLatLng()
+                    marker.addListener('dragend', function (obj) {
+                    //updateLatLng()
+                    });
+                }
+             console.log(marker.getPosition())
+
+        });
+      }
+
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+	        var latitude = results[0].geometry.location.lat();
+            var longitude = results[0].geometry.location.lng();
+            console.log(results);
+            console.log(latitude)
+            console.log(longitude)
+			map.setCenter({lat:latitude, lng: longitude})
+			console.log("DFDF")
+			if(marker != undefined){
+				//marker.setPosition(results)
+			//	console.log(results)
+				marker.setPosition( {lat:latitude, lng: longitude})
+	
+	        }else{
+          	marker = new google.maps.Marker({
+	            map: map,
+	            position:  {lat:latitude, lng: longitude},
+	            draggable: true,
+	            animation: google.maps.Animation.DROP
+	        });
+	        
+	        }
+	        /*
+            resultsMap.setCenter(results[0].geometry.location);
+              marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location,
+
+            });*/
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmax-o29L6uMibCrMDckagdxgnTynSMOU&callback=initMap">
     </script>
-	    <script>
-	    	var marker;
-			var result;
-			var map;
-	    	function initMap() {
-			    map = new google.maps.Map(document.getElementById('map'), {
-			      zoom: 20,
-			      center: {lat: -34.397, lng: 150.644}
-			    });
-			    var geocoder = new google.maps.Geocoder();
-
-			    document.getElementById('submit').addEventListener('click', function() {
-			      geocodeAddress(geocoder, map);
-			    });
-			    
-
-			    map.addListener('click', function(event) {
-			      // 3 seconds after the center of the map has changed, pan back to the
-			      // marker.
-			     if (marker != undefined){
-			            marker.setPosition(event.latLng)
-			                //updateLatLng()
-			            } else {
-			                marker = new google.maps.Marker({
-			                    position: event.latLng,
-			                    map: map,
-			                    draggable: true,
-			                    animation: google.maps.Animation.DROP,
-			                    //icon: "/content/images/map-pin-icon.png"
-			                });
-
-			                //updateLatLng()
-			                marker.addListener('dragend', function (obj) {
-			                //updateLatLng()
-			                });
-			            }
-			         console.log(marker.getPosition())
-
-			    });
-			}
-			
-			function geocodeAddress(geocoder, resultsMap) {
-			    var address = document.getElementById('address').value;
-			    geocoder.geocode({'address': address}, function(results, status) {
-			        if (status === 'OK') {
-					        var latitude = results[0].geometry.location.lat();
-				            var longitude = results[0].geometry.location.lng();
-				            console.log(results);
-				            console.log(latitude)
-				            console.log(longitude)
-							map.setCenter({lat:latitude, lng: longitude})
-							console.log("DFDF")
-							if(marker != undefined){
-								//marker.setPosition(results)
-							//	console.log(results)
-								marker.setPosition( {lat:latitude, lng: longitude})
-					
-					        }else{
-				          	marker = new google.maps.Marker({
-					            map: map,
-					            position:  {lat:latitude, lng: longitude},
-					            draggable: true,
-					            animation: google.maps.Animation.DROP
-					        });
-				        
-			        		}
-				        
-			            
-			      	} else {
-			            alert('Geocode was not successful for the following reason: ' + status);
-			      	}
-			    });
-			}
-
-	    </script>
-		<script>
-		$(function(){
-			$('#myTable').DataTable();
-		})
-		$('.outbreak').click(function(){
-
-			$('#patient_id').val($(this).attr('id'))
-			$('#firstname').val($(this).attr('firstname'))
-			$('#lastname').val($(this).attr('lastname'))
-			$('#birthday').val($(this).attr('birthday'))
-			$('#address').val($(this).attr('address'))
-			$('#contact').val($(this).attr('contact'))
-			$('#gender').val($(this).attr('gender'))
-			$('#baranggay').val($(this).attr('baranggay'))
 
 
-			
-		
-			$('#myModal').modal('show')
-		})
-		$("#disease_id").change(function(){
-
-			var id=$(this).val()	
-			$.ajax({
-				url:'../api.php',
-				data:{request:"getDiseaseViaID",id:id},
-				dataType:'JSON',
-				type:'POST',
-				success:function(data){
-					$('#disease_description').html(data.description)
-				}
-			});
-
-		})
-		$('.delete').click(function(){
-			$('#alertModal').modal('show')
-			$('#patient_id').val($(this).attr('id'))
-
-			$('#mdlPatient').html($(this).attr('firstname') +' '+$(this).attr('lastname'))
-
-		})
-		$("#frmInsertOutbreak").submit(function(e){
-			
-			var patient_id = $("#patient_id").val()
-			var disease_id =$('#disease_id').val()
-			var status =$('#status').val()
-
-			var error = 0
-
-			if(patient_id=="" || disease_id == "" ||status ==""){
-				error++
-			}
-			
-			if(error > 0){
-				e.preventDefault()
-				return false;
-			}
-			$.ajax({
-				url:'../api.php',
-				data:{request:'insertOutbreak',patient_id:patient_id,disease_id:disease_id,status:status},
-				dataType:'JSON',
-				type:'POST',
-				success:function(data){
-					if(data.msg==200){
-						alert('Information Added')
-						location.reload()
-					}else{
-						alert(data.description)
-					}
-				}
-			}) 
-				e.preventDefault()
-		})
-		$('#btnDeleteAccount').click(function(){
-			var id = $('#patient_id').val()
-			$.ajax({
-				url:'../api.php',
-				data:{request:'deletePatientViaID',id:id},
-				dataType:'JSON',
-				type:'post',
-				success:function(data){
-					if(data.msg==200){
-						console.log('Account Deleted')
-						alert('Account Deleted')
-						location.reload()
-					}
-				}
-			})
-		})
-	</script>
+	
 
 		
 </body>
