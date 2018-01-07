@@ -37,8 +37,8 @@
       <input id="submit" type="button" value="Geocode">
     </div>
     <div id="map"></div>
-    <input type="text" id="lat">
-    <input type="text" id="long">
+    <input type="hidden" id="lat">
+    <input type="hidden" id="long">
     <script>
     var marker;
     var result;

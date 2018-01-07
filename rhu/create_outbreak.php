@@ -267,7 +267,7 @@ if(checkIfLoggedIn()==false){
 					<p id="disease_description" > </p>
 				</div> 
 
-				<div class="clearfix"></div>
+				<div class="clearfix"></dataiv>
 				<iframe src="sample.php" width="870px" height="500px" id="frameMap"></iframe>
 				
 
@@ -439,11 +439,16 @@ if(checkIfLoggedIn()==false){
 			var patient_id = $("#patient_id").val()
 			var disease_id =$('#disease_id').val()
 			var status =$('#status').val()
+			var lat = $('#frameMap').contents().find('#lat').val()
+			var long = $('#frameMap').contents().find('#long').val()
 
 			var error = 0
 
 			if(patient_id=="" || disease_id == "" ||status ==""){
 				error++
+			}else if(lat==""||long==""){
+				error++
+				alert('Please use map to set location of the patient')
 			}
 			
 			if(error > 0){
@@ -452,7 +457,7 @@ if(checkIfLoggedIn()==false){
 			}
 			$.ajax({
 				url:'../api.php',
-				data:{request:'insertOutbreak',patient_id:patient_id,disease_id:disease_id,status:status},
+				data:{request:'insertOutbreak',patient_id:patient_id,disease_id:disease_id,status:status,lat:lat,long:long},
 				dataType:'JSON',
 				type:'POST',
 				success:function(data){

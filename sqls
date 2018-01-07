@@ -1,0 +1,3 @@
+for view on outbreaks
+
+SELECT o.*,p.*,d.*,b.`name` FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id`

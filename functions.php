@@ -142,4 +142,11 @@ function checkIfExistingOutbreak($p_id,$d_id){
 	
 	return false;
 }
+function qryOutbreak(){
+	require 'config.php';
+	$sql = "SELECT o.*,p.*,d.*,b.`name` FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id`";
+		//Execute the query and put data into a result
+	$result = mysqli_query($conn,$sql);
+	return mysqli_fetch_all($result,MYSQLI_ASSOC);
+}
 ?>

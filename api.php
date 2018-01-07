@@ -122,11 +122,13 @@ if($request=="insertOutbreak"){
 	$disease_id = $_POST['disease_id'];
 	$status = $_POST['status'];
 	$user_id = $_SESSION['user']['id'];
+	$lattitude = $_POST['lat'];
+	$longitude = $_POST['long'];
 	if(checkIfExistingOutbreak($patient_id,$disease_id)){
 		echo json_encode(array('msg'=>404,'description'=>'Record Already Exists'));
 
 	}else{		
-		$sql = "Insert into outbreak(patient_id,disease_id,created_by)values('$patient_id','$disease_id','$user_id')";
+		$sql = "Insert into outbreak(patient_id,disease_id,lattitude,longitude,created_by,status)values('$patient_id','$disease_id','$lattitude','$longitude','$user_id','$status')";
 		if(mysqli_query($conn,$sql)){
 			echo json_encode(array('msg'=>200,'description'=>'Record Added'));
 		}else{
