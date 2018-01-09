@@ -120,8 +120,8 @@ if(checkIfLoggedIn()==false){
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Patients
-						<a href="create_patient.php"><button class="btn btn-success" style="float:right;">Create New Patient</button></a>
+						Outbreaks
+						<a href="create_outbreak.php"><button class="btn btn-success" style="float:right;">Create Outbreak	</button></a>
 					</div>
 					<div class="panel-body">
 						<table class="table table-striped" id="myTable">
@@ -130,13 +130,14 @@ if(checkIfLoggedIn()==false){
 								<th>Last Name</th>
 								<th>Gender</th>
 								<th>Age</th>
+								<th>Diseases</th>
 								<th>Baranggay</th>
+								<th>Status</th>
 
-								<th>Created At</th>
-								<th>Actions</th>
+								<th>Encoded On</th>
 							</thead>
 							<?php 
-								$data = getPatientCollection();
+								$data = qryOutbreak();
 								if($count = count($data) > 0){
 
 									foreach($data as $key=>$value){
@@ -145,20 +146,12 @@ if(checkIfLoggedIn()==false){
 											<td><?=$value['firstname']?></td>
 											<td><?=$value['lastname']?></td>
 											<td><?=$value['gender']?></td>
-											<td><?=$value['age']?></td>
-											<td><?=$value['baranggay']?></td>
+											<td><?=computeAge($value['birthday'])?></td>
+											<td><?=$value['disease_name']?></td>
+											<td><?=$value['name']?></td>
+											<td><?=ucfirst($value['status'])?></td>
 											<td><?=$value['created_at']?></td>
-											<td>
-												<button class="btn btn-warning outbreak" 
-												id="<?=$value['id']?>" 
-												firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" 
-												birthday="<?=$value['birthday']?>" address="<?=$value['address']?>" 
-												contact="<?=$value['contact']?>" gender="<?=$value['gender']?>"
-												baranggay="<?=$value['baranggay_id']?>"> <span class="fa fa-pencil"></span> </button>
-
-												<button class="btn btn-danger delete" id="<?=$value['id']?>" firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" > <span class="fa fa-trash-o"></span> </button>
-
-											</td>
+											
 										</tr>
 
 									<?php
@@ -312,94 +305,35 @@ if(checkIfLoggedIn()==false){
 	<script src="../js/datatables.js"></script>
 
 	<script>
+		var coordinates ={}
 		$(function(){
 			 $('#myTable').DataTable();
-		})
-		$('.outbreak').click(function(){
-
-			$('#patient_id').val($(this).attr('id'))
-			$('#firstname').val($(this).attr('firstname'))
-			$('#lastname').val($(this).attr('lastname'))
-			$('#birthday').val($(this).attr('birthday'))
-			$('#address').val($(this).attr('address'))
-			$('#contact').val($(this).attr('contact'))
-			$('#gender').val($(this).attr('gender'))
-			$('#baranggay').val($(this).attr('baranggay'))
-
-
-			
-		
-			$('#myModal').modal('show')
-		})
-		$("#disease_id").change(function(){
-
-			var id=$(this).val()	
-			$.ajax({
-				url:'../api.php',
-				data:{request:"getDiseaseViaID",id:id},
-				dataType:'JSON',
-				type:'POST',
-				success:function(data){
-					$('#disease_description').html(data.description)
-				}
-			});
 
 		})
-		$('.delete').click(function(){
-			$('#alertModal').modal('show')
-			$('#patient_id').val($(this).attr('id'))
+		function getPoints(){
+			return [
+				<?php
+					$qry = qryOutbreak();
+					$ctr=0;
+					$total = count($qry);
+					foreach ($qry as $key => $value) {
+					$ctr++;
+					if($ctr<$total){
+						?>
 
-			$('#mdlPatient').html($(this).attr('firstname') +' '+$(this).attr('lastname'))
-
-		})
-		$("#frmInsertOutbreak").submit(function(e){
-			
-			var patient_id = $("#patient_id").val()
-			var disease_id =$('#disease_id').val()
-			var status =$('#status').val()
-
-			var error = 0
-
-			if(patient_id=="" || disease_id == "" ||status ==""){
-				error++
-			}
-			
-			if(error > 0){
-				e.preventDefault()
-				return false;
-			}
-			$.ajax({
-				url:'../api.php',
-				data:{request:'insertOutbreak',patient_id:patient_id,disease_id:disease_id,status:status},
-				dataType:'JSON',
-				type:'POST',
-				success:function(data){
-					if(data.msg==200){
-						alert('Information Added')
-						location.reload()
-					}else{
-						alert(data.description)
-					}
-				}
-			}) 
-				e.preventDefault()
-		})
-		$('#btnDeleteAccount').click(function(){
-			var id = $('#patient_id').val()
-			$.ajax({
-				url:'../api.php',
-				data:{request:'deletePatientViaID',id:id},
-				dataType:'JSON',
-				type:'post',
-				success:function(data){
-					if(data.msg==200){
-						console.log('Account Deleted')
-						alert('Account Deleted')
-						location.reload()
-					}
-				}
-			})
-		})
+						{latt:<?=$value['lattitude']?>,long:<?=$value['longitude']?>},
+						<?php 
+						}else{
+							?>
+						
+						{latt:<?=$value['lattitude']?>,long:<?=$value['longitude']?>}
+							<?php
+							}	
+						}
+				?>
+				
+			]
+		}
 	</script>
 
 		

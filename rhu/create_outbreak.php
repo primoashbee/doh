@@ -121,8 +121,8 @@ if(checkIfLoggedIn()==false){
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Patients
-						<a href="create_patient.php"><button class="btn btn-success" style="float:right;">Create New Patient</button></a>
+						Outbreak
+						<a href="create_outbreak.php"><button class="btn btn-success" style="float:right;">Create Oubreak</button></a>
 					</div>
 					<div class="panel-body">
 						
@@ -152,14 +152,14 @@ if(checkIfLoggedIn()==false){
 											<td><?=$value['baranggay']?></td>
 											<td><?=$value['created_at']?></td>
 											<td>
-												<button class="btn btn-warning outbreak" 
+												<button class="btn btn-success outbreak" 
 												id="<?=$value['id']?>" 
 												firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" 
 												birthday="<?=$value['birthday']?>" address="<?=$value['address']?>" 
 												contact="<?=$value['contact']?>" gender="<?=$value['gender']?>"
-												baranggay="<?=$value['baranggay_id']?>"> <span class="fa fa-pencil"></span> </button>
+												baranggay="<?=$value['baranggay_id']?>"> <span class="fa fa-plus"></span> </button>
 
-												<button class="btn btn-danger delete" id="<?=$value['id']?>" firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" > <span class="fa fa-trash-o"></span> </button>
+												
 
 											</td>
 										</tr>
@@ -318,84 +318,15 @@ if(checkIfLoggedIn()==false){
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmax-o29L6uMibCrMDckagdxgnTynSMOU&callback=initMap">
     </script>
-	    <script>
-	    	var marker;
-			var result;
-			var map;
-	    	function initMap() {
-			    map = new google.maps.Map(document.getElementById('map'), {
-			      zoom: 20,
-			      center: {lat: -34.397, lng: 150.644}
-			    });
-			    var geocoder = new google.maps.Geocoder();
 
-			    document.getElementById('submit').addEventListener('click', function() {
-			      geocodeAddress(geocoder, map);
-			    });
-			    
-
-			    map.addListener('click', function(event) {
-			      // 3 seconds after the center of the map has changed, pan back to the
-			      // marker.
-			     if (marker != undefined){
-			            marker.setPosition(event.latLng)
-			                //updateLatLng()
-			            } else {
-			                marker = new google.maps.Marker({
-			                    position: event.latLng,
-			                    map: map,
-			                    draggable: true,
-			                    animation: google.maps.Animation.DROP,
-			                    //icon: "/content/images/map-pin-icon.png"
-			                });
-
-			                //updateLatLng()
-			                marker.addListener('dragend', function (obj) {
-			                //updateLatLng()
-			                });
-			            }
-			         console.log(marker.getPosition())
-
-			    });
-			}
-			
-			function geocodeAddress(geocoder, resultsMap) {
-			    var address = document.getElementById('address').value;
-			    geocoder.geocode({'address': address}, function(results, status) {
-			        if (status === 'OK') {
-					        var latitude = results[0].geometry.location.lat();
-				            var longitude = results[0].geometry.location.lng();
-				            console.log(results);
-				            console.log(latitude)
-				            console.log(longitude)
-							map.setCenter({lat:latitude, lng: longitude})
-							console.log("DFDF")
-							if(marker != undefined){
-								//marker.setPosition(results)
-							//	console.log(results)
-								marker.setPosition( {lat:latitude, lng: longitude})
-					
-					        }else{
-				          	marker = new google.maps.Marker({
-					            map: map,
-					            position:  {lat:latitude, lng: longitude},
-					            draggable: true,
-					            animation: google.maps.Animation.DROP
-					        });
-				        
-			        		}
-				        
-			            
-			      	} else {
-			            alert('Geocode was not successful for the following reason: ' + status);
-			      	}
-			    });
-			}
-
-	    </script>
-		<script>
+	<script>
 		$(function(){
 			$('#myTable').DataTable();
+			$('#myModal').on('hidden.bs.modal',function(){
+				$('#frameMap').contents().find('#lat').val("")
+				$('#frameMap').contents().find('#long').val("")
+					
+			})
 		})
 		$('.outbreak').click(function(){
 
@@ -413,6 +344,7 @@ if(checkIfLoggedIn()==false){
 		
 			$('#myModal').modal('show')
 		})
+	
 		$("#disease_id").change(function(){
 
 			var id=$(this).val()	
@@ -463,7 +395,7 @@ if(checkIfLoggedIn()==false){
 				success:function(data){
 					if(data.msg==200){
 						alert('Information Added')
-						location.reload()
+						
 					}else{
 						alert(data.description)
 					}
