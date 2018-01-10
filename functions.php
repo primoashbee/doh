@@ -64,6 +64,15 @@ function getDiseaseViaID(){
 	$data=array('description'=>$row['description']);
 	return $data;
 }
+function getDiseaseViaIDNumber($id){
+	require "config.php";
+	$sql="Select * from diseases where id = '$id' and isDeleted = false";
+
+	$result = mysqli_query($conn,$sql);
+	
+	return mysqli_fetch_all($result,MYSQLI_ASSOC);
+
+}
 function getPatientCollection(){
 	require "config.php";
 	$sql="Select * from patients where isDeleted = false";
@@ -144,19 +153,24 @@ function checkIfExistingOutbreak($p_id,$d_id){
 }
 function qryOutbreak(array $arr=array()){
 	require 'config.php';
-	$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.disease_name,d.description,b.name, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id`";
+	$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id`";
 	$filter="";
-	$rows = count($arr)-1;
+	$rows = count($arr);
 	$ctr=0;
 	if($rows>0){
 		$filter = "where ";
 		foreach($arr as $key=>$value){
-			if($ctr!=$rows){
-				$filter.=$key.=" = '".$value."' and ";
-			}else{
-				$filter.=$key.=" = '".$value."' ";
+			if($value!=""){
+
+				$ctr++;
+				if($ctr!=$rows){
+
+					$filter.=$key.=" = '".$value."' and ";
+				}else{
+					$filter.=$key.=" = '".$value."' ";
+				}
+
 			}
-			$ctr++;
 		}
 	
 	}
@@ -171,6 +185,65 @@ function getYears(){
 	$sql = "SELECT DISTINCT(year) AS year FROM outbreak";
 	$result = mysqli_query($conn,$sql);
 	return mysqli_fetch_all($result,MYSQLI_ASSOC);
+
+}
+function antiNull($data){
+	//var_dump($data);
+	if(is_null($data) || isset($data)){
+		return "";
+	}
+	return 'haha';
+}
+function getDiseaseIDS($outbreakResult){
+	$disease_ids =array();
+	foreach ($outbreakResult as $key => $value) {
+		
+		if(!in_array($value['disease_id'],$disease_ids)){
+			array_push($disease_ids,$value['disease_id']);
+		}
+	}
+	return $disease_ids;
+}
+
+function getCountOnAge($id,$start,$end){
+	require "config.php";
+	$data = array();
+	
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Male' and disease_id = '$id' ) p where age between '$start' and '$end'";
+	$total_m = mysqli_num_rows(mysqli_query($conn,$sql));
+
+		
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Female' and disease_id = '$id' ) p where age between '$start' and '$end'";
+	$total_f = mysqli_num_rows(mysqli_query($conn,$sql));
+
+	$data[]=array(
+		'Female'=>$total_f,
+		'Male'=>$total_m
+	);
+	return $data;
+
+}
+function summarizeAgeRangePerDisease($id){
+	$data = array();
+	//foreach ($ids as $key => $id) {
+		$data[] = array('under'=>getCountOnAge($id,0,1));
+		$data[] = array('under'=>getCountOnAge($id,1,4));
+		$data[] = array('under'=>getCountOnAge($id,5,9));
+		$data[] = array('under'=>getCountOnAge($id,10,14));
+		$data[] = array('under'=>getCountOnAge($id,15,19));
+		$data[] = array('under'=>getCountOnAge($id,20,24));
+		$data[] = array('under'=>getCountOnAge($id,25,29));
+		$data[] = array('under'=>getCountOnAge($id,30,34));
+		$data[] = array('under'=>getCountOnAge($id,35,39));
+		$data[] = array('under'=>getCountOnAge($id,40,44));
+		$data[] = array('under'=>getCountOnAge($id,45,49));
+		$data[] = array('under'=>getCountOnAge($id,50,54));
+		$data[] = array('under'=>getCountOnAge($id,55,59));
+		$data[] = array('under'=>getCountOnAge($id,60,64));
+		$data[] = array('under'=>getCountOnAge($id,65,1000000));
+
+	//}
+	return $data;
 
 }
 ?>

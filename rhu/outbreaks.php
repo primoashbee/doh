@@ -146,7 +146,7 @@ if(checkIfLoggedIn()==false){
 											<td><?=$value['firstname']?></td>
 											<td><?=$value['lastname']?></td>
 											<td><?=$value['gender']?></td>
-											<td><?=computeAge($value['birthday'])?></td>
+											<td><?=$value['age']?></td>
 											<td><?=$value['disease_name']?></td>
 											<td><?=$value['name']?></td>
 											<td><?=ucfirst($value['status'])?></td>

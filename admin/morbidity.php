@@ -70,7 +70,8 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			</div>
 			<div class="profile-usertitle">
 				<div class="profile-usertitle-name">ADMIN</div>
-				<div class="profile-usertitle-status"><span class="indicator label-success"></span>Administrator</div>
+				<div class="profile-usertitle-status"><span class="indicator label-success"></span>Administrator
+				</div>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -126,6 +127,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">Welcome, <i> Administrator</i></h1>
+					
 			</div>
 		</div><!--/.row-->
 		
@@ -142,13 +144,28 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 						<form action ="<?=$_SERVER['PHP_SELF']?>" method ="get" id="frmFilter">
 						<div class="form-inline">
 							<label for="status">Status:  </label>
-							<select name="status" id="status" class ="form-control">
+							<select name="status" id="status" class ="form-control filter">
+								<option value="">------</option>
 								<option value="morbidity">Morbidity</option>
 								<option value="mortality">Mortality</option>
-							</select>							
-							<div style="float:right">
+							</select>	
+							
+							<label for="status">Baranggay:  </label>
+							<select name="baranggay_id" id="baranggay_id" class ="form-control filter" >
+								<option value="">------</option>
+								<?php 
+										$data = getBaranggayCollection();
+										foreach($data as $key=>$value){
+											?>
+									<option value="<?=$value['id']?>"><?=html_entity_decode($value['name'])?></option>
+											<?php
+											
+										}
+								?>
+							</select>
 							<label for="month">Month:  </label>
-							<select name="month" id="month" class ="form-control">
+							<select name="month" id="month" class ="form-control filter">
+								<option value="">------</option>
 								<option value="1">January</option>
 								<option value="2">February</option>
 								<option value="3">March</option>
@@ -161,9 +178,10 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 								<option value="10">October</option>
 								<option value="11">November</option>
 								<option value="12">December</option>
-							</select>							
+							</select>						
 							<label for="year">Year:  </label>
-							<select name="year" id="year" class ="form-control">
+							<select name="year" id="year" class ="form-control filter">
+								<option value="">------</option>
 								<?php
 									$years= getYears();
 									
@@ -174,12 +192,14 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 									}
 								 ?>
 							</select>
-							<button type="submit" class="btn" style="background-color:#30a5ff;border-color:#30a5ff;color: white">Enter</button>
+							<button type="submit" class="btn" style="background-color:#30a5ff;border-color:#30a5ff;color: white;float:right;">Enter</button>
+							<a href="reports/disease_report.php?<?=$_SERVER['QUERY_STRING']?>" onClick=""><button type="button" class="btn btn-warning" style="float:right;"><i class="fa fa-print fa-2" aria-hidden="true">  Print Result</i></button></a>
 							</div>
 							</div>
 						</div>
 						</form>
 						<div class="clearfix" style="padding-bottom: 10px"></div>
+
 						<table class="table table-striped" id="myTable">
 							<thead>
 								<th>First Name</th>
@@ -239,13 +259,48 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 
 	<script>
 		$(function(){
+
 			 $('#myTable').DataTable();
-			 
+			 <?php 
+			 	$params = count($_GET);
+			 	
+			 	if($params>0){
+			 		foreach ($_GET as $key => $value) {	
+			 		?>
+		$('#<?=$key?>').val('<?=$value?>')
+						<?php
+
+						}
+					}
+				?>
 		})
 		
-		
-		
-	</script>
+		$('#frmFilter').submit(function(){
+			$('.filter').each(function(){
+				if($(this).val()==""){
+					$(this).attr('disabled','disabled')
+
+			}
+			})
+		})
+
+	function generateReport(){
+		var qry = '<?=$_SERVER['PHP_SELF'].'/'.$_SERVER['QUERY_STRING']?>';
+		var data = '<?=$_SERVER['QUERY_STRING']?>'
+		var type = 'all'
+
+		/*$.ajax({
+			url:'',
+			type:'GET',
+			success:function(data){
+
+			}
+		})*/
+		location.href="reports/disease_report.php?"+data
+
+	}
+
+</script>
 
 		
 </body>

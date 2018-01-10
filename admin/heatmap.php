@@ -75,7 +75,7 @@ if(checkIfLoggedIn()==false){
           zoom: 15,
           center: {lat: 14.8386303, lng: 120.28420230000006},
 
-          mapTypeId: 'satellite'
+          mapTypeId: 'terrain'
         });
 
         heatmap = new google.maps.visualization.HeatmapLayer({
