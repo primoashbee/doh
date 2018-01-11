@@ -88,13 +88,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 				<ul class="children collapse" id="sub-item-3">
 					<li><a class="" href="morbidity.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> Morbidity
-					</a></li>
-					<li><a class="" href="mortality.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Mortality
-					</a></li>
-					<li><a class="" href="rankings.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Rankings
-					</a></li>
+					</a>
 				</ul>
 			</li>
 			<li><a href="logout.php"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>

@@ -80,17 +80,11 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 				</ul>
 			</li>
 			<li class="parent "><a data-toggle="collapse" href="#sub-item-2">
-				<em class="fa fa-navicon">&nbsp;</em> Reports <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
+				<em class="fa fa-navicon">&nbsp;</em> Reports <span data-toggle="collapse" href="#sub-item-3" class="icon pull-right"><em class="fa fa-plus"></em></span>
 				</a>
-				<ul class="children collapse" id="sub-item-2">
+				<ul class="children collapse" id="sub-item-3">
 					<li><a class="" href="morbidity.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> Morbidity
-					</a></li>
-					<li><a class="" href="mortality.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Mortality
-					</a></li>
-					<li><a class="" href="rankings.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Rankings
 					</a></li>
 				</ul>
 			</li>
