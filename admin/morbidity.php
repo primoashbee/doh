@@ -136,63 +136,62 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 
 					<div class="panel-body">
 						<div class="col-xs-12 col-md-12" style="margin-left:-10px">
-						<form action ="<?=$_SERVER['PHP_SELF']?>" method ="get" id="frmFilter">
-						<div class="form-inline">
-							<label for="status">Status:  </label>
-							<select name="status" id="status" class ="form-control filter">
-								<option value="">------</option>
-								<option value="morbidity">Morbidity</option>
-								<option value="mortality">Mortality</option>
-							</select>	
-							
-							<label for="status">Baranggay:  </label>
-							<select name="baranggay_id" id="baranggay_id" class ="form-control filter" >
-								<option value="">------</option>
-								<?php 
-										$data = getBaranggayCollection();
-										foreach($data as $key=>$value){
-											?>
-									<option value="<?=$value['id']?>"><?=html_entity_decode($value['name'])?></option>
-											<?php
-											
-										}
-								?>
-							</select>
-							<label for="month">Month:  </label>
-							<select name="month" id="month" class ="form-control filter">
-								<option value="">------</option>
-								<option value="1">January</option>
-								<option value="2">February</option>
-								<option value="3">March</option>
-								<option value="4">April</option>
-								<option value="5">May</option>
-								<option value="6">June</option>
-								<option value="7">July</option>
-								<option value="8">August</option>
-								<option value="9">September</option>
-								<option value="10">October</option>
-								<option value="11">November</option>
-								<option value="12">December</option>
-							</select>						
-							<label for="year">Year:  </label>
-							<select name="year" id="year" class ="form-control filter">
-								<option value="">------</option>
-								<?php
-									$years= getYears();
+							<form action ="<?=$_SERVER['PHP_SELF']?>" method ="get" id="frmFilter">
+								<div class="form-inline">
+									<label for="status">Status:  </label>
+									<select name="status" id="status" class ="form-control filter">
+										<option value="">------</option>
+										<option value="morbidity">Morbidity</option>
+										<option value="mortality">Mortality</option>
+									</select>	
 									
-									foreach ($years as $key => $value) {
-									?>
-									<option value="<?=$value['year']?>"><?=$value['year']?></option>
-									<?php
-									}
-								 ?>
-							</select>
-							<button type="submit" class="btn" style="background-color:#30a5ff;border-color:#30a5ff;color: white;float:right;">Enter</button>
-							<a href="reports/disease_report.php?<?=$_SERVER['QUERY_STRING']?>" onClick=""><button type="button" class="btn btn-warning" style="float:right;"><i class="fa fa-print fa-2" aria-hidden="true">  Print Result</i></button></a>
-							</div>
-							</div>
+									<label for="status">Baranggay:  </label>
+									<select name="baranggay_id" id="baranggay_id" class ="form-control filter" >
+										<option value="">------</option>
+										<?php 
+												$data = getBaranggayCollection();
+												foreach($data as $key=>$value){
+													?>
+											<option value="<?=$value['id']?>"><?=html_entity_decode($value['name'])?></option>
+													<?php
+													
+												}
+										?>
+									</select>
+									<label for="month">Month:  </label>
+									<select name="month" id="month" class ="form-control filter">
+										<option value="">------</option>
+										<option value="1">January</option>
+										<option value="2">February</option>
+										<option value="3">March</option>
+										<option value="4">April</option>
+										<option value="5">May</option>
+										<option value="6">June</option>
+										<option value="7">July</option>
+										<option value="8">August</option>
+										<option value="9">September</option>
+										<option value="10">October</option>
+										<option value="11">November</option>
+										<option value="12">December</option>
+									</select>						
+									<label for="year">Year:  </label>
+									<select name="year" id="year" class ="form-control filter">
+										<option value="">------</option>
+										<?php
+											$years= getYears();
+											
+											foreach ($years as $key => $value) {
+											?>
+											<option value="<?=$value['year']?>"><?=$value['year']?></option>
+											<?php
+											}
+										 ?>
+									</select>
+									<button type="submit" class="btn" style="background-color:#30a5ff;border-color:#30a5ff;color: white;float:right;">Enter</button>
+									<a href="reports/disease_report.php?<?=$_SERVER['QUERY_STRING']?>" onClick=""><button type="button" class="btn btn-warning" style="float:right;"><i class="fa fa-print fa-2" aria-hidden="true">  Print Result</i></button></a>
+								</div>
+							</form>
 						</div>
-						</form>
 						<div class="clearfix" style="padding-bottom: 10px"></div>
 
 						<table class="table table-striped" id="myTable">
