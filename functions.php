@@ -22,10 +22,16 @@ class Account{
 			echo 'good';
 			return $flag;
 		}
-		echo $sql; 
 	
 	}
 
+}
+function getPopulation(){
+	require "config.php";
+	$sql="Select * from patients where isDeleted = false";
+	$res = mysqli_query($conn,$sql);
+	return mysqli_num_rows($res);
+	
 }
 function getAccountsCollection(){
 	require "config.php";
@@ -89,7 +95,7 @@ function getPatientCollection(){
 }
 function getBaranggayCollection(){
 	require "config.php";
-	$sql="Select * from baranggays where isDeleted = false";
+	$sql="Select * from baranggays where isDeleted = false order by name  ASC";
 	$res = mysqli_query($conn,$sql);
 	$data;
 	while($row =mysqli_fetch_array($res)){
@@ -180,6 +186,69 @@ function qryOutbreak(array $arr=array()){
 	
 	return mysqli_fetch_all($result,MYSQLI_ASSOC);
 }
+function getMorbidityReport(array $arr=array()){
+	require 'config.php';
+	$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` where `status` ='morbidity' ";
+	$filter="";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+		$filter = " and ";
+		foreach($arr as $key=>$value){
+			if($value!=""){
+
+				$ctr++;
+				if($ctr!=$rows){
+
+					$filter.=$key.=" = '".$value."' and ";
+				}else{
+					$filter.=$key.=" = '".$value."' ";
+				}
+
+			}
+		}
+	
+	}
+
+	$sql = $sql.$filter;
+
+	//Execute the query and put data into a result
+	$result = mysqli_query($conn,$sql);
+	
+	return mysqli_fetch_all($result,MYSQLI_ASSOC);
+}
+function getMortalityReport(array $arr=array()){
+	require 'config.php';
+	$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` where `status` ='mortality'";
+	$filter="";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+
+		$filter = " and ";
+		foreach($arr as $key=>$value){
+			if($value!=""){
+
+				$ctr++;
+				if($ctr!=$rows){
+
+					$filter.=$key.=" = '".$value."' and ";
+				}else{
+					$filter.=$key.=" = '".$value."' ";
+				}
+
+			}
+		}
+	
+	}
+
+	$sql = $sql.$filter;
+		//Execute the query and put data into a result
+	$result = mysqli_query($conn,$sql);
+	
+	return mysqli_fetch_all($result,MYSQLI_ASSOC);
+}
+
 function getYears(){
 	require "config.php";
 	$sql = "SELECT DISTINCT(year) AS year FROM outbreak";
@@ -205,21 +274,225 @@ function getDiseaseIDS($outbreakResult){
 	return $disease_ids;
 }
 
-function getCountOnAge($id,$start,$end){
+function getCountOnAge($id,$start,$end,array $arr = array()){
 	require "config.php";
 	$data = array();
 	
-	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Male' and disease_id = '$id' ) p where age between '$start' and '$end'";
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description, p.baranggay_id as baranggay_id,TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Male' and disease_id = '$id' ) p where age between '$start' and '$end'";
+	
+		$filter="";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+
+		$filter = " and ";
+		foreach($arr as $key=>$value){
+			if($value!=""){
+
+				$ctr++;
+				if($ctr!=$rows){
+
+					$filter.=$key.=" = '".$value."' and ";
+				}else{
+					$filter.=$key.=" = '".$value."' ";
+				}
+
+			}
+		}
+	
+	}
+
+	$sql = $sql.$filter;
+
 	$total_m = mysqli_num_rows(mysqli_query($conn,$sql));
 
-		
-	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Female' and disease_id = '$id' ) p where age between '$start' and '$end'";
-	$total_f = mysqli_num_rows(mysqli_query($conn,$sql));
 
+
+
+		
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,p.baranggay_id as baranggay_id, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Female' and disease_id = '$id' ) p where age between '$start' and '$end'";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+
+		$filter = " and ";
+		foreach($arr as $key=>$value){
+			if($value!=""){
+
+				$ctr++;
+				if($ctr!=$rows){
+
+					$filter.=$key.=" = '".$value."' and ";
+				}else{
+					$filter.=$key.=" = '".$value."' ";
+				}
+
+			}
+		}
+	
+	}
+
+	$sql = $sql.$filter;
+	
+
+	$total_f = mysqli_num_rows(mysqli_query($conn,$sql));
 	$data[]=array(
 		'Female'=>$total_f,
 		'Male'=>$total_m
 	);
+
+	return $data;
+
+}
+function getCountOnAgeMortality($id,$start,$end,array $arr = array()){
+	require "config.php";
+	$data = array();
+	
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description, p.baranggay_id as baranggay_id,TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.month,o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Male' and disease_id = '$id' and status='mortality') p where age between '$start' and '$end'";
+	
+		$filter="";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+
+		$filter = " and ";
+		foreach($arr as $key=>$value){
+			if($value!=""){
+
+				$ctr++;
+				if($key=="status"){
+
+				}else{
+					if($ctr!=$rows){
+
+						$filter.=$key.=" = '".$value."' and ";
+					}else{
+						$filter.=$key.=" = '".$value."' ";
+					}
+				}
+			}
+		}
+	
+	}
+
+	$sql = $sql.$filter;
+
+	$total_m = mysqli_num_rows(mysqli_query($conn,$sql));
+
+
+
+		
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,p.baranggay_id as baranggay_id, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.month,o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Female' and disease_id = '$id' and status='mortality') p where age between '$start' and '$end'";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+
+			$filter = " and ";
+			foreach($arr as $key=>$value){
+				if($value!=""){
+
+					$ctr++;
+					if($key=="status"){
+
+					}else{
+						if($ctr!=$rows){
+
+							$filter.=$key.=" = '".$value."' and ";
+						}else{
+							$filter.=$key.=" = '".$value."' ";
+						}
+					}
+				}
+			}
+		
+	}
+
+	$sql = $sql.$filter;
+	
+
+	$total_f = mysqli_num_rows(mysqli_query($conn,$sql));
+	$data[]=array(
+		'Female'=>$total_f,
+		'Male'=>$total_m
+	);
+
+	return $data;
+
+}
+
+function getCountOnAgeMorbidity($id,$start,$end,array $arr = array()){
+	require "config.php";
+	$data = array();
+	
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description, p.baranggay_id as baranggay_id,TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.month, o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Male' and disease_id = '$id' and status='morbidity') p where age between '$start' and '$end'";
+	
+		$filter="";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+
+		$filter = " and ";
+		foreach($arr as $key=>$value){
+			if($value!=""){
+
+				$ctr++;
+				if($key=="status"){
+
+				}else{
+					if($ctr!=$rows){
+
+						$filter.=$key.=" = '".$value."' and ";
+					}else{
+						$filter.=$key.=" = '".$value."' ";
+					}
+				}
+			}
+		}
+	
+	}
+
+	$sql = $sql.$filter;
+
+	$total_m = mysqli_num_rows(mysqli_query($conn,$sql));
+
+
+
+
+		
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,p.baranggay_id as baranggay_id, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.month,o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Female' and disease_id = '$id' and status='morbidity') p where age between '$start' and '$end'";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+
+			$filter = " and ";
+			foreach($arr as $key=>$value){
+				if($value!=""){
+
+					$ctr++;
+					if($key=="status"){
+
+					}else{
+						if($ctr!=$rows){
+
+							$filter.=$key.=" = '".$value."' and ";
+						}else{
+							$filter.=$key.=" = '".$value."' ";
+						}
+					}
+				}
+			}
+		
+	}
+
+	$sql = $sql.$filter;
+	
+
+	$total_f = mysqli_num_rows(mysqli_query($conn,$sql));
+	$data[]=array(
+		'Female'=>$total_f,
+		'Male'=>$total_m
+	);
+
 	return $data;
 
 }
@@ -245,5 +518,12 @@ function summarizeAgeRangePerDisease($id){
 	//}
 	return $data;
 
+}
+function convertToMonthName($month){
+	$monthNum  = $month;
+	$dateObj   = DateTime::createFromFormat('!m', $monthNum);
+	$monthName = $dateObj->format('F'); 
+
+	return $monthName;
 }
 ?>
