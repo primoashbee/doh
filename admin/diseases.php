@@ -79,7 +79,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 					</a></li>
 				</ul>
 			</li>
-			<li class="parent "><a data-toggle="collapse" href="#sub-item-2">
+			<li class="parent "><a data-toggle="collapse" href="#sub-item-3">
 				<em class="fa fa-navicon">&nbsp;</em> Reports <span data-toggle="collapse" href="#sub-item-3" class="icon pull-right"><em class="fa fa-plus"></em></span>
 				</a>
 				<ul class="children collapse" id="sub-item-3">
