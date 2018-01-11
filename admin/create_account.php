@@ -55,7 +55,7 @@ session_start();
 					<li><a class="" href="index.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Accounts
 					</a></li>
-					<li><a class="" href="create_accounts.php">
+					<li><a class="" href="create_account.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> Create Accounts
 					</a></li>
 					
@@ -68,7 +68,7 @@ session_start();
 					<li><a class="" href="diseases.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Diseases
 					</a></li>
-					<li><a class="" href="create_diseases.php">
+					<li><a class="" href="create_disease.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> Create Disease
 					</a></li>
 				</ul>

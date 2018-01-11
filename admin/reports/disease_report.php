@@ -60,6 +60,8 @@ $spreadsheet = $reader->load($inputFileName);
 
 $morbidity = $spreadsheet->getSheet(0);
 $mortality = $spreadsheet->getSheet(2);
+$morbidity_rank = $spreadsheet->getSheet(1);
+$mortality_rank = $spreadsheet->getSheet(3);
 $morbidity->getCell('AD1')->setValue($scope);	
 $morbidity->getCell('AD2')->setValue($month);	
 $morbidity->getCell('AD3')->setValue($year);	
@@ -68,9 +70,12 @@ $mortality->getCell('AD1')->setValue($scope);
 $mortality->getCell('AD2')->setValue($month);	
 $mortality->getCell('AD3')->setValue($year);	
 
+$mortality_rank->getCell('C7')->setValue('');
+$mortality_rank->getCell('E7')->setValue($year);
+$morbidity_rank->getCell('C7')->setValue('');
+$morbidity_rank->getCell('E7')->setValue($year);
 $row = 8;
 $ctr = 1;
-
 	foreach ($reports_morbidity as $key => $value) {
 		
 		$morbidity->getCell('A'.$row)->setValue($ctr);

@@ -1,4 +1,4 @@
 <?php 
 
-echo addslashes("Hello "");
+echo addslashes("Hello ");
 ?>
