@@ -73,7 +73,7 @@ if(checkIfLoggedIn()==false){
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 15,
-          center: {lat: 14.8386303, lng: 120.28420230000006},
+          center: {lat: 14.678672690466012, lng: 120.54104804992676},
 
           mapTypeId: 'satellite'
         });

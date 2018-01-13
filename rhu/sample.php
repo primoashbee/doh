@@ -33,7 +33,7 @@
   </head>
   <body>
     <div id="floating-panel">
-      <input id="address" type="textbox" value="Olongapo, Philippines">
+      <input id="address" type="textbox" value="Balanga, Bataan">
       <input id="submit" type="button" value="Geocode">
     </div>
     <div id="map"></div>
@@ -46,8 +46,8 @@
     
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 20,
-          center: {lat: -34.397, lng: 150.644}
+          zoom: 15,
+          center: {lat: 14.678672690466012, lng: 120.54104804992676}
         });
         var geocoder = new google.maps.Geocoder();
 
