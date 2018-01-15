@@ -68,12 +68,18 @@ if(checkIfLoggedIn()==false){
       // parameter when you first load the API. For example:
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
 
-      var map, heatmap;
+      var map, heatmap,center;
+  center ={lat: 14.678672690466012, lng: 120.54104804992676}
 
+      
       function initMap() {
+        
+        if(getPoints().length>0){
+          center = getPoints()[0]
+        }
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 15,
-          center: {lat: 14.678672690466012, lng: 120.54104804992676},
+          center: center,
 
           mapTypeId: 'terrain'
         });

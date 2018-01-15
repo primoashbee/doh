@@ -37,7 +37,7 @@ session_start();
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<div class="profile-sidebar">
 			<div class="profile-userpic">
-				<img src="<?=$_SESSION['user']['img_url']."?".rand(0,100) ?>" class="img-responsive" alt="">
+				<img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
 			</div>
 			<div class="profile-usertitle">
 				<div class="profile-usertitle-name">ADMIN</div>
@@ -83,7 +83,6 @@ session_start();
 					</li>
 				</ul>
 			</li>
-			<li><a href="setting.php"><em class="fa fa-gear">&nbsp;</em> Setting</a></li>
 			<li><a href="logout.php"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 		</ul>
 	</div><!--/.sidebar-->
@@ -100,61 +99,14 @@ session_start();
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Create Account
-						<a href="create_account.php"><button class="btn btn-success" style="float:right;">Create New Account</button></a>
+						Chart Sample
 					</div>
-					
 					<div class="panel-body">
-						<?php
-						if(isset($_SESSION['msg'])){
-							
-							?>
-								<div class="alert alert-success fade in alert-dismissable" style="margin-top:18px;">
-								    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-								    <strong>Success!</strong> <?=$_SESSION['msg'];?>
-								</div>
-							<?php
-							unset($_SESSION['msg']);
-						}
-					?>
-						<form action="create_account1.php" method="POST" id="frmCreateAccount">
-							<div class="form-group col-md-6" id="divUsername">
-								<label class="control-label" for="username" id="lblUsername">Username</label>
-								<input type="text" class="form-control" id="username" name ="username" placeholder="username" required="">
-							</div>
-							<div class="form-group col-md-6">
-								<label class="control-label" for="firstname">Firstname</label>
-								<input type="text" class="form-control" id="firstname" name ="firstname" placeholder="firstname" req>
-							</div>							
-							<div class="form-group col-md-6">
-								<label class="control-label" for="lastname">Lastname</label>
-								<input type="text" class="form-control" id="lastname" name ="lastname" placeholder="lastname" required="" >
-							</div>
-							<div class="form-group col-md-3">
-								<label class="control-label" for="birthday">Birthday</label>
-								<input type="date" id="birthday" name="birthday" class="form-control" required="">
-							</div>
-							<div class="form-group col-md-3">
-								<label class="control-label" for="gender">Gender</label>
-								<select name="gender" id="gender" class="form-control" style="height:46px" required="">
-									<option value="">------</option>
-									<option value="Male">Male</option>
-									<option value="Female">Female</option>
-								</select>
-							</div>							
-							
-							<div class="clearfix"></div>
-							<hr>
-							<div class="form-group col-md-6 divPassword" >
-								<label class="control-label" for="password" id="lblPassword">Password</label>
-								<input type="password" class="form-control" id="password" name ="password" placeholder="Password required">
-							</div>
-							<div class="form-group col-md-6 divPassword">
-								<label class="control-label" for="password_confirm">Password Confirm</label>
-								<input type="password" class="form-control" id="password_confirm" name ="password_confirm" placeholder="Retype Password" required="">
-							</div>
-							<button type="submit" class="btn btn-success">Submit</button>
-						</form>
+						<canvas id="myChart" width="400" height="400"></canvas>
+					</div>
+
+					
+				
 					</div>
 				</div>
 
@@ -171,52 +123,50 @@ session_start();
 	<script src="../js/easypiechart-data.js"></script>
 	<script src="../js/bootstrap-datepicker.js"></script>
 	<script src="../js/custom.js"></script>
-	<script>
 	
-		$("#frmCreateAccount").submit(function(e){
-			var errors = 0
-			$.ajax({
-					url:'../api.php',
-					data:{request:'checkIfUsernameExists',username:$('#username').val()},
-					type:'POST',
-					success:function(data){
-						console.log(data)
-						if(data==200){
-							console.log('existing')
-							$("#divUsername").addClass('has-error')
-							$("#lblUsername").html('Username (Username already existing)')
-							errors++
-						}else{
-							console.log('pwede')
-							$("#divUsername").removeClass('has-error')
-							$("#lblUsername").html('Username')}
-						
-					}
-				})
-			
-			if(!checkPasswordIfMatched($("#password").val(),$('#password_confirm').val())){
-				$('#lblPassword').html('Password (Password must match)');
-				$('.divPassword').addClass('has-error')
-				errors++
-			}else{
-				$('#lblPassword').html('Password ');
-				$('.divPassword').removeClass('has-error')
-			}
+ 
+    <script>
+    	var ctx = $('#myChart')
+    	var ctx = document.getElementById("myChart");
+		var myChart = new Chart(ctx, {
+		    type: 'bar',
+		    data: {
+		        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+		        datasets: [{
+		            label: '# of Votes',
+		            data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(255, 99, 132, 0.2)',
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(255, 206, 86, 0.2)',
+		                'rgba(75, 192, 192, 0.2)',
+		                'rgba(153, 102, 255, 0.2)',
+		                'rgba(255, 159, 64, 0.2)'
+		            ],
+		            borderColor: [
+		                'rgba(255,99,132,1)',
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(255, 206, 86, 1)',
+		                'rgba(75, 192, 192, 1)',
+		                'rgba(153, 102, 255, 1)',
+		                'rgba(255, 159, 64, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true
+		                }
+		            }]
+		        }
+		    }
+		});
+        
+    </script>
 
-			if(errors>0){
-				e.preventDefault()
-			}
-
-		})
-
-	
-		function checkPasswordIfMatched(pass1,pass2){
-			if(pass1==pass2){
-				return true;
-			}
-				return false;
-		}
-	</script>
 		
 </body>
 </html>

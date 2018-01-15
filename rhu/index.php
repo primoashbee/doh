@@ -47,7 +47,7 @@ if(checkIfLoggedIn()==false){
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<div class="profile-sidebar">
 			<div class="profile-userpic">
-				<img src="<?=$_SESSION['user']['img_url']?>" class="img-responsive" alt="">
+				<img src="<?=$_SESSION['user']['img_url']."?".rand(0,100)?>" class="img-responsive" alt="">
 			</div>
 			<div class="profile-usertitle">
 				<div class="profile-usertitle-name"><?=$_SESSION['user']['username']?></div>

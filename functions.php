@@ -1,4 +1,4 @@
-<?php 
+<?php 	
 class Account{
 	public $username;
 	public $password;
@@ -38,6 +38,11 @@ function getAccountsCollection(){
 	$sql="Select * from accounts where isDeleted = false and isAdmin = false";
 	$res = mysqli_query($conn,$sql);
 	$data;
+	if(mysqli_num_rows($res)<1){
+		
+		$data = array();
+		return $data=array();
+	}
 	while($row =mysqli_fetch_array($res)){
 		$length = sizeof($row['password']);
 		$password="";
@@ -56,6 +61,9 @@ function getDiseaseCollection(){
 	$sql="Select * from diseases where isDeleted = false";
 	$res = mysqli_query($conn,$sql);
 	$data;
+	if(mysqli_num_rows($res)==0){
+		return $data==array();
+	}
 	while($row =mysqli_fetch_array($res)){
 		$data[]=array('id'=>$row['id'],'name'=>$row['disease_name'],'description'=>$row['description'],'created_at'=>$row['created_at']);
 		
@@ -159,7 +167,7 @@ function checkIfExistingOutbreak($p_id,$d_id){
 }
 function qryOutbreak(array $arr=array()){
 	require 'config.php';
-	$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id`";
+	$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` ";
 	$filter="";
 	$rows = count($arr);
 	$ctr=0;
@@ -180,7 +188,7 @@ function qryOutbreak(array $arr=array()){
 		}
 	
 	}
-	$sql = $sql.$filter;
+	$sql = $sql.$filter. " order by created_at DESC";
 		//Execute the query and put data into a result
 	$result = mysqli_query($conn,$sql);
 	

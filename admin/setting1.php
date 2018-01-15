@@ -3,21 +3,15 @@
 	require "../config.php";
 	require "../functions.php";
 	session_start();
-	$firstname = addslashes($_POST['firstname']);
-	$lastname = addslashes($_POST['lastname']);
-	$birthday = addslashes($_POST['birthday']);
-	$password = addslashes($_POST['password']);
-	$gender = addslashes($_POST['gender']);
+	$password = $_POST['password'];
 	$id = $_SESSION['user']['id'];
 	if(!file_exists($_FILES['img_src']['tmp_name']) || !is_uploaded_file($_FILES['img_src']['tmp_name'])) {
 		if($password ==""){
-			$sql ="Update accounts set 
-			firstname='$firstname', lastname='$lastname', birthday='$birthday',
-			gender='$gender' where id ='$id'";
+
+			header('location:setting.php');
 		}else{
 		$sql ="Update accounts set 
-		password ='$password', firstname='$firstname', lastname='$lastname', birthday='$birthday',
-		gender='$gender' where id ='$id'";
+		password ='$password' where id ='$id'";
 		}
 		if(mysqli_query($conn,$sql)){
 				$_SESSION['msg'] = 'Account Succesffuly Upaded';
@@ -40,19 +34,18 @@
 			if($password ==""){
 
 				$sql ="Update accounts set 
-				firstname='$firstname', lastname='$lastname', birthday='$birthday',
-				gender='$gender', img_url='$target' where id ='$id'";
+				 img_url='$target' where id ='$id'";
 			}else{
 				$sql ="Update accounts set 
-				password ='$password', firstname='$firstname', lastname='$lastname', birthday='$birthday',
-				gender='$gender', img_url='$target' where id ='$id'";
+				password ='$password', img_url='$target' where id ='$id'";
 			}
 
 			if(mysqli_query($conn,$sql)){
 				move_uploaded_file( $_FILES['img_src']['tmp_name'], $target);
 				$_SESSION['msg'] = 'Account Succesffuly Upaded';
+				$sql="Select * from accounts where id ='$id'";
 				$_SESSION['user'] = mysqli_fetch_assoc(mysqli_query($conn,$sql));
-				
+
 				header('location:setting.php');
 			}
 	    } else {

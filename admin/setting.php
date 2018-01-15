@@ -80,11 +80,11 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 	<div id="" class="col-sm-3 col-lg-2 sidebar">
 		<div class="profile-sidebar">
 			<div class="profile-userpic">
-				<img src="<?=$_SESSION['user']['img_url']."?".rand(0,100)?>?>" class="img-responsive" alt="">
+				<img src="<?=$_SESSION['user']['img_url']."?".rand(0,100)?>" class="img-responsive" alt="">
 			</div>
 			<div class="profile-usertitle">
-				<div class="profile-usertitle-name"><?=$_SESSION['user']['username']?></div>
-				<div class="profile-usertitle-status"><span class="indicator label-success"></span>RHU Officer</div>
+				<div class="profile-usertitle-name">ADMIN</div>
+				<div class="profile-usertitle-status"><span class="indicator label-success"></span>ADMINISTRATOR</div>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -92,32 +92,41 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 	
 		<ul class="nav menu">
 			<li class="parent "><a data-toggle="collapse" href="#sub-item-1">
-				<em class="fa fa-user">&nbsp;</em> Patients <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
+				<em class="fa fa-user">&nbsp;</em> Accounts <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
 				</a>
 				<ul class="children collapse" id="sub-item-1">
 					<li><a class="" href="index.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> View Patients
+						<span class="fa fa-arrow-right">&nbsp;</span> View Accounts
 					</a></li>
-					<li><a class="" href="create_patient.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Patient
+					<li><a class="" href="create_account.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> Create Accounts
 					</a></li>
 					
 				</ul>
 			</li>
 			<li class="parent "><a data-toggle="collapse" href="#sub-item-2">
-				<em class="fa fa-navicon">&nbsp;</em> Outbreak Mgmt <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
+				<em class="fa fa-navicon">&nbsp;</em> Diseases <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
 				</a>
 				<ul class="children collapse" id="sub-item-2">
-					<li><a class="" href="outbreaks.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> View Outbreaks
+					<li><a class="" href="diseases.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> View Diseases
 					</a></li>
-					<li><a class="" href="create_outbreak.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Outbreaks
+					<li><a class="" href="create_disease.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> Create Disease
 					</a></li>
 				</ul>
 			</li>
-			
-			<li><a href="setting.php"><em class="fa fa-gear">&nbsp;</em> Settings</a></li>
+			<li class="parent "><a data-toggle="collapse" href="#sub-item-2">
+				<em class="fa fa-navicon">&nbsp;</em> Reports <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
+				</a>
+				<ul class="children collapse" id="sub-item-2">
+					<li><a class="" href="morbidity.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> Morbidity
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li><a href="setting.php"><em class="fa fa-gear">&nbsp;</em> Setting</a></li>
 			<li><a href="logout.php"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 		</ul>
 	</div><!--/.sidebar-->
@@ -126,7 +135,7 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 	
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">Welcome, <i><?=$_SESSION['user']['firstname']." ".$_SESSION['user']['lastname']?></i></h1>
+				<h1 class="page-header">Welcome, <i><?=$_SESSION['user']['firstname']?></i></h1>
 			</div>
 		</div><!--/.row-->
 		
@@ -152,55 +161,37 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 						}
 					?>
 						<form action="setting1.php" method="POST" id="frmUpdateAccount" enctype="multipart/form-data">
-							<div class="col-md-6 col-xs-12 col-lg-3" style="padding-right: 250px">
+							<div class="col-md-6 col-xs-12 col-lg-3" >
 
-							<input type="file" accept="image/*" id="img_src" name="img_src" onchange="loadFile(event)" style="visibility: hidden">
+								<input type="file" accept="image/*" id="img_src" name="img_src" onchange="loadFile(event)" style="visibility: hidden">
 
-							<center><img id="output" class="img img-circle" style="width: 250px;height: 250px;margin-top: -30px"/></center>
-							 <br><br>
-							 <div id="changeImage"><center><b></b></center>
-							 </div>
-							 <center><button type="button" 	id="btnUpload" class="btn btn-success"><span class="glyphicon glyphicon-camera"></span>
-							  <span>Change Image</span></button></center>
-						 	
+								<center><img id="output" class="img img-circle" style="width: 250px;height: 250px;margin-top: -30px"/></center>
+								 <br><br>
+								 <div id="changeImage"><center><b></b></center>
+								 </div>
+								 <center><button type="button" 	id="btnUpload" class="btn btn-success"><span class="glyphicon glyphicon-camera"></span>
+								  <span>Change Image</span></button></center>
+							 	
 
-							<script>
-							  var loadFile = function(event) {
-							    var output = document.getElementById('output');
-							    output.src = URL.createObjectURL(event.target.files[0]);
-							  };
-							</script>
+								<script>
+								  var loadFile = function(event) {
+								    var output = document.getElementById('output');
+								    output.src = URL.createObjectURL(event.target.files[0]);
+								  };
+								</script>
 							</div>
-							<div class="form-group col-md-5 col-lg-3" id="divUsername" >
+
+							<div class="form-group col-md-5 col-lg-4" id="divUsername" >
 								<label class="control-label" for="username" id="lblUsername">Username</label>
 								<input type="text" class="form-control" id="username" name ="username" placeholder="username" required="" value="<?=$me['username'] ?>" readonly>
 							</div>
-							<div class="form-group col-md-4">
-								<label class="control-label" for="firstname">Firstname</label>
-								<input type="text" class="form-control" id="firstname" name ="firstname" placeholder="firstname" required="" value="<?=$me['firstname'] ?>">
-							</div>							
-							<div class="form-group col-md-5">
-								<label class="control-label" for="lastname">Lastname</label>
-								<input type="text" class="form-control" id="lastname" name ="lastname" placeholder="lastname" required="" value="<?=$me['lastname'] ?>">
-							</div>
-							<div class="form-group col-md-4">
-								<label class="control-label" for="birthday">Birthday</label>
-								<input type="date" id="birthday" name="birthday" class="form-control" required="" value="<?=$me['birthday'] ?>">
-							</div>
-							<div class="form-group col-md-2">
-								<label class="control-label" for="gender">Gender</label>
-								<select name="gender" id="gender" class="form-control" style="height:46px" required="">
-									<option value="<?=$me['gender'] ?>"><?=$me['gender'] ?></option>
-									<option value="Male">Male</option>
-									<option value="Female">Female</option>
-								</select>
-							</div>							
+								
 							
-							<div class="form-group col-md-3 divPassword" >
+							<div class="form-group col-md-5 col-lg-4 divPassword" >
 								<label class="control-label" for="password" id="lblPassword">Password</label>
 								<input type="password" class="form-control" id="password" name ="password" placeholder="Password required" >
 							</div>
-							<div class="form-group col-md-3 divPassword">
+							<div class="form-group col-md-5 col-lg-4 divPassword">
 								<label class="control-label" for="password_confirm">Password Confirm</label>
 								<input type="password" class="form-control" id="password_confirm" name ="password_confirm" placeholder="Retype Password">
 							</div>

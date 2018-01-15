@@ -6,6 +6,18 @@ require '../../config.php';
 require '../../functions.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+$chart= new \PHPExcel_Chart(
+                    'chart1',
+                    'Ashbee',
+                    '',
+                    '',
+                    true,
+                    0,
+                    NULL, 
+                    NULL
+                    );
+var_dump($chart);
+return;
 date_default_timezone_set('Asia/Manila');
 $date = date('m-d-Y(h-i-s-A)', time());
 $scope = 'ALL';
@@ -62,6 +74,10 @@ $morbidity = $spreadsheet->getSheet(0);
 $mortality = $spreadsheet->getSheet(2);
 $morbidity_rank = $spreadsheet->getSheet(1);
 $mortality_rank = $spreadsheet->getSheet(3);
+
+$chart_morbidy = $spreadsheet->getSheet(4);
+
+
 $morbidity->getCell('AD1')->setValue($scope);	
 $morbidity->getCell('AD2')->setValue($month);	
 $morbidity->getCell('AD3')->setValue($year);	
