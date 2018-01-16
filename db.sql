@@ -29,16 +29,14 @@ CREATE TABLE `accounts` (
   `birthday` varchar(255) DEFAULT NULL,
   `lastname` varchar(255) DEFAULT NULL,
   `gender` varchar(255) DEFAULT NULL,
-  `img_url` varchar(255) DEFAULT NULL,
+  `img_url` varchar(255) DEFAULT '../images/avatar/default.png',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `isDeleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 /*Data for the table `accounts` */
-
-insert  into `accounts`(`id`,`username`,`password`,`isAdmin`,`firstname`,`birthday`,`lastname`,`gender`,`img_url`,`created_at`,`updated_at`,`isDeleted`) values (6,'admin','1234',1,'ADMINISTRATOR','2000-01-01','ADMINISTRATOR',NULL,NULL,'2018-01-03 13:54:47','2018-01-03 13:54:47',0);
 
 /*Table structure for table `baranggays` */
 
@@ -73,8 +71,6 @@ CREATE TABLE `diseases` (
 
 /*Data for the table `diseases` */
 
-insert  into `diseases`(`id`,`disease_name`,`description`,`created_at`,`updated_at`,`isDeleted`) values (3,'Adenoviruses ','Adenoviruses are common causes of respiratory illness, but most infections are not severe. They can cause cold-like symptoms, sore throat, bronchitis, pneumonia, diarrhea, and pink eye (conjunctivitis). You can get an adenovirus infection at any age, but infants and people with weakened immune systems are more likely than others to develop severe illness from adenovirusesâ€¦','2018-01-04 10:55:52','2018-01-04 10:55:52',0),(4,'UTI','Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.','2018-01-04 20:03:31','2018-01-04 20:03:31',0),(5,'Allergy','Allergy\r\nAllergy\r\nAllergy\r\nAllergy\r\nAllergy\r\nAllergy\r\n','2018-01-11 10:04:39','2018-01-11 10:04:39',0),(6,'ARI (cough and colds)','ARI (cough and colds)\r\nARI (cough and colds)\r\nARI (cough and colds)\r\nARI (cough and colds)\r\nARI (cough and colds)\r\nARI (cough and colds)\r\nARI (cough and colds)\r\nARI (cough and colds)\r\nARI (cough and colds)\r\nARI (cough and colds)\r\n','2018-01-11 10:04:45','2018-01-11 10:04:45',0);
-
 /*Table structure for table `outbreak` */
 
 DROP TABLE IF EXISTS `outbreak`;
@@ -92,7 +88,7 @@ CREATE TABLE `outbreak` (
   `month` varchar(255) DEFAULT 'MONTH(CURRENT_TIMESTAMP)',
   `year` varchar(255) DEFAULT 'YEAR(CURRENT_TIMESTAMP)',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `outbreak` */
 
@@ -114,11 +110,9 @@ CREATE TABLE `patients` (
   `isDeleted` tinyint(1) DEFAULT '0',
   `created_by` int(15) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 /*Data for the table `patients` */
-
-insert  into `patients`(`id`,`firstname`,`lastname`,`birthday`,`address`,`contact`,`gender`,`baranggay_id`,`created_at`,`updated_at`,`isDeleted`,`created_by`) values (4,'Ashbee','Morgado1','1994-11-26','#1647 Balic-BAlic Sta. Rita Olongapo\'s City','09171101126','Male',15,'2018-01-04 13:37:45','2018-01-04 13:37:45',0,16),(5,'Bruno','Mars','1989-05-23','DOON SA MALAYO HINDI KO ALAM KUNG TAGA SAAN EH','09276131095','Male',1,'2018-01-04 13:40:59','2018-01-04 13:40:59',0,16),(6,'Ed','Sheeran','1990-08-04','asdjalkdaslkasjdalksdjaskldjalksd','09094012258','Male',14,'2018-01-05 09:05:06','2018-01-05 09:05:06',0,16),(7,'Daenarys','Targaryen','2000-01-10','1321','09191234566','Female',14,'2018-01-05 09:15:53','2018-01-05 09:15:53',0,16);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
