@@ -124,7 +124,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 									foreach($data as $key=>$value){
 									?>
 										<tr>
-											<td><?=$value['name']?></td>
+											<td><?=$value['disease_name']?></td>
 											<td><?=$value['description']?></td>
 											<td><?=$value['created_at']?></td>
 											<td>

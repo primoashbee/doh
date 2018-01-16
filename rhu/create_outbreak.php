@@ -246,7 +246,7 @@ if(checkIfLoggedIn()==false){
 
 									foreach($data as $key=>$value){
 									?>
-							<option value="<?=$value['id']?>"><?=($value['name'])?></option>
+							<option value="<?=$value['id']?>"><?=($value['disease_name'])?></option>
 									<?php
 									
 								}

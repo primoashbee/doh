@@ -60,8 +60,9 @@ function getDiseaseCollection(){
 	require "config.php";
 	$sql="Select * from diseases where isDeleted = false";
 	$res = mysqli_query($conn,$sql);
-	$data;
-	if(mysqli_num_rows($res)==0){
+	
+	return (mysqli_fetch_all($res,MYSQLI_ASSOC));
+	/*if(mysqli_num_rows($res)==0){
 		return $data==array();
 	}
 	while($row =mysqli_fetch_array($res)){
@@ -69,6 +70,7 @@ function getDiseaseCollection(){
 		
 	}
 	return $data;
+	*/
 }
 function getDiseaseViaID(){
 	require "config.php";
