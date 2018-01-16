@@ -6,18 +6,6 @@ require '../../config.php';
 require '../../functions.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-$chart= new \PHPExcel_Chart(
-                    'chart1',
-                    'Ashbee',
-                    '',
-                    '',
-                    true,
-                    0,
-                    NULL, 
-                    NULL
-                    );
-var_dump($chart);
-return;
 date_default_timezone_set('Asia/Manila');
 $date = date('m-d-Y(h-i-s-A)', time());
 $scope = 'ALL';

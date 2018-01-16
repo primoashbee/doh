@@ -116,12 +116,12 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 					</a></li>
 				</ul>
 			</li>
-			<li class="parent "><a data-toggle="collapse" href="#sub-item-2">
-				<em class="fa fa-navicon">&nbsp;</em> Reports <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
+			<li class="parent "><a data-toggle="collapse" href="#sub-item-3">
+				<em class="fa fa-navicon">&nbsp;</em> Reports <span data-toggle="collapse" href="#sub-item-3" class="icon pull-right"><em class="fa fa-plus"></em></span>
 				</a>
-				<ul class="children collapse" id="sub-item-2">
+				<ul class="children collapse" id="sub-item-3">
 					<li><a class="" href="morbidity.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Morbidity
+						<span class="fa fa-arrow-right">&nbsp;</span> Reports
 						</a>
 					</li>
 				</ul>
