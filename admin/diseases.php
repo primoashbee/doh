@@ -128,7 +128,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 											<td><?=$value['description']?></td>
 											<td><?=$value['created_at']?></td>
 											<td>
-												<button class="btn btn-warning edit" id="<?=$value['id']?>" disease="<?=$value['name']?>"> <span class="fa fa-pencil"></span> </button>
+												<button class="btn btn-warning edit" id="<?=$value['id']?>" disease="<?=$value['disease_name']?>"> <span class="fa fa-pencil"></span> </button>
 												<button class="btn btn-danger delete" id="<?=$value['id']?>"> <span class="fa fa-trash-o"></span> </button>
 
 											</td>

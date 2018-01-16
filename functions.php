@@ -80,6 +80,12 @@ function getDiseaseViaID(){
 	$data=array('description'=>$row['description']);
 	return $data;
 }
+function deleteDiseaseViaID($id){
+	require "config.php";
+	$sql="Update diseases set isDeleted = true where id= '$id'";
+	mysqli_query($conn,$sql);
+	return 200;
+}
 function getDiseaseViaIDNumber($id){
 	require "config.php";
 	$sql="Select * from diseases where id = '$id' and isDeleted = false";

@@ -14,7 +14,6 @@ if($request=="deleteAccountViaID"){
 	$sql="Update accounts set isDeleted = true where id ='$id'";
 
 	if(mysqli_query($conn,$sql)){
-	
 		echo json_encode(array('msg'=>200));
 	}else{
 		echo json_encode(array('msg'=>404));
@@ -65,8 +64,8 @@ if($request=="deletePatientViaID"){
 }
 if($request=="deleteDiseaseViaID"){
 	$id = addslashes($_POST['id']);
-	$sql="Update diseaes set isDeleted = true where id ='$id'";
-
+	$sql="Update diseases set isDeleted = true where id ='$id'";
+	
 	if(mysqli_query($conn,$sql)){
 	
 		echo json_encode(array('msg'=>200));
