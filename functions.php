@@ -72,6 +72,7 @@ function getDiseaseCollection(){
 	return $data;
 	*/
 }
+
 function getDiseaseViaID(){
 	require "config.php";
 	$sql="Select description from diseases where isDeleted = false";
@@ -264,7 +265,11 @@ function getMortalityReport(array $arr=array()){
 	
 	return mysqli_fetch_all($result,MYSQLI_ASSOC);
 }
-
+function totalCountViaDiseaseID($id,$status){
+	require "config.php";
+	$sql = "Select * from outbreak where disease_id = '$id' and status = '$status'";
+	return mysqli_num_rows(mysqli_query($conn,$sql));
+}
 function getYears(){
 	require "config.php";
 	$sql = "SELECT DISTINCT(year) AS year FROM outbreak";
@@ -541,5 +546,62 @@ function convertToMonthName($month){
 	$monthName = $dateObj->format('F'); 
 
 	return $monthName;
+}
+
+function rankings($status, string $year="asdasd"){
+	require 'config.php';
+	if($status=="morbidity"){
+			$sql  = "SELECT *, FIND_IN_SET( total_count, (
+					SELECT GROUP_CONCAT( total_count ORDER BY total_count DESC ) 
+					FROM morbidity_scores )
+			) AS rank
+			FROM morbidity_scores" ;
+	}else{
+			$sql  = "SELECT *, FIND_IN_SET( total_count, (
+					SELECT GROUP_CONCAT( total_count ORDER BY total_count DESC ) 
+					FROM mortality_scores )
+			) AS rank
+			FROM mortality_scores" ;		
+	}
+	
+	return mysqli_fetch_all(mysqli_query($conn,$sql),MYSQLI_ASSOC);
+
+
+}
+function setMorbidityRanking(){
+	require "config.php";
+	$sql = "AS SELECT 
+		  disease_id,
+		  d.`disease_name`,
+		  IF(
+		    COUNT(disease_id) > 0,
+		    COUNT(disease_id),
+		    0
+		  ) AS total_count 
+		FROM
+		  outbreak o 
+		  LEFT JOIN diseases d 
+		    ON d.id = o.`disease_id` 
+		    WHERE o.`status` ='morbidity'
+		GROUP BY disease_id ";
+	}
+
+function setMortalityRanking(){
+	require "config.php";
+	$sql = "AS SELECT 
+		  disease_id,
+		  d.`disease_name`,
+		  IF(
+		    COUNT(disease_id) > 0,
+		    COUNT(disease_id),
+		    0
+		  ) AS total_count 
+		FROM
+		  outbreak o 
+		  LEFT JOIN diseases d 
+		    ON d.id = o.`disease_id` 
+		    WHERE o.`status` ='mortality'
+		GROUP BY disease_id ";
+
 }
 ?>

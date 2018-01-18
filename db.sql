@@ -34,9 +34,11 @@ CREATE TABLE `accounts` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `isDeleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 /*Data for the table `accounts` */
+
+insert  into `accounts`(`id`,`username`,`password`,`isAdmin`,`firstname`,`birthday`,`lastname`,`gender`,`img_url`,`created_at`,`updated_at`,`isDeleted`) values (28,'admin','1234',1,NULL,NULL,NULL,NULL,'../images/avatar/default.png','2018-01-16 09:08:04','2018-01-16 09:08:04',0),(29,'ashbee','1234',0,'Ashbee','1994-11-26','Morgado','Male','../images/avatar/default.png','2018-01-18 09:08:36','2018-01-18 09:08:36',0);
 
 /*Table structure for table `baranggays` */
 
@@ -67,9 +69,11 @@ CREATE TABLE `diseases` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `isDeleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 /*Data for the table `diseases` */
+
+insert  into `diseases`(`id`,`disease_name`,`description`,`created_at`,`updated_at`,`isDeleted`) values (7,'Test','akldjaskdjaskdasj','2018-01-16 09:18:20','2018-01-16 09:18:20',1),(8,'UTI','Urinary Track Infection','2018-01-18 09:11:41','2018-01-18 09:11:41',0),(9,'Headache','Sakit sa ulo','2018-01-18 09:15:57','2018-01-18 09:15:57',0),(10,'AIDS/HIV','TULO HAHAHAHA','2018-01-18 09:16:32','2018-01-18 09:16:32',0),(11,'Asthma','Ubo ng ubo','2018-01-18 09:16:46','2018-01-18 09:16:46',0);
 
 /*Table structure for table `outbreak` */
 
@@ -88,9 +92,11 @@ CREATE TABLE `outbreak` (
   `month` varchar(255) DEFAULT 'MONTH(CURRENT_TIMESTAMP)',
   `year` varchar(255) DEFAULT 'YEAR(CURRENT_TIMESTAMP)',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `outbreak` */
+
+insert  into `outbreak`(`id`,`patient_id`,`disease_id`,`status`,`lattitude`,`longitude`,`created_at`,`updated_at`,`created_by`,`month`,`year`) values (1,1,8,'mortality','14.667338889449432','120.54555416107178','2018-01-18 09:17:06','2018-01-18 09:17:06',29,'1','2018'),(2,2,10,'morbidity','14.667338889449432','120.54044723510742','2018-01-18 09:17:16','2018-01-18 09:17:16',29,'1','2018'),(3,5,11,'mortality','14.666633102207173','120.55250644683838','2018-01-18 09:17:26','2018-01-18 09:17:26',29,'1','2018'),(4,4,11,'mortality','14.65525715871266','120.54413795471191','2018-01-18 09:17:37','2018-01-18 09:17:37',29,'1','2018');
 
 /*Table structure for table `patients` */
 
@@ -110,9 +116,71 @@ CREATE TABLE `patients` (
   `isDeleted` tinyint(1) DEFAULT '0',
   `created_by` int(15) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 /*Data for the table `patients` */
+
+insert  into `patients`(`id`,`firstname`,`lastname`,`birthday`,`address`,`contact`,`gender`,`baranggay_id`,`created_at`,`updated_at`,`isDeleted`,`created_by`) values (1,'Ashbee','Morgado','1994-11-26','#1647 Balic - Balic Sta. Rita','0917110112694','Male',1,'2018-01-18 09:09:05','2018-01-18 09:09:05',0,29),(2,'Enmar','Andal','1990-01-01','Doon','09094012294','Male',5,'2018-01-18 09:09:23','2018-01-18 09:09:23',0,29),(3,'Jah','Mackay','1994-11-13','don sa gapo','09171101129','Female',20,'2018-01-18 09:09:45','2018-01-18 09:09:45',0,29),(4,'Suzette','Madayag','1990-01-01','don sa st reet','09194412294','Female',2,'2018-01-18 09:10:09','2018-01-18 09:10:09',0,29),(5,'Mary Jane','Lingat','1989-01-01','sindalan','09215569987','Female',6,'2018-01-18 09:10:41','2018-01-18 09:10:41',0,29);
+
+/*Table structure for table `morbidity_scores` */
+
+DROP TABLE IF EXISTS `morbidity_scores`;
+
+/*!50001 DROP VIEW IF EXISTS `morbidity_scores` */;
+/*!50001 DROP TABLE IF EXISTS `morbidity_scores` */;
+
+/*!50001 CREATE TABLE  `morbidity_scores`(
+ `disease_id` int(15) unsigned ,
+ `disease_name` varchar(255) ,
+ `total_count` bigint(21) 
+)*/;
+
+/*Table structure for table `mortality_scores` */
+
+DROP TABLE IF EXISTS `mortality_scores`;
+
+/*!50001 DROP VIEW IF EXISTS `mortality_scores` */;
+/*!50001 DROP TABLE IF EXISTS `mortality_scores` */;
+
+/*!50001 CREATE TABLE  `mortality_scores`(
+ `disease_id` int(15) unsigned ,
+ `disease_name` varchar(255) ,
+ `total_count` bigint(21) 
+)*/;
+
+/*Table structure for table `scores` */
+
+DROP TABLE IF EXISTS `scores`;
+
+/*!50001 DROP VIEW IF EXISTS `scores` */;
+/*!50001 DROP TABLE IF EXISTS `scores` */;
+
+/*!50001 CREATE TABLE  `scores`(
+ `disease_id` int(15) unsigned ,
+ `disease_name` varchar(255) ,
+ `total_count` bigint(21) 
+)*/;
+
+/*View structure for view morbidity_scores */
+
+/*!50001 DROP TABLE IF EXISTS `morbidity_scores` */;
+/*!50001 DROP VIEW IF EXISTS `morbidity_scores` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `morbidity_scores` AS select `o`.`disease_id` AS `disease_id`,`d`.`disease_name` AS `disease_name`,if((count(`o`.`disease_id`) > 0),count(`o`.`disease_id`),0) AS `total_count` from (`outbreak` `o` left join `diseases` `d` on((`d`.`id` = `o`.`disease_id`))) where (`o`.`status` = 'morbidity') group by `o`.`disease_id` */;
+
+/*View structure for view mortality_scores */
+
+/*!50001 DROP TABLE IF EXISTS `mortality_scores` */;
+/*!50001 DROP VIEW IF EXISTS `mortality_scores` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `mortality_scores` AS select `o`.`disease_id` AS `disease_id`,`d`.`disease_name` AS `disease_name`,if((count(`o`.`disease_id`) > 0),count(`o`.`disease_id`),0) AS `total_count` from (`outbreak` `o` left join `diseases` `d` on((`d`.`id` = `o`.`disease_id`))) where (`o`.`status` = 'mortality') group by `o`.`disease_id` */;
+
+/*View structure for view scores */
+
+/*!50001 DROP TABLE IF EXISTS `scores` */;
+/*!50001 DROP VIEW IF EXISTS `scores` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `scores` AS (select `o`.`disease_id` AS `disease_id`,`d`.`disease_name` AS `disease_name`,if((count(`o`.`disease_id`) > 0),count(`o`.`disease_id`),0) AS `total_count` from (`outbreak` `o` left join `diseases` `d` on((`d`.`id` = `o`.`disease_id`))) group by `o`.`disease_id`) */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

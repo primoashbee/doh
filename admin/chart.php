@@ -102,7 +102,11 @@ session_start();
 						Chart Sample
 					</div>
 					<div class="panel-body">
-						<canvas id="myChart" width="400" height="400"></canvas>
+						
+							<h1> Mortality Report </h1>
+						<div class="canvas-wrapper">
+							<canvas class="main-chart" id="bar-chart" height="200" width="600"></canvas>
+						</div>
 					</div>
 
 					
@@ -125,47 +129,46 @@ session_start();
 	<script src="../js/custom.js"></script>
 	
  
-    <script>
-    	var ctx = $('#myChart')
-    	var ctx = document.getElementById("myChart");
-		var myChart = new Chart(ctx, {
-		    type: 'bar',
-		    data: {
-		        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-		        datasets: [{
-		            label: '# of Votes',
-		            data: [12, 19, 3, 5, 2, 3],
-		            backgroundColor: [
-		                'rgba(255, 99, 132, 0.2)',
-		                'rgba(54, 162, 235, 0.2)',
-		                'rgba(255, 206, 86, 0.2)',
-		                'rgba(75, 192, 192, 0.2)',
-		                'rgba(153, 102, 255, 0.2)',
-		                'rgba(255, 159, 64, 0.2)'
-		            ],
-		            borderColor: [
-		                'rgba(255,99,132,1)',
-		                'rgba(54, 162, 235, 1)',
-		                'rgba(255, 206, 86, 1)',
-		                'rgba(75, 192, 192, 1)',
-		                'rgba(153, 102, 255, 1)',
-		                'rgba(255, 159, 64, 1)'
-		            ],
-		            borderWidth: 1
-		        }]
-		    },
-		    options: {
-		        scales: {
-		            yAxes: [{
-		                ticks: {
-		                    beginAtZero:true
-		                }
-		            }]
-		        }
-		    }
-		});
-        
-    </script>
+	<script>
+	var chart2 = document.getElementById("bar-chart").getContext("2d");
+
+	var chartData = {
+		labels : ["January","February","March","April","May","June","July","January","February","March","April","May","June","July"],
+		datasets : [
+			{
+				fillColor : "rgba(48, 164, 255, 0.2)",
+				strokeColor : "rgba(48, 164, 255, 0.8)",
+				highlightFill : "rgba(48, 164, 255, 0.75)",
+				highlightStroke : "rgba(48, 164, 255, 1)",
+				data : [1,2,3,4,5,6,7,8]
+			}
+		],
+		options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                // Change here
+            	barPercentage: 10,
+            	categorySpacing:1.5
+                
+            }]
+        }
+    
+    }
+
+	}
+	window.myBar = new Chart(chart2).Bar(chartData, {
+	responsive: true,
+	scaleLineColor: "rgba(0,0,0,.2)",
+	scaleGridLineColor: "rgba(0,0,0,.05)",
+	scaleFontColor: "#c5c7cc"
+	});
+
+	</script>
 
 		
 </body>

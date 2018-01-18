@@ -247,7 +247,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			$.ajax({
 				url:'../api.php',
 				data:{request:'deleteDiseaseViaID',id:id},
-				dataType:'JSON',
+				dataType:'JSON',	
 				type:'post',
 				success:function(data){
 					if(data.msg==200){

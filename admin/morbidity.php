@@ -234,8 +234,79 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 
 						</table>
 						<hr>
-						<h3> Map Information </h3>
+						<div class="clearfix"></div>
+						<div class="canvas-wrapper">
+							<h3 style="text-align: center"> Mortality Graph </h3>
+							<canvas class="main-chart" id="mortalityGraph" height="100" width="600"></canvas>
+						</div>						
+						<div class="canvas-wrapper">
+							<h3 style="text-align: center"> Morbidity Graph </h3>
+							<canvas class="main-chart" id="morbidityGraph" height="100" width="600"></canvas>
+						</div>
+						<div class="clearfix"></div>
+						<div class="col-xs-12 col-lg-12 col-md-12">
+						<h3> <center> Map Information </center> </h3>
 						<iframe src="heatmap.php" width="100%" height="500px"></iframe>
+						</div>						
+						<div class="col-xs-12 col-lg-6 col-md-6">
+						<h3>  <center>Morbidty Rankings</center> </h3>
+						<?php 
+							$morbidity = rankings('morbidity');
+							
+							$ctr=1;
+						?>
+						<table class="table table-striped">
+							<thead>
+								<th>#</th>
+								<th>Name</th>
+								<th>Count</th>
+								<th>Rank</th>
+							</thead>
+							<tbody>	
+								<?php
+									foreach ($morbidity as $key => $value) {
+									?> 
+									<tr>
+										<td><?=$ctr++?></td>
+										<td><?=$value['disease_name']?></td>
+										<td><?=$value['total_count']?></td>
+										<td><?=$value['rank']?></td>
+									</tr>
+									<?php
+								}
+							?>
+							</tbody>
+						</table>
+						</div>						
+						<div class="col-xs-12 col-lg-6 col-md-6">
+						<h3> <center>Mortality Rankings</center> </h3>
+												<?php 
+							$mortality = rankings('mortality');
+							$ctr=1;
+						?>
+						<table class="table table-striped">
+							<thead>
+								<th>#</th>
+								<th>Name</th>
+								<th>Count</th>
+								<th>Rank</th>
+							</thead>
+							<tbody>	
+								<?php
+									foreach ($mortality as $key => $value) {
+									?> 
+									<tr>
+										<td><?=$ctr++?></td>
+										<td><?=$value['disease_name']?></td>
+										<td><?=$value['total_count']?></td>
+										<td><?=$value['rank']?></td>
+									</tr>
+									<?php
+								}
+							?>
+							</tbody>
+						</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -252,7 +323,96 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	<script src="../js/bootstrap-datepicker.js"></script>
 	<script src="../js/custom.js"></script>
 	<script src="../js/datatables.js"></script>
+	<script>
+	var mortalityChart = document.getElementById("mortalityGraph").getContext("2d");
+	var morbidityChart = document.getElementById("morbidityGraph").getContext("2d");
+	var labels = <?php 
+		$label=array();
+		$disease = qryOutbreak($_GET);
+		$totalCountMorbidityViaDiseaseID =array();
+		$totalCountMortalityViaDiseaseID =array();
+		$mortality_counts =array();	
+		foreach ($disease as $key => $value) {
+			if(!in_array($value['disease_name'], $label)){
+			array_push($label,$value['disease_name']);
+			array_push($totalCountMortalityViaDiseaseID,totalCountViaDiseaseID($value['disease_id'],'mortality'));
+			array_push($totalCountMorbidityViaDiseaseID,totalCountViaDiseaseID($value['disease_id'],'morbidity'));
+			}
+			//$labels.=$value['disease_name'].", ";
+		}
+			echo json_encode($label);		
+	?>;
+	var chartDataMortality = {
+		labels :  labels,
+		datasets : [
+			{
+				fillColor : "rgba(48, 164, 255, 0.2)",
+				strokeColor : "rgba(48, 164, 255, 0.8)",
+				highlightFill : "rgba(48, 164, 255, 0.75)",
+				highlightStroke : "rgba(48, 164, 255, 1)",
+				data : <?= json_encode($totalCountMortalityViaDiseaseID) ?>
+			}
+		],
+		options: {
+	        scales: {
+	            yAxes: [{
+	                ticks: {
+	                    beginAtZero: true
+	                }
+	            }],
+	            xAxes: [{
+	                // Change here
+	            	barPercentage: 10,
+	            	categorySpacing:1.5
+	                
+	            }]
+	        }
+    
+	    }	
+	}
+	var chartDataMorbidity = {
+		labels :  labels,
+		datasets : [
+			{
+				fillColor : "rgba(48, 164, 255, 0.2)",
+				strokeColor : "rgba(48, 164, 255, 0.8)",
+				highlightFill : "rgba(48, 164, 255, 0.75)",
+				highlightStroke : "rgba(48, 164, 255, 1)",
+				data : <?= json_encode($totalCountMorbidityViaDiseaseID) ?>
+			}
+		],
+		options: {
+	        scales: {
+	            yAxes: [{
+	                ticks: {
+	                    beginAtZero: true
+	                }
+	            }],
+	            xAxes: [{
+	                // Change here
+	            	barPercentage: 10,
+	            	categorySpacing:1.5
+	                
+	            }]
+	        }
+    
+	    }	
+	}
+	window.myBar = new Chart(mortalityChart).Bar(chartDataMortality, {
+	responsive: true,
+	scaleLineColor: "rgba(0,0,0,.2)",
+	scaleGridLineColor: "rgba(0,0,0,.05)",
+	scaleFontColor: "#c5c7cc"
+	});
+	window.myBar2 = new Chart(morbidityChart).Bar(chartDataMorbidity, {
+	responsive: true,
+	scaleLineColor: "rgba(0,0,0,.2)",
+	scaleGridLineColor: "rgba(0,0,0,.05)",
+	scaleFontColor: "#c5c7cc"
+	});
+	
 
+	</script>
 	<script>
 		
 		$(function(){
