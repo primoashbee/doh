@@ -147,7 +147,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 										<option value="mortality">Mortality</option>
 									</select>	
 									<label class="control-label" for="disease_id">Disease</label>
-									<select name="disease_id" id="disease_id" class="form-control filter" style="height:46px" >
+									<select name="disease_id" id="disease_id" class="form-control filter" >
 										<option value="">------</option>
 										<?php 
 												$data = getDiseaseCollection();
@@ -257,6 +257,14 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 						<div class="canvas-wrapper">
 							<h3 style="text-align: center"> Morbidity Graph </h3>
 							<canvas class="main-chart" id="morbidityGraph" height="100" width="600"></canvas>
+						</div>						
+						<div class="canvas-wrapper">
+							<h3 style="text-align: center"> Age Morbidity Graph </h3>
+							<canvas class="main-chart" id="AgeMorbidityGraph" height="300" width="600"></canvas>
+						</div>						
+						<div class="canvas-wrapper">
+							<h3 style="text-align: center"> Age Mortality Graph </h3>
+							<canvas class="main-chart" id="AgeMortalityGraph" height="300" width="600"></canvas>
 						</div>
 						<div class="clearfix"></div>
 						<div class="col-xs-12 col-lg-12 col-md-12">
@@ -281,7 +289,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 								<?php
 									foreach ($morbidity as $key => $value) {
 									?> 
-									<tr>
+									<tr class="<?=trClassViaID($value['disease_id'],'morbidity',$value['disease_name'])?>">
 										<td><?=$ctr++?></td>
 										<td><?=$value['disease_name']?></td>
 										<td><?=$value['total_count']?></td>
@@ -309,8 +317,9 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 							<tbody>	
 								<?php
 									foreach ($mortality as $key => $value) {
+
 									?> 
-									<tr>
+									<tr class="<?=trClassViaID($value['disease_id'],'mortality',$value['disease_name'])?>">
 										<td><?=$ctr++?></td>
 										<td><?=$value['disease_name']?></td>
 										<td><?=$value['total_count']?></td>
@@ -331,21 +340,22 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	
 	<script src="../js/jquery-1.11.1.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/chart.min.js"></script>
 	<script src="../js/chart-data.js"></script>
 	<script src="../js/easypiechart.js"></script>
 	<script src="../js/easypiechart-data.js"></script>
 	<script src="../js/bootstrap-datepicker.js"></script>
 	<script src="../js/custom.js"></script>
 	<script src="../js/datatables.js"></script>
+	<script src="../js/ashbee.js"></script>
 	<script>
-	var mortalityChart = document.getElementById("mortalityGraph").getContext("2d");
-	var morbidityChart = document.getElementById("morbidityGraph").getContext("2d");
+
 	var mt_labels = <?php 
 		$mt_label=array();
 		$mb_label=array();
 		$mt_disease = qryOutbreakPerBaranggay($_GET,'mortality');
 		$mb_disease = qryOutbreakPerBaranggay($_GET,'morbidity');
+		$mt_colors =array();
+		$mb_colors =array();
 
 		$totalCountMortality =array();
 		$totalCountMorbidity =array();
@@ -354,12 +364,14 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			if(!is_null($value['baranggay_name'])){
 			array_push($mt_label,$value['baranggay_name']);
 			array_push($totalCountMortality,$value['total_count']);
+			array_push($mt_colors,generateColor());
 			}
 		}
 		foreach ($mb_disease as $key => $value) {
 			if(!is_null($value['baranggay_name'])){
 			array_push($mb_label,$value['baranggay_name']);
 			array_push($totalCountMorbidity,$value['total_count']);
+			array_push($mb_colors,generateColor());
 			}
 		}
 
@@ -367,76 +379,152 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 		
 		echo json_encode($mt_label);
 	?>;
-	var mb_labels = <?= json_encode($mb_label) ?>;
-	var chartDataMortality = {
-		labels :  mt_labels,
-		datasets : [
-			{
-				fillColor : "rgba(48, 164, 255, 0.2)",
-				strokeColor : "rgba(48, 164, 255, 0.8)",
-				highlightFill : "rgba(48, 164, 255, 0.75)",
-				highlightStroke : "rgba(48, 164, 255, 1)",
-				data : <?= json_encode($totalCountMortality) ?>
-			}
-		],
-		options: {
-	        scales: {
-	            yAxes: [{
-	                ticks: {
-	                    beginAtZero: true
-	                }
-	            }],
-	            xAxes: [{
-	                // Change here
-	            	barPercentage: 10,
-	            	categorySpacing:1.5
-	                
-	            }]
-	        }
-    
-	    }	
-	}
-	var chartDataMorbidity = {
-		labels :  mt_labels,
-		datasets : [
-			{
-				fillColor : "rgba(48, 164, 255, 0.2)",
-				strokeColor : "rgba(48, 164, 255, 0.8)",
-				highlightFill : "rgba(48, 164, 255, 0.75)",
-				highlightStroke : "rgba(48, 164, 255, 1)",
-				data : <?= json_encode($totalCountMorbidity) ?>
-			}
-		],
-		options: {
-	        scales: {
-	            yAxes: [{
-	                ticks: {
-	                    beginAtZero: true
-	                }
-	            }],
-	            xAxes: [{
-	                // Change here
-	            	barPercentage: 10,
-	            	categorySpacing:1.5
-	                
-	            }]
-	        }
-    
-	    }	
-	}
-	window.myBar = new Chart(mortalityChart).Bar(chartDataMortality, {
-	responsive: true,
-	scaleLineColor: "rgba(0,0,0,.2)",
-	scaleGridLineColor: "rgba(0,0,0,.05)",
-	scaleFontColor: "#c5c7cc"
-	});
-	window.myBar2 = new Chart(morbidityChart).Bar(chartDataMorbidity, {
-	responsive: true,
-	scaleLineColor: "rgba(0,0,0,.2)",
-	scaleGridLineColor: "rgba(0,0,0,.05)",
-	scaleFontColor: "#c5c7cc"
-	});
+	var mb_labels = <?php echo json_encode($mb_label)?>;
+
+	var mt_colors = <?php echo json_encode($mt_colors)?>;
+	var mb_colors = <?php echo json_encode($mb_colors)?>;
 	
+	var mt_data = <?php echo json_encode($totalCountMortality)?>;
+	var mb_data = <?php echo json_encode($totalCountMorbidity)?>;
+	
+	var morbidityGraph = document.getElementById("morbidityGraph").getContext("2d");
+	var mortalityGraph = document.getElementById("mortalityGraph").getContext("2d");
+	var ageMorbidityGraph = document.getElementById("AgeMorbidityGraph").getContext("2d");
+	var ageMortalityGraph = document.getElementById("AgeMortalityGraph").getContext("2d");
+	var mbData = {
+	    labels:mb_labels,
+	    datasets: [{
+	        label: "Morbidity",
+	        data: mb_data,
+	        backgroundColor: mb_colors,
+	        hoverBackgroundColor: ["#66A2EB", "#FCCE56"]
+	    }]
+	};	
+	var mtData = {
+	    labels:mt_labels,
+	    datasets: [{
+	        label: "Mortality",
+	        data: mb_data,
+	        backgroundColor: mt_colors,
+	        hoverBackgroundColor: ["#66A2EB", "#FCCE56"]
+	    }]
+	};
+
+	var mbGraph = new Chart(morbidityGraph, {
+	    type: 'bar',
+	    data: mbData,
+	    options: {
+	        scales: {
+	            xAxes: [{
+	                ticks: {
+	            		min: 60
+	                }
+	            }],
+	            yAxes: [{
+	            	stacked: true
+	            }]
+	        }
+
+	    }
+	});
+	var mtGraph = new Chart(mortalityGraph, {
+	    type: 'bar',
+	    data: mtData,
+	    options: {
+	        scales: {
+	            xAxes: [{
+	                ticks: {
+	            		min: 60
+	                }
+	            }],
+	            yAxes: [{
+	            	stacked: true
+	            }]
+	        }
+
+	    }
+	});
+	var male_values_morbidity=<?php 	
+		 echo json_encode(getAgeCountMorbidity($_GET,'male'));
+	?>;
+
+	var female_values_morbidity=<?php 	
+		 echo json_encode(getAgeCountMorbidity($_GET,'female'));
+	?>;
+	var male_values_mortality=<?php 	
+		 echo json_encode(getAgeCountMortality($_GET,'male'));
+	?>;
+	var female_values_mortality=<?php 	
+		 echo json_encode(getAgeCountMortality($_GET,'female'));
+	?>;
+
+	var ageDataMorbidity = {
+	    labels: ["Under 1","1 to 4","5 to 9","10 to 14"," 15 to 19","20 to 24","25 to 29","35 to 39","40 to 44","45 to 49","50 to 59","60 to 64", "65 & above"],
+	    datasets: [
+	        {
+	            label: "Male",
+	            backgroundColor: "#f2c351",
+	            data: male_values_morbidity
+	        },
+	        {
+	            label: "Female",
+	            backgroundColor: "#fb8c29",
+	            data: female_values_morbidity 
+	        }
+
+	        
+	        
+	    ]
+	};
+	var ageDataMortality = {
+	    labels: ["Under 1","1 to 4","5 to 9","10 to 14"," 15 to 19","20 to 24","25 to 29","35 to 39","40 to 44","45 to 49","50 to 59","60 to 64", "65 & above"],
+	    datasets: [
+	        {
+	            label: "Male",
+	            backgroundColor: "#f2c351",
+	            data: male_values_mortality
+	        },
+	        {
+	            label: "Female",
+	            backgroundColor: "#fb8c29",
+	            data: female_values_mortality
+	        }
+
+	        
+	        
+	    ]
+	};
+
+	var myBarChartMorbidity = new Chart(ageMorbidityGraph, {
+	    type: 'horizontalBar',
+	    data: ageDataMorbidity,
+	    options: {
+	        barValueSpacing: 20,
+	        scales: {
+	            xAxes: [{
+	                ticks: {
+	                    min: 0,
+	                    beginAtZero:true
+	                }
+	            }]
+	        }
+	    }
+	});	
+	var myBarChartMortality = new Chart(ageMortalityGraph, {
+	    type: 'horizontalBar',
+	    data: ageDataMortality,
+	    options: {
+	        barValueSpacing: 20,
+	        scales: {
+	            xAxes: [{
+	                ticks: {
+	                    min: 0,
+	                    beginAtZero:true
+	                }
+	            }]
+	        }
+	    }
+	});
 
 	</script>
 	<script>

@@ -1,7 +1,7 @@
 <?php
 	
 	require "../config.php";
-	require "../required/functions.php";
+	require "../functions.php";
 	session_start();
 	$username = $_POST['username'];
 	$password = $_POST['password'];
