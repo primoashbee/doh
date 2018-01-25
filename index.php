@@ -17,13 +17,16 @@ session_start();
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
 </head>
-<body>
+<body style="background-image: url('bg.jpg')" >
+
 	<div class="row">
-		<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
-			<div class="login-panel panel panel-default">
-				<div class="panel-heading"><center> DOH | BALANGA</center> </div>
-				<div class="panel-body">
-					<center><p class ="lead center">Log in</p></center>
+		<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4" >
+			<div class="login-panel panel panel-default" style="opacity: 0.9; border-radius: 25px" >
+				
+				<div class="panel-body" >
+					<center><h1>DOH - BALANGA</h1></center>
+					<center><img src="images/balanga.png" class = "img img-responsive" width="50%"></center>
+					<center><p class ="lead center" style="font-size:1.5em;font-weight: 900">Log in</p></center>
 					<?php if(isset($_SESSION['msg'])){
 						?>
 					<div class="alert alert-danger">
@@ -43,7 +46,7 @@ session_start();
 								<input class="form-control" placeholder="Password" name="password" type="password" value="">
 							</div>
 							
-							<button type="submit" class="btn btn-success">Login</button>
+							<button type="submit" class="btn btn-success" style="width:100%">Login</button>
 					</form>
 				</div>
 			</div>

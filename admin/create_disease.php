@@ -78,7 +78,7 @@ session_start();
 				</a>
 				<ul class="children collapse" id="sub-item-3">
 					<li><a class="" href="morbidity.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Morbidity
+						<span class="fa fa-arrow-right">&nbsp;</span> Reports
 					</a></li>
 				</ul>
 			</li>

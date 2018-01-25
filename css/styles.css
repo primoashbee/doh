@@ -1,3 +1,16 @@
+.green-mo-bes{
+  background-color:#1bff4c!important;
+  font-weight: bold;
+}
+.red-mo-bes{
+  background-color:#ff2323!important;
+  font-weight: bold;
+}
+.orange-mo-bes{
+  background-color:#ffd400!important;
+  font-weight: bold;
+}
+
 body {
   background: #f1f4f7;
   padding-top: 60px;

@@ -88,6 +88,7 @@ if(checkIfLoggedIn()==false){
           data: getPoints(),
           map: map
         });
+        changeRadius();
       }
 
       function toggleHeatmap() {

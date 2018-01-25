@@ -129,44 +129,77 @@ session_start();
 	<script src="../js/custom.js"></script>
 	
  
-	<script>
-	var chart2 = document.getElementById("bar-chart").getContext("2d");
+<script>
 
-	var chartData = {
-		labels : ["January","February","March","April","May","June","July","January","February","March","April","May","June","July"],
+	
+	var randomScalingFactor = function(){ return Math.round(Math.random()*1000)};
+	
+	var barChartData = {
+		labels : ["January","February","March","April","May","June","July"],
 		datasets : [
+			{
+				fillColor : "rgba(220,220,220,0.5)",
+				strokeColor : "rgba(220,220,220,0.8)",
+				highlightFill: "rgba(220,220,220,0.75)",
+				highlightStroke: "rgba(220,220,220,1)",
+				data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+			},
 			{
 				fillColor : "rgba(48, 164, 255, 0.2)",
 				strokeColor : "rgba(48, 164, 255, 0.8)",
 				highlightFill : "rgba(48, 164, 255, 0.75)",
 				highlightStroke : "rgba(48, 164, 255, 1)",
-				data : [1,2,3,4,5,6,7,8]
+				data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
 			}
-		],
-		options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }],
-            xAxes: [{
-                // Change here
-            	barPercentage: 10,
-            	categorySpacing:1.5
-                
-            }]
-        }
-    
-    }
-
+		]
 	}
-	window.myBar = new Chart(chart2).Bar(chartData, {
+
+	window.onload = function () {
+	
+	var chart2 = document.getElementById("bar-chart").getContext("2d");
+	/*
+	window.myBar = new Chart(chart2).Bar(barChartData, {
+	type:'horizontalBar',
 	responsive: true,
 	scaleLineColor: "rgba(0,0,0,.2)",
 	scaleGridLineColor: "rgba(0,0,0,.05)",
 	scaleFontColor: "#c5c7cc"
-	});
+	
+	});*/
+
+	var MeSeData = {
+    labels: [
+        "ME",
+        "SE"
+    ],
+    datasets: [{
+        label: "Test",
+        data: [100, 75],
+        backgroundColor: ["#669911", "#119966"],
+        hoverBackgroundColor: ["#66A2EB", "#FCCE56"]
+	    }]
+	};
+	var chart1 = new Chart(chart2, {
+    type: 'horizontalBar',
+    data: MeSeData,
+    options: {
+        scales: {
+            xAxes: [{
+                ticks: {
+            		min: 60
+                }
+            }],
+            yAxes: [{
+            	stacked: true
+            }]
+        }
+
+    }
+});
+
+	
+};
+
 
 	</script>
 

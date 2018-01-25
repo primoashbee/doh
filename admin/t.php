@@ -147,7 +147,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 										<option value="mortality">Mortality</option>
 									</select>	
 									<label class="control-label" for="disease_id">Disease</label>
-									<select name="disease_id" id="disease_id" class="form-control filter" style="height:46px" >
+									<select name="disease_id" id="disease_id" class="form-control filter" >
 										<option value="">------</option>
 										<?php 
 												$data = getDiseaseCollection();
@@ -281,7 +281,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 								<?php
 									foreach ($morbidity as $key => $value) {
 									?> 
-									<tr>
+									<tr class="<?=trClassViaID($value['disease_id'],'morbidity',$value['disease_name'])?>">
 										<td><?=$ctr++?></td>
 										<td><?=$value['disease_name']?></td>
 										<td><?=$value['total_count']?></td>
@@ -309,8 +309,9 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 							<tbody>	
 								<?php
 									foreach ($mortality as $key => $value) {
+
 									?> 
-									<tr>
+									<tr class="<?=trClassViaID($value['disease_id'],'mortality',$value['disease_name'])?>">
 										<td><?=$ctr++?></td>
 										<td><?=$value['disease_name']?></td>
 										<td><?=$value['total_count']?></td>

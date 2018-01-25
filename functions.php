@@ -26,6 +26,175 @@ class Account{
 	}
 
 }
+function random_color_part() {
+    return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+}
+
+function getAgeCountMorbidity(array $arr = array(),$gender){
+	require 'config.php';
+	
+		if(isset($arr['status'])){
+			unset($arr['status']);
+		}
+		$filter="";
+		$rows = count($arr);
+		$ctr=0;
+		
+		
+		if($rows>0){
+			$filter = "where ";
+			foreach($arr as $key=>$value){
+
+				if($value!=""){
+
+					$ctr++;
+					if($ctr!=$rows){
+
+						$filter.=$key.=" = '".$value."' and ";
+					}else{
+						$filter.=$key.=" = '".$value."' ";
+					}
+
+				}
+			}
+		
+		}
+
+		$sql = "SELECT
+	    SUM(IF(age < 1,1,0)) AS 'under_1',
+	    SUM(IF(age BETWEEN 1 AND 4,1,0)) AS '1-4',
+	    SUM(IF(age BETWEEN 5 AND 9,1,0)) AS '5-9',
+	    SUM(IF(age BETWEEN 10 AND 14,1,0)) AS '10-14',
+	    SUM(IF(age BETWEEN 15 AND 19,1,0)) AS '15-19',
+	    SUM(IF(age BETWEEN 20 AND 24,1,0)) AS '20-24',
+	    SUM(IF(age BETWEEN 25 AND 29,1,0)) AS '25-29',
+	    SUM(IF(age BETWEEN 30 AND 34,1,0)) AS '30-34',    
+	    SUM(IF(age BETWEEN 35 AND 39,1,0)) AS '35-39',
+	    SUM(IF(age BETWEEN 40 AND 44,1,0)) AS '40-44',
+	    SUM(IF(age BETWEEN 45 AND 49,1,0)) AS '45-49',
+	    SUM(IF(age BETWEEN 50 AND 54,1,0)) AS '50-55',
+	    SUM(IF(age BETWEEN 55 AND 59,1,0)) AS '55-59',
+	    SUM(IF(age BETWEEN 60 AND 64,1,0)) AS '60-64',
+	    SUM(IF(age>64,1,0)) AS 'over_65',
+	    SUM(IF(age IS NULL, 1, 0)) AS 'NULL'
+		FROM (SELECT o.*,TIMESTAMPDIFF(YEAR, p.`birthday`, CURDATE()) AS `age` FROM outbreak o inner JOIN patients p ON o.`patient_id` = p.`id` ".$filter." and p.gender = '$gender' and status ='morbidity' ) AS derived";
+		
+		$res = mysqli_query($conn, $sql);
+		$list = array();
+		
+		$columns = mysqli_field_count($conn)-1;
+		$data = mysqli_fetch_array($res);
+	       
+	    for($ctr=0;$ctr<=$columns;$ctr++){
+	    	if(is_null($data[$ctr])){
+				array_push($list,0);
+	    	}else{
+	    	array_push($list,$data[$ctr]);
+	    	}
+	    }
+		return $list;
+
+}
+function getAgeCountMortality(array $arr = array(),$gender){
+		require 'config.php';
+		if(isset($arr['status'])){
+			unset($arr['status']);
+		}
+		$filter="";
+		$rows = count($arr);
+		$ctr=0;
+		
+		if($rows>0){
+			$filter = "where ";
+			foreach($arr as $key=>$value){
+				if($value!=""){
+
+					$ctr++;
+					if($ctr!=$rows){
+
+						$filter.=$key.=" = '".$value."' and ";
+					}else{
+						$filter.=$key.=" = '".$value."' ";
+					}
+
+				}
+			}
+		
+		}
+
+		$sql = "SELECT
+	    SUM(IF(age < 1,1,0)) AS 'under_1',
+	    SUM(IF(age BETWEEN 1 AND 4,1,0)) AS '1-4',
+	    SUM(IF(age BETWEEN 5 AND 9,1,0)) AS '5-9',
+	    SUM(IF(age BETWEEN 10 AND 14,1,0)) AS '10-14',
+	    SUM(IF(age BETWEEN 15 AND 19,1,0)) AS '15-19',
+	    SUM(IF(age BETWEEN 20 AND 24,1,0)) AS '20-24',
+	    SUM(IF(age BETWEEN 25 AND 29,1,0)) AS '25-29',
+	    SUM(IF(age BETWEEN 30 AND 34,1,0)) AS '30-34',    
+	    SUM(IF(age BETWEEN 35 AND 39,1,0)) AS '35-39',
+	    SUM(IF(age BETWEEN 40 AND 44,1,0)) AS '40-44',
+	    SUM(IF(age BETWEEN 45 AND 49,1,0)) AS '45-49',
+	    SUM(IF(age BETWEEN 50 AND 54,1,0)) AS '50-55',
+	    SUM(IF(age BETWEEN 55 AND 59,1,0)) AS '55-59',
+	    SUM(IF(age BETWEEN 60 AND 64,1,0)) AS '60-64',
+	    SUM(IF(age>64,1,0)) AS 'over_65',
+	    SUM(IF(age IS NULL, 1, 0)) AS 'NULL'
+		FROM (SELECT o.*,TIMESTAMPDIFF(YEAR, p.`birthday`, CURDATE()) AS `age` FROM outbreak o inner JOIN patients p ON o.`patient_id` = p.`id` ".$filter." and p.gender = '$gender' and status ='mortality') AS derived";
+		$res = mysqli_query($conn, $sql);
+		$list = array();
+		
+		$columns = mysqli_field_count($conn)-1;
+		$data = mysqli_fetch_array($res);
+	       
+	    for($ctr=0;$ctr<=$columns;$ctr++){
+	    	if(is_null($data[$ctr])){
+				array_push($list,0);
+	    	}else{
+	    	array_push($list,$data[$ctr]);
+	    	}
+	    }
+		return $list;
+
+}
+function generateColor() {
+    return '#'.random_color_part() . random_color_part() . random_color_part();
+}
+function trClassViaID($disease_id, $status, $disease_name){
+	require "config.php";
+	$sql = "Select count(disease_id) as total_count from outbreak where status = '$status' and disease_id 
+		='$disease_id' group by disease_id";
+	$res = mysqli_fetch_all(mysqli_query($conn,$sql),MYSQLI_ASSOC);
+	return alertLevel($disease_name,$res[0]['total_count']);
+}
+function alertLevel($name,$count){
+	require "config.php";
+	//check list of low level alerts via config
+	foreach ($low_level_alerts as $key => $value) {
+		//if passed name is inside the low level alert check the count the return class
+		if (strpos($name, $value) !== false) {
+
+			if($count>5 && $count < 10){
+				return 'orange-mo-bes';
+			}elseif($count >=10){
+				return 'red-mo-bes';
+			}else{
+				return 'green-mo-bes';
+			}
+		}else{
+			if($count > 25 && $count < 50){
+				return 'orange-mo-bes';
+			}elseif($count > 50){
+				return 'red-mo-bes';
+			}else{
+				return 'green-mo-bes';
+			}
+	
+	
+	}
+
+	
+	}
+}
 function getPopulation(){
 	require "config.php";
 	$sql="Select * from patients where isDeleted = false";
@@ -173,6 +342,40 @@ function checkIfExistingOutbreak($p_id,$d_id){
 	}
 	
 	return false;
+}
+function qryOutbreakPerBaranggay(array $arr=array(),$status){
+	require "config.php";
+	$sql ="SELECT COUNT(baranggay_id) AS total_count, baranggay_name FROM 
+(SELECT p.id AS patient_id,b.`id` AS baranggay_id, b.`name` AS baranggay_name,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id`  and status ='$status'";
+	$filter="";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+		$filter = "where ";
+		foreach($arr as $key=>$value){
+			if($value!=""){
+
+				$ctr++;
+				if($ctr!=$rows){
+
+					$filter.=$key.=" = '".$value."' and ";
+				}else{
+					$filter.=$key.=" = '".$value."' ";
+				}
+
+			}
+		}
+	
+	}
+
+	$sql = $sql.$filter.") ex GROUP BY baranggay_id";
+		//Execute the query and put data into a result
+	
+	$result = mysqli_query($conn,$sql);
+
+	
+	return mysqli_fetch_all($result,MYSQLI_ASSOC);
+
 }
 function qryOutbreak(array $arr=array()){
 	require 'config.php';
@@ -540,6 +743,7 @@ function summarizeAgeRangePerDisease($id){
 	return $data;
 
 }
+
 function convertToMonthName($month){
 	$monthNum  = $month;
 	$dateObj   = DateTime::createFromFormat('!m', $monthNum);
@@ -602,6 +806,21 @@ function setMortalityRanking(){
 		    ON d.id = o.`disease_id` 
 		    WHERE o.`status` ='mortality'
 		GROUP BY disease_id ";
+
+}
+
+function getBaranggayOutbreak(){
+require "config.php";
+$sql = "SELECT o.patient_id, o.disease_id,b.`id`,b.`name` FROM outbreak o LEFT JOIN patients p ON p.id = o.`patient_id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id`";
+return mysqli_fetch_all(mysqli_query($conn,$sql),MYSQLI_ASSOC);
+}
+
+function getMortalityGraphPerBaranggay(){
+	require 'config.php';
+	$sql ="SELECT COUNT(o.disease_id) AS total_count ,b.`id` AS baranggay_id,b.`name` FROM outbreak o LEFT JOIN patients p ON p.id = o.`patient_id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` GROUP BY baranggay_id";
+
+	return mysqli_fetch_all(mysqli_query($conn,$sql),MYSQLI_ASSOC);
+
 
 }
 ?>

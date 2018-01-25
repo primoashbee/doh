@@ -63,7 +63,7 @@ $mortality = $spreadsheet->getSheet(2);
 $morbidity_rank = $spreadsheet->getSheet(1);
 $mortality_rank = $spreadsheet->getSheet(3);
 
-$chart_morbidy = $spreadsheet->getSheet(4);
+//$chart_morbidy = $spreadsheet->getSheet(4);
 
 
 $morbidity->getCell('AD1')->setValue($scope);	
@@ -197,7 +197,27 @@ return;
 	}
 $file ='../reports/Report-'.$date.'.xlsx';
 $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+//$spreadsheet->getActiveSheet()->protectCells('B8:B20','PHP');
+
+/*$spreadsheet->getActiveSheet()->getStyle('B8')
+    ->getProtection()
+    ->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+*/
+$morbidity->getProtection()->setPassword($GLOBAL_PASS);
+$morbidity->getProtection()->setSheet(true);
+
+
+$mortality->getProtection()->setPassword($GLOBAL_PASS);
+$mortality->getProtection()->setSheet(true);
+
+$morbidity_rank->getProtection()->setPassword($GLOBAL_PASS);
+$morbidity_rank->getProtection()->setSheet(true);
+
+$mortality_rank->getProtection()->setPassword($GLOBAL_PASS);
+$mortality_rank->getProtection()->setSheet(true);
+
 $writer->save($file);
+
 if (file_exists($file)) {
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
