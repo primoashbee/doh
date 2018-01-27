@@ -145,12 +145,11 @@ function getAgeCountMortality(array $arr = array(),$gender){
 		
 		$columns = mysqli_field_count($conn)-1;
 		$data = mysqli_fetch_array($res);
-	       
 	    for($ctr=0;$ctr<=$columns;$ctr++){
 	    	if(is_null($data[$ctr])){
 				array_push($list,0);
 	    	}else{
-	    	array_push($list,$data[$ctr]);
+	    	array_push($list,intval($data[$ctr]));
 	    	}
 	    }
 		return $list;
@@ -465,7 +464,7 @@ function getMortalityReport(array $arr=array()){
 	$sql = $sql.$filter;
 		//Execute the query and put data into a result
 	$result = mysqli_query($conn,$sql);
-	
+
 	return mysqli_fetch_all($result,MYSQLI_ASSOC);
 }
 function totalCountViaDiseaseID($id,$status){
