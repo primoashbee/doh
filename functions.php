@@ -168,31 +168,42 @@ function trClassViaID($disease_id, $status, $disease_name){
 function alertLevel($name,$count){
 	require "config.php";
 	//check list of low level alerts via config
+	$hasHit = 0;
+	/*
 	foreach ($low_level_alerts as $key => $value) {
+		echo $value;
 		//if passed name is inside the low level alert check the count the return class
-		if (strpos($name, $value) !== false) {
+		if (strpos($name, $value)) {
+		 $hasHit++;
+		}
+		if (in_array($name, $))
 
-			if($count>5 && $count < 10){
-				return 'orange-mo-bes';
-			}elseif($count >=10){
-				return 'red-mo-bes';
-			}else{
-				return 'green-mo-bes';
-			}
+	}*/
+	if(in_array(strtoupper($name), $low_level_alerts)){
+		$hasHit++;
+	}
+
+	echo $hasHit.' ';
+	if($hasHit>0){
+		if($count >3 && $count < 5){
+			return 'orange-mo-bes';
+		}elseif($count >4){
+			return 'red-mo-bes';
 		}else{
-			if($count > 25 && $count < 50){
-				return 'orange-mo-bes';
-			}elseif($count > 50){
-				return 'red-mo-bes';
-			}else{
-				return 'green-mo-bes';
-			}
-	
-	
-	}
+			return 'green-mo-bes';
+		}
+	}else{
+		if($count > 25 && $count < 50){
+			return 'orange-mo-bes';
+		}elseif($count > 50){
+			return 'red-mo-bes';
+		}else{
+			return 'green-mo-bes';
+		}
 
-	
 	}
+		
+	
 }
 function getPopulation(){
 	require "config.php";
@@ -758,13 +769,13 @@ function rankings($status, string $year="asdasd"){
 					SELECT GROUP_CONCAT( total_count ORDER BY total_count DESC ) 
 					FROM morbidity_scores )
 			) AS rank
-			FROM morbidity_scores" ;
+			FROM morbidity_scores ORDER BY rank ASC" ;
 	}else{
 			$sql  = "SELECT *, FIND_IN_SET( total_count, (
 					SELECT GROUP_CONCAT( total_count ORDER BY total_count DESC ) 
 					FROM mortality_scores )
 			) AS rank
-			FROM mortality_scores" ;		
+			FROM mortality_scores ORDER BY rank ASC" ;		
 	}
 	
 	return mysqli_fetch_all(mysqli_query($conn,$sql),MYSQLI_ASSOC);
