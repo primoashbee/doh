@@ -183,17 +183,16 @@ function alertLevel($name,$count){
 		$hasHit++;
 	}
 
-	echo $hasHit.' ';
 	if($hasHit>0){
-		if($count >3 && $count < 5){
+		if($count > 2 && $count < 6){
 			return 'orange-mo-bes';
-		}elseif($count >4){
+		}elseif($count >6){
 			return 'red-mo-bes';
 		}else{
 			return 'green-mo-bes';
 		}
 	}else{
-		if($count > 25 && $count < 50){
+		if($count > 24 && $count < 51){
 			return 'orange-mo-bes';
 		}elseif($count > 50){
 			return 'red-mo-bes';
