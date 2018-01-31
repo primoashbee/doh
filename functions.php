@@ -185,10 +185,12 @@ function alertLevel($name,$count){
 
 	if($hasHit>0){
 		if($count > 2 && $count < 6){
+		//3 - 5
 			return 'orange-mo-bes';
-		}elseif($count >6){
+		}elseif($count >5){
+		//6 pataas
 			return 'red-mo-bes';
-		}else{
+		}elseif($count <2){
 			return 'green-mo-bes';
 		}
 	}else{
@@ -196,7 +198,7 @@ function alertLevel($name,$count){
 			return 'orange-mo-bes';
 		}elseif($count > 50){
 			return 'red-mo-bes';
-		}else{
+		}elseif($count < 25){
 			return 'green-mo-bes';
 		}
 
