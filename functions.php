@@ -1,31 +1,4 @@
 <?php 	
-class Account{
-	public $username;
-	public $password;
-	public $isAdmin;
-	public $fname;
-	public $lname;
-	public $conn;
-	public $errorBag=[];
-	public function __construct($account = array(),$conn){
-		$this->username = $account['username'];
-		$this->password = $account['password'];
-		$this->fname = $account['firstname'];
-		$this->lname = $account['lastname'];
-		$this->isAdmin = 0;
-		$this->conn = $conn;
-
-	}
-	public function createAccount(){
-		$sql = "Insert into accounts(username,`password`,isAdmin,firstname,lastname)values('".$this->username."','".$this->password."','".$this->isAdmin."','".$this->fname."','".$this->lname."')";
-		if($flag = mysqli_query($this->conn,$sql)){
-			echo 'good';
-			return $flag;
-		}
-	
-	}
-
-}
 function random_color_part() {
     return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
 }

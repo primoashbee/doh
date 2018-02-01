@@ -3,7 +3,7 @@
 	require "../config.php";
 	require "../functions.php";
 	session_start();
-	$password = $_POST['password'];
+	$password = addslashes($_POST['password']);
 	$id = $_SESSION['user']['id'];
 	if(!file_exists($_FILES['img_src']['tmp_name']) || !is_uploaded_file($_FILES['img_src']['tmp_name'])) {
 		if($password ==""){
