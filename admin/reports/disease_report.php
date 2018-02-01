@@ -118,8 +118,8 @@ $ctr = 1;
 		$morbidity->getCell('X'.$row)->setValue(getCountOnAgeMorbidity($value['id'],45,49,$_GET)[0]['Male']);
 		$morbidity->getCell('Y'.$row)->setValue(getCountOnAgeMorbidity($value['id'],45,49,$_GET)[0]['Female']);
 		
-		$morbidity->getCell('Z'.$row)->setValue(getCountOnAgeMorbidity($value['id'],40,54,$_GET)[0]['Male']);
-		$morbidity->getCell('AA'.$row)->setValue(getCountOnAgeMorbidity($value['id'],40,54,$_GET)[0]['Female']);
+		$morbidity->getCell('Z'.$row)->setValue(getCountOnAgeMorbidity($value['id'],50,54,$_GET)[0]['Male']);
+		$morbidity->getCell('AA'.$row)->setValue(getCountOnAgeMorbidity($value['id'],50,54,$_GET)[0]['Female']);
 		
 		$morbidity->getCell('AB'.$row)->setValue(getCountOnAgeMorbidity($value['id'],55,59,$_GET)[0]['Male']);
 		$morbidity->getCell('AC'.$row)->setValue(getCountOnAgeMorbidity($value['id'],55,59,$_GET)[0]['Female']);
@@ -179,8 +179,8 @@ return;
 		$mortality->getCell('X'.$row)->setValue(getCountOnAgeMortality($value['id'],45,49,$_GET)[0]['Male']);
 		$mortality->getCell('Y'.$row)->setValue(getCountOnAgeMortality($value['id'],45,49,$_GET)[0]['Female']);
 		
-		$mortality->getCell('Z'.$row)->setValue(getCountOnAgeMortality($value['id'],40,54,$_GET)[0]['Male']);
-		$mortality->getCell('AA'.$row)->setValue(getCountOnAgeMortality($value['id'],40,54,$_GET)[0]['Female']);
+		$mortality->getCell('Z'.$row)->setValue(getCountOnAgeMortality($value['id'],50,54,$_GET)[0]['Male']);
+		$mortality->getCell('AA'.$row)->setValue(getCountOnAgeMortality($value['id'],50,54,$_GET)[0]['Female']);
 		
 		$mortality->getCell('AB'.$row)->setValue(getCountOnAgeMortality($value['id'],55,59,$_GET)[0]['Male']);
 		$mortality->getCell('AC'.$row)->setValue(getCountOnAgeMortality($value['id'],55,59,$_GET)[0]['Female']);

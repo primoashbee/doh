@@ -8,9 +8,15 @@ $password = $_POST['password'];
 if($username == "" || $password ==""){
 	header('location:index.php');
 }
-$sql = "Select * from accounts where username ='$username' and password ='$password'";
+$sql = "Select * from accounts where username ='$username'";
 if(mysqli_num_rows($res = mysqli_query($conn,$sql))>0){
 	$user = mysqli_fetch_assoc($res);
+	if (strcmp($password, $user['password']) !== 0) {
+    	$_SESSION['msg']='Username/Password is incorrect';	
+		$_SESSION['old_user']=$username;
+		header('location:index.php');
+		exit;
+	}
 	$_SESSION['user'] =$user;
 	
 	if($user['isAdmin']){
@@ -19,9 +25,11 @@ if(mysqli_num_rows($res = mysqli_query($conn,$sql))>0){
 		header('location:rhu/index.php');
 	
 	}
+	exit;
 }else{
 	$_SESSION['msg']='Username/Password is incorrect';	
 	$_SESSION['old_user']=$username;
 	header('location:index.php');
+	exit;
 }
 ?>

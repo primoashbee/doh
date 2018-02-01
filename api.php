@@ -40,7 +40,7 @@ if($request=="updatePatientViaID"){
 	$address = addslashes($_POST['address']);
 	$contact = addslashes($_POST['contact']);
 	$gender= addslashes($_POST['gender']);
-	$baranggay = $_POST['baranggay'];
+	$baranggay = addslashes($_POST['baranggay']);
 	$sql = "Update patients set firstname ='$fname', lastname ='$lname', birthday='$bday', address ='$address',contact='$contact', 
 	gender ='$gender', baranggay_id='$baranggay' where id ='$id'";
 	if(mysqli_query($conn,$sql)){
