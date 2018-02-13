@@ -16,7 +16,7 @@
 	$sql = "Insert into patients(firstname,lastname,birthday,address,street,zone,block,contact,gender,baranggay_id,created_by)values('".$firstname."','".$lastname."','".$birthday."','".$address."','".$street."','".$zone."','".$block."','".$contact."','".$gender."','".$baranggay."','".$_SESSION['user']['id']."')";
 		if($flag = mysqli_query($conn,$sql)){
 		
-			$_SESSION['msg'] = "Patient Successfully Created";
+			$_SESSION['msg'] = "New Patients Record Added";
     		
     		
     		header('location:create_patient.php');
