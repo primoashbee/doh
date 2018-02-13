@@ -117,15 +117,15 @@ if(checkIfLoggedIn()==false){
 						<form action="create_patient1.php" method="POST" id="frmCreatePatient">
 							<div class="form-group col-md-6" id="divUsername">
 								<label class="control-label" for="firstname" id="lblfirstname">First Name</label>
-								<input type="text" class="form-control" id="firstname" name ="firstname" placeholder="firstname" required="">
+								<input type="text" class="form-control" id="firstname" name ="firstname" pholder="firstname" required="">
 							</div>
 							<div class="form-group col-md-6">
 								<label class="control-label" for="lastname">Last Name</label>
-								<input type="text" class="form-control" id="lastname" name ="lastname" placeholder="lastname" req>
+								<input type="text" class="form-control" id="lastname" name ="lastname" pholder="lastname" req>
 							</div>							
 							<div class="form-group col-md-3">
 								<label class="control-label" for="birthday">Birthday</label>
-								<input type="date" class="form-control" id="birthday" name ="birthday" placeholder="birthday" required="" >
+								<input type="date" class="form-control" id="birthday" name ="birthday" pholder="birthday" required="" >
 							</div>
 							<div class="form-group col-md-9">
 								<label class="control-label" for="address">Home no./Street/Zone/ Block</label>

@@ -75,9 +75,9 @@
                     });
                 }
              
-             document.getElementById('lat').value = marker.getPosition().lat()
+            document.getElementById('lat').value = marker.getPosition().lat()
             document.getElementById('long').value = marker.getPosition().lng()
-             
+            console.log(marker)
 
         });
       }
