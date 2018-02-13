@@ -1,7 +1,7 @@
 <?php 
 
 $conn = mysqli_connect('localhost','root','','doh');
-$app_name=['DOH','BALANGA'];
+$app_name=['DOH','BATAAN'];
 $GLOBAL_PASS='ashbeemorgado';
 $low_level_alerts = array('HIV','AIDS');
 $sql = "Select * from accounts where isAdmin = 1";

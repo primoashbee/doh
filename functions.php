@@ -256,12 +256,13 @@ function getPatientCollection($rhu_id =""){
 	require "config.php";
 	$sql="Select * from patients where created_by = '$rhu_id' and isDeleted = false";
 	if($rhu_id==""){
-		$sql="Select * from patients where and isDeleted = false";
+		$sql="Select * from patients where isDeleted = false";
 	}
 	$res = mysqli_query($conn,$sql);
 	$data;
 	if(mysqli_num_rows($res)==0){
-		return $data[]=array();
+		
+		return $data=array();
 	}
 	while($row =mysqli_fetch_array($res)){
 		$data[]=array('id'=>$row['id'],'firstname'=>$row['firstname'],'lastname'=>$row['lastname'],'birthday'=>$row['birthday'],'address'=>$row['address'],'contact'=>$row['contact'],'created_at'=>$row['created_at'],'created_by'=>$row['created_by'],'age'=>computeAge($row['birthday']),'gender'=>$row['gender'],'baranggay'=>getBarangay($row['baranggay_id']),'baranggay_id'=>$row['baranggay_id']);

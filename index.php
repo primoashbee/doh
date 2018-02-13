@@ -24,7 +24,7 @@ session_start();
 			<div class="login-panel panel panel-default" style="opacity: 0.9; border-radius: 25px" >
 				
 				<div class="panel-body" >
-					<center><h1>DOH - BALANGA</h1></center>
+					<center><h1>DOH - BATAAN</h1></center>
 					<center><img src="images/balanga.png" class = "img img-responsive" width="50%"></center>
 					<center><p class ="lead center" style="font-size:1.5em;font-weight: 900">Log in</p></center>
 					<?php if(isset($_SESSION['msg'])){
