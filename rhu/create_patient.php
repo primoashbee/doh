@@ -97,7 +97,7 @@ if(checkIfLoggedIn()==false){
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Create new Patient
+						Add New Patient Record
 						
 					</div>
 					
@@ -128,8 +128,20 @@ if(checkIfLoggedIn()==false){
 								<input type="date" class="form-control" id="birthday" name ="birthday" pholder="birthday" required="" >
 							</div>
 							<div class="form-group col-md-9">
-								<label class="control-label" for="address">Home no./Street/Zone/ Block</label>
-								<input type="text" id="address" name="address" class="form-control" required="">
+								<label class="control-label" for="address">Home no.</label>
+								<input type="text" id="address_number" name="address_number" class="form-control" required="">
+							</div>
+							<div class="form-group col-md-3">
+								<label class="control-label" for="address">Street</label>
+								<input type="text" id="address_street" name="address_street" class="form-control" required="">
+							</div>
+							<div class="form-group col-md-3">
+								<label class="control-label" for="address">Zone</label>
+								<input type="text" id="address_zone" name="address_zone" class="form-control" required="">
+							</div>
+							<div class="form-group col-md-3">
+								<label class="control-label" for="address">Block</label>
+								<input type="text" id="address_block" name="address_block" class="form-control" required="">
 							</div>
 							<div class="form-group col-md-6">
 								<label class="control-label" for="contact">Contact # <i>(639191234567)</i></label>

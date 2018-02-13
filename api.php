@@ -38,11 +38,15 @@ if($request=="updatePatientViaID"){
 	$lname= addslashes($_POST['lname']);
 	$bday = addslashes($_POST['bday']);
 	$address = addslashes($_POST['address']);
+	$zone = addslashes($_POST['zone']);
+	$block = addslashes($_POST['block']);
+	$street = addslashes($_POST['street']);
 	$contact = addslashes($_POST['contact']);
 	$gender= addslashes($_POST['gender']);
 	$baranggay = addslashes($_POST['baranggay']);
 	$sql = "Update patients set firstname ='$fname', lastname ='$lname', birthday='$bday', address ='$address',contact='$contact', 
-	gender ='$gender', baranggay_id='$baranggay' where id ='$id'";
+	gender ='$gender', baranggay_id='$baranggay',
+	zone='$zone', block = '$block', street ='$street' where id ='$id'";
 	if(mysqli_query($conn,$sql)){
 		
 		echo json_encode(array('msg'=>200));

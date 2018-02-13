@@ -132,7 +132,10 @@ if(checkIfLoggedIn()==false){
 												firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" 
 												birthday="<?=$value['birthday']?>" address="<?=$value['address']?>" 
 												contact="<?=$value['contact']?>" gender="<?=$value['gender']?>"
-												baranggay="<?=$value['baranggay_id']?>"> <span class="fa fa-pencil"></span> </button>
+												baranggay="<?=$value['baranggay_id']?>" 
+												zone = "<?=$value['zone']?>"
+												block ="<?=$value['block']?>"
+												street ="<?=$value['street']?>"> <span class="fa fa-pencil"></span> </button>
 
 												<!--<button class="btn btn-danger delete" id="<?=$value['id']?>" firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" > <span class="fa fa-trash-o"></span> </button>!-->
 
@@ -179,14 +182,27 @@ if(checkIfLoggedIn()==false){
 					<label class="control-label" for="birthday">Birthday</label>
 					<input type="date" class="form-control" id="birthday" name ="birthday" placeholder="birthday" required="" >
 				</div>
-				<div class="form-group col-md-9">
-					<label class="control-label" for="address">Address</label>
-					<input type="text" id="address" name="address" class="form-control" required="">
-				</div>
 				<div class="form-group col-md-6">
-					<label class="control-label" for="contact">Contact # <i>(09191234567)</i></label>
-					<input type="tel" id="contact" name="contact" class="form-control" required="">
+					<label class="control-label" for="contact">Contact # <i>(639191234567)</i></label>
+					<input type="text" id="contact" name="contact" class="form-control" required="">
 				</div>
+
+				<div class="form-group col-md-9">
+								<label class="control-label" for="address">Home no.</label>
+								<input type="text" id="address_number" name="address_number" class="form-control" required="">
+							</div>
+							<div class="form-group col-md-3">
+								<label class="control-label" for="address">Street</label>
+								<input type="text" id="address_street" name="address_street" class="form-control" required="">
+							</div>
+							<div class="form-group col-md-3">
+								<label class="control-label" for="address">Zone</label>
+								<input type="text" id="address_zone" name="address_zone" class="form-control" required="">
+							</div>
+							<div class="form-group col-md-3">
+								<label class="control-label" for="address">Block</label>
+								<input type="text" id="address_block" name="address_block" class="form-control" required="">
+							</div>
 				<div class="form-group col-md-3">
 					<label class="control-label" for="gender">Gender</label>
 					<select name="gender" id="gender" class="form-control" style="height:46px" required="">
@@ -264,7 +280,7 @@ if(checkIfLoggedIn()==false){
 		var error=0		
 		$(function(){
 			 $('#myTable').DataTable();
-			    $('#contact').mask("099999999999");
+			    $('#contact').mask("639999999999");
 				$("#frmUpdatePatient").validate({
 			        rules: {
 			          contact: {
@@ -283,6 +299,10 @@ if(checkIfLoggedIn()==false){
 			$('#firstname').val($(this).attr('firstname'))
 			$('#lastname').val($(this).attr('lastname'))
 			$('#birthday').val($(this).attr('birthday'))
+			$('#address_number').val($(this).attr('address'))
+			$('#address_street').val($(this).attr('street'))
+			$('#address_zone').val($(this).attr('zone'))
+			$('#address_block').val($(this).attr('block'))
 			$('#address').val($(this).attr('address'))
 			$('#contact').val($(this).attr('contact'))
 			$('#gender').val($(this).attr('gender'))
@@ -311,12 +331,15 @@ if(checkIfLoggedIn()==false){
 			var fname =$('#firstname').val()
 			var lname= $('#lastname').val()
 			var bday = $('#birthday').val()
-			var address = $('#address').val()
+			var address = $('#address_number').val()
+			var block = $('#address_block').val()
+			var zone = $('#address_zone').val()
+			var street = $('#address_street').val()
 			var contact = $('#contact').val()
 			var gender = $('#gender').val()
 			var baranggay = $('#baranggay').val();
 
-			if(id=="" || fname=="" || lname=="" || bday=="" || address=="" || contact=="" || gender==""||baranggay==""){
+			if(id=="" || fname=="" || lname=="" || bday=="" || address=="" || contact=="" || gender==""||baranggay=="" || block=="" || zone=="" ||street==""){
 				error++
 			}
 
@@ -326,7 +349,7 @@ if(checkIfLoggedIn()==false){
 			}
 			$.ajax({
 				url:'../api.php',
-				data:{request:'updatePatientViaID',id:id,fname:fname,lname:lname,bday:bday,address:address,contact:contact,gender:gender,baranggay:baranggay},
+				data:{request:'updatePatientViaID',id:id,fname:fname,lname:lname,bday:bday,address:address,contact:contact,gender:gender,baranggay:baranggay,block:block,zone:zone,street:street},
 				dataType:'JSON',
 				type:'POST',
 				success:function(data){
@@ -336,6 +359,7 @@ if(checkIfLoggedIn()==false){
 					}
 				}
 			}) 
+			e.preventDefault();
 		})
 		$('#btnDeleteAccount').click(function(){
 			var id = $('#patient_id').val()

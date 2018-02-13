@@ -340,6 +340,7 @@ function qryOutbreakPerBaranggay(array $arr=array(),$status){
 (SELECT p.id AS patient_id,b.`id` AS baranggay_id, b.`name` AS baranggay_name,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id`  and status ='$status'";
 	$filter="";
 	$rows = count($arr);
+	var_dump($arr);
 	$ctr=0;
 	if($rows>0){
 		$filter = "where ";
@@ -361,7 +362,7 @@ function qryOutbreakPerBaranggay(array $arr=array(),$status){
 
 	$sql = $sql.$filter.") ex GROUP BY baranggay_id";
 		//Execute the query and put data into a result
-	
+	echo $sql;
 	$result = mysqli_query($conn,$sql);
 
 	
@@ -381,21 +382,46 @@ function qryOutbreak(array $arr=array()){
 	$ctr=0;
 	if($rows>0){
 		$filter = "where ";
+
+		$isRange = false;
+		if(isset($arr['month']) && isset($arr['month2'])){
+			$from = $arr['month'];
+			$to = $arr['month2'];
+			$filter.=" `month` between $from and $to ";
+			$isRange= true;
+			$ctr++;
+
+			if($rows > 2){
+				$filter.=" and ";
+
+			}
+		}
 		foreach($arr as $key=>$value){
-			if($key!="myTable_length"){
-
 				if($value!=""){
-
-					$ctr++;
-					if($ctr!=$rows){
-
-						$filter.=$key.=" = '".$value."' and ";
+					if($isRange){
+						//neglect month
+						if($key!="month2"){
+							$ctr++;
+							if($key=="month"){
+							}elseif($ctr!=$rows){
+								$filter.=$key.=" = '".$value."' and ";
+							}else{
+								$filter.=$key.=" = '".$value."' ";
+							}
+						}
 					}else{
-						$filter.=$key.=" = '".$value."' ";
+						if($key!="month2"){
+							$ctr++;
+							if($ctr!=$rows){
+
+								$filter.=$key.=" = '".$value."' and ";
+							}else{
+								$filter.=$key.=" = '".$value."' ";
+							}
+						}
 					}
 
 				}
-			}
 		}
 	
 	}
@@ -412,25 +438,53 @@ function getMorbidityReport(array $arr=array()){
 	$rows = count($arr);
 	$ctr=0;
 	if($rows>0){
-		$filter = " and ";
-		foreach($arr as $key=>$value){
-			if($value!=""){
+		//$filter = "where ";
 
-				$ctr++;
-				if($ctr!=$rows){
+		$isRange = false;
+		if(isset($arr['month']) && isset($arr['month2'])){
+			$from = $arr['month'];
+			$to = $arr['month2'];
+			$filter.=" `month` between $from and $to ";
+			$isRange= true;
+			$ctr++;
 
-					$filter.=$key.=" = '".$value."' and ";
-				}else{
-					$filter.=$key.=" = '".$value."' ";
-				}
+			if($rows > 2){
+				$filter.=" and ";
 
 			}
+		}
+		foreach($arr as $key=>$value){
+				if($value!=""){
+					if($isRange){
+						//neglect month
+						if($key!="month2"){
+							$ctr++;
+							if($key=="month"){
+							}elseif($ctr!=$rows){
+								$filter.=$key.=" = '".$value."' and ";
+							}else{
+								$filter.=$key.=" = '".$value."' ";
+							}
+						}
+					}else{
+						if($key!="month2"){
+							$ctr++;
+							if($ctr!=$rows){
+
+								$filter.=$key.=" = '".$value."' and ";
+							}else{
+								$filter.=$key.=" = '".$value."' ";
+							}
+						}
+					}
+
+				}
 		}
 	
 	}
 
 	$sql = $sql.$filter;
-
+	echo $sql;
 	//Execute the query and put data into a result
 	$result = mysqli_query($conn,$sql);
 	
@@ -684,6 +738,8 @@ function getCountOnAgeMorbidity($id,$start,$end,array $arr = array()){
 		
 	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,p.baranggay_id as baranggay_id, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.month,o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Female' and disease_id = '$id' and status='morbidity') p where age between '$start' and '$end'";
 	$rows = count($arr);
+
+
 	$ctr=0;
 	if($rows>0){
 
