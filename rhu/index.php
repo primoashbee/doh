@@ -58,23 +58,19 @@ if(checkIfLoggedIn()==false){
 		<div class="divider"></div>
 	
 		<ul class="nav menu">
-			<li class="parent "><a data-toggle="collapse" href="#sub-item-1">
-				<em class="fa fa-user">&nbsp;</em> Patients <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
-				</a>
-				<ul class="children collapse" id="sub-item-1">
-					<li><a class="" href="index.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> View Patients
-					</a></li>
-					<li><a class="" href="create_patient.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Patient
-					</a></li>
-					
-				</ul>
-			</li>
+
 			<li class="parent "><a data-toggle="collapse" href="#sub-item-2">
-				<em class="fa fa-navicon">&nbsp;</em> Outbreak Mgmt <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
+				<em class="fa fa-navicon">&nbsp;</em> Outbreak Management <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
 				</a>
 				<ul class="children collapse" id="sub-item-2">
+					<li>
+					<a class="" href="index.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> View Patients
+					</a>
+					</li>
+					<li><a class="" href="create_patient.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> Create New Patient
+					</a></li>
 					<li><a class="" href="outbreaks.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Outbreaks
 					</a></li>
@@ -102,7 +98,7 @@ if(checkIfLoggedIn()==false){
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						Patients
-						<a href="create_patient.php"><button class="btn btn-success" style="float:right;">Create New Patient</button></a>
+						<a href="create_patient.php"><button class="btn btn-success" style="float:right;">Add New Patients Record</button></a>
 					</div>
 					<div class="panel-body">
 						<div class="table-responsive">
@@ -118,7 +114,7 @@ if(checkIfLoggedIn()==false){
 								<th>Actions</th>
 							</thead>
 							<?php 
-								$data = getPatientCollection();
+								$data = getPatientCollection($_SESSION['user']['id']);
 								if($count = count($data) > 0){
 
 									foreach($data as $key=>$value){
@@ -129,7 +125,7 @@ if(checkIfLoggedIn()==false){
 											<td><?=$value['gender']?></td>
 											<td><?=$value['age']?></td>
 											<td><?=$value['baranggay']?></td>
-											<td><?=$value['created_at']?></td>
+											<td><?=convertDateTime($value['created_at'])?></td>
 											<td>
 												<button class="btn btn-warning edit" 
 												id="<?=$value['id']?>" 
@@ -138,7 +134,7 @@ if(checkIfLoggedIn()==false){
 												contact="<?=$value['contact']?>" gender="<?=$value['gender']?>"
 												baranggay="<?=$value['baranggay_id']?>"> <span class="fa fa-pencil"></span> </button>
 
-												<button class="btn btn-danger delete" id="<?=$value['id']?>" firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" > <span class="fa fa-trash-o"></span> </button>
+												<!--<button class="btn btn-danger delete" id="<?=$value['id']?>" firstname="<?=$value['firstname']?>" lastname="<?=$value['lastname']?>" > <span class="fa fa-trash-o"></span> </button>!-->
 
 											</td>
 										</tr>
@@ -261,10 +257,25 @@ if(checkIfLoggedIn()==false){
 	<script src="../js/bootstrap-datepicker.js"></script>
 	<script src="../js/custom.js"></script>
 	<script src="../js/datatables.js"></script>
+	<script src="../js/mask.js"></script>
+	<script src="../js/bootstrap-inputmask.min.js"></script>
 
 	<script>
+		var error=0		
 		$(function(){
 			 $('#myTable').DataTable();
+			    $('#contact').mask("099999999999");
+				$("#frmUpdatePatient").validate({
+			        rules: {
+			          contact: {
+			            required: true,
+			            maxlength: 12,
+			            minlength: 12
+			          }
+			        }
+			      });
+    
+
 		})
 		$('.edit').click(function(){
 
@@ -288,8 +299,14 @@ if(checkIfLoggedIn()==false){
 
 		})
 		$("#frmUpdatePatient").submit(function(e){
-			console.log($(this).serialize())
-			console.log('$(this).serialize()')
+			var error = 0
+
+			var errs = $("#frmUpdatePatient").validate();
+			if(errs.errorList.length > 0){
+				errors ++
+			}
+
+			
 			var id = $("#edit_patient_id").val()
 			var fname =$('#firstname').val()
 			var lname= $('#lastname').val()
@@ -298,12 +315,15 @@ if(checkIfLoggedIn()==false){
 			var contact = $('#contact').val()
 			var gender = $('#gender').val()
 			var baranggay = $('#baranggay').val();
-			var error = 0
 
 			if(id=="" || fname=="" || lname=="" || bday=="" || address=="" || contact=="" || gender==""||baranggay==""){
 				error++
-			}e.preventDefault()
-			
+			}
+
+			if(error > 0){
+				e.preventDefault()
+				return false;
+			}
 			$.ajax({
 				url:'../api.php',
 				data:{request:'updatePatientViaID',id:id,fname:fname,lname:lname,bday:bday,address:address,contact:contact,gender:gender,baranggay:baranggay},
@@ -316,10 +336,6 @@ if(checkIfLoggedIn()==false){
 					}
 				}
 			}) 
-			if(error > 0){
-				e.preventDefault()
-				return false;
-			}
 		})
 		$('#btnDeleteAccount').click(function(){
 			var id = $('#patient_id').val()

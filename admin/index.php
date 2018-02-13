@@ -131,7 +131,7 @@ getMortalityGraphPerBaranggay(getBaranggayOutbreak());
 										<tr>
 											<td><?=$value['username']?></td>
 											<td><?=$value['name']?></td>
-											<td><?=$value['created_at']?></td>
+											<td><?=convertDateTime($value['created_at'])?></td>
 											<td>
 												<button class="btn btn-warning edit" id="<?=$value['id']?>" fname="<?=$value['fname']?>" lname="<?=$value['lname']?>" username="<?=$value['username']?>" birthday="<?=$value['birthday']?>" gender="<?=$value['gender']?>" > <span class="fa fa-pencil"></span> </button>
 												<button class="btn btn-danger delete" id="<?=$value['id']?>" fname="<?=$value['fname']?>" lname="<?=$value['lname']?>" username="<?=$value['username']?>"> <span class="fa fa-trash-o"></span> </button>
@@ -240,6 +240,7 @@ getMortalityGraphPerBaranggay(getBaranggayOutbreak());
 	<script src="../js/custom.js"></script>
 
 	<script>
+
 		$('.edit').click(function(){
 
 			$('#update_account_id').val($(this).attr('id'))

@@ -90,24 +90,21 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 		</div>
 		<div class="divider"></div>
 	
+	
 		<ul class="nav menu">
-			<li class="parent "><a data-toggle="collapse" href="#sub-item-1">
-				<em class="fa fa-user">&nbsp;</em> Patients <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
-				</a>
-				<ul class="children collapse" id="sub-item-1">
-					<li><a class="" href="index.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> View Patients
-					</a></li>
-					<li><a class="" href="create_patient.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Patient
-					</a></li>
-					
-				</ul>
-			</li>
+
 			<li class="parent "><a data-toggle="collapse" href="#sub-item-2">
-				<em class="fa fa-navicon">&nbsp;</em> Outbreak Mgmt <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
+				<em class="fa fa-navicon">&nbsp;</em> Outbreak Management <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
 				</a>
 				<ul class="children collapse" id="sub-item-2">
+					<li>
+					<a class="" href="index.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> View Patients
+					</a>
+					</li>
+					<li><a class="" href="create_patient.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> Create New Patient
+					</a></li>
 					<li><a class="" href="outbreaks.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Outbreaks
 					</a></li>

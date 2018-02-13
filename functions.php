@@ -129,6 +129,9 @@ function getAgeCountMortality(array $arr = array(),$gender){
 
 }
 function generateColor() {
+	$colors = ['#4b36f6','#7bc636','#c52085'];
+	$index = rand(0,2);
+	return $colors[$index];
     return '#'.random_color_part() . random_color_part() . random_color_part();
 }
 function trClassViaID($disease_id, $status, $disease_name){
@@ -211,7 +214,7 @@ function getAccountsCollection(){
 }
 function getDiseaseCollection(){
 	require "config.php";
-	$sql="Select * from diseases where isDeleted = false";
+	$sql="Select * from diseases where isDeleted = false order by disease_name ASC";
 	$res = mysqli_query($conn,$sql);
 	
 	return (mysqli_fetch_all($res,MYSQLI_ASSOC));
@@ -249,9 +252,12 @@ function getDiseaseViaIDNumber($id){
 	return mysqli_fetch_all($result,MYSQLI_ASSOC);
 
 }
-function getPatientCollection(){
+function getPatientCollection($rhu_id =""){
 	require "config.php";
-	$sql="Select * from patients where isDeleted = false";
+	$sql="Select * from patients where created_by = '$rhu_id' and isDeleted = false";
+	if($rhu_id==""){
+		$sql="Select * from patients where and isDeleted = false";
+	}
 	$res = mysqli_query($conn,$sql);
 	$data;
 	if(mysqli_num_rows($res)==0){
@@ -361,6 +367,11 @@ function qryOutbreakPerBaranggay(array $arr=array(),$status){
 	return mysqli_fetch_all($result,MYSQLI_ASSOC);
 
 }
+
+function convertDateTime($datetime){
+	$date = new DateTime($datetime);
+	return $date->format('m/d/Y h:i:s a ');	
+}
 function qryOutbreak(array $arr=array()){
 	require 'config.php';
 	$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` ";
@@ -370,16 +381,19 @@ function qryOutbreak(array $arr=array()){
 	if($rows>0){
 		$filter = "where ";
 		foreach($arr as $key=>$value){
-			if($value!=""){
+			if($key!="myTable_length"){
 
-				$ctr++;
-				if($ctr!=$rows){
+				if($value!=""){
 
-					$filter.=$key.=" = '".$value."' and ";
-				}else{
-					$filter.=$key.=" = '".$value."' ";
+					$ctr++;
+					if($ctr!=$rows){
+
+						$filter.=$key.=" = '".$value."' and ";
+					}else{
+						$filter.=$key.=" = '".$value."' ";
+					}
+
 				}
-
 			}
 		}
 	

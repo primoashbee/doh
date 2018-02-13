@@ -5,12 +5,9 @@ if(isset($_SESSION['old_user'])){
 unset($_SESSION['old_user']);
 };
 session_start();
-
 if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	header('location:../index.php');
-
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -137,201 +134,217 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 					</div>
 
 					<div class="panel-body">
-						<div class="col-xs-12 col-md-12" style="margin-left:-10px">
-							<form action ="<?=$_SERVER['PHP_SELF']?>" method ="get" id="frmFilter">
-								<div class="form-inline">
-									<label for="status">Status:  </label>
-									<select name="status" id="status" class ="form-control filter">
-										<option value="">------</option>
-										<option value="morbidity">Morbidity</option>
-										<option value="mortality">Mortality</option>
-									</select>	
-									<label class="control-label" for="disease_id">Disease</label>
-									<select name="disease_id" id="disease_id" class="form-control filter" >
-										<option value="">------</option>
-										<?php 
-												$data = getDiseaseCollection();
-												if($count = count($data) > 0){
+						<form action ="<?=$_SERVER['PHP_SELF']?>" method ="get" id="frmFilter">
+							<div class="form-inline">
+								<label for="status">Status:  </label>
+								<select name="status" id="status" class ="form-control filter">
+									<option value="">------</option>
+									<option value="morbidity">Morbidity</option>
+									<option value="mortality">Mortality</option>
+								</select>	
+								<label class="control-label" for="disease_id">Disease</label>
+								<select name="disease_id" id="disease_id" class="form-control filter" >
+									<option value="">------</option>
+									<?php 
+											$data = getDiseaseCollection();
+											if($count = count($data) > 0){
+												foreach($data as $key=>$value){
+												?>
+										<option value="<?=$value['id']?>"><?=($value['disease_name'])?></option>
+												<?php
+												
+											}
+										}
+									?>
+								</select>
+								<label for="status">Baranggay:  </label>
+								<select name="baranggay_id" id="baranggay_id" class ="form-control filter" >
+									<option value="">------</option>
+									<?php 
+											$data = getBaranggayCollection();
+											foreach($data as $key=>$value){
+												?>
+										<option value="<?=$value['id']?>"><?=html_entity_decode($value['name'])?></option>
+												<?php
+												
+											}
+									?>
+								</select>
+								<label for="month">Month:  </label>
+								<select name="month" id="month" class ="form-control filter">
+									<option value="">------</option>
+									<option value="1">January</option>
+									<option value="2">February</option>
+									<option value="3">March</option>
+									<option value="4">April</option>
+									<option value="5">May</option>
+									<option value="6">June</option>
+									<option value="7">July</option>
+									<option value="8">August</option>
+									<option value="9">September</option>
+									<option value="10">October</option>
+									<option value="11">November</option>
+									<option value="12">December</option>
+								</select>						
+								<label for="year">Year:  </label>
+								<select name="year" id="year" class ="form-control filter">
+									<option value="">------</option>
+									<?php
+										$years= getYears();
+										
+										foreach ($years as $key => $value) {
+										?>
+										<option value="<?=$value['year']?>"><?=$value['year']?></option>
+										<?php
+										}
+									 ?>
+								</select>
+								<button type="submit" class="btn" style="background-color:#30a5ff;border-color:#30a5ff;color: white;float:right;width: 110px">Enter</button>
+								<a href="reports/disease_report.php?<?=$_SERVER['QUERY_STRING']?>" onClick=""><button type="button" class="btn btn-warning" style="float:right;"><i class="fa fa-print fa-2" aria-hidden="true">  Print Result</i></button></a>
+							</div>
+						</form>
 
+						<div class="clearfix" style="margin-top: 25px"></div>
+								<ul class="nav nav-tabs">
+				                  <li class="active "><a data-toggle="tab" href="#home">List</a></li>
+				                  <li class=""><a data-toggle="tab" href="#bgraph">Baranggay Graph</a></li>
+				                  <li class=""><a data-toggle="tab" href="#agraph">Age Graph</a></li>
+				                  <li class=""><a data-toggle="tab" href="#outbreak">Outbreak</a></li>
+				                  <li class=""><a data-toggle="tab" href="#rankings">Rankings</a></li>
+				                </ul>
+				                <div class="tab-content">
+				                  <div id="home" class="tab-pane fade in active">
+										<table class="table table-striped" id="myTable">
+											<thead>
+												<th>First Name</th>
+												<th>Last Name</th>
+												<th>Gender</th>
+												<th>Age</th>
+												<th>Diseases</th>
+												<th>Baranggay</th>
+												<th>Status</th>
+
+												<th>Encoded On</th>
+											</thead>
+											<?php 
+												$data = qryOutbreak($_GET);
+												$_SESSION['QRY_STRING'] = $_GET;
+												if($count = count($data) > 0){
 													foreach($data as $key=>$value){
 													?>
-											<option value="<?=$value['id']?>"><?=($value['disease_name'])?></option>
+														<tr>
+															<td><?=$value['firstname']?></td>
+															<td><?=$value['lastname']?></td>
+															<td><?=$value['gender']?></td>
+															<td><?=computeAge($value['birthday'])?></td>
+															<td><?=$value['disease_name']?></td>
+															<td><?=$value['name']?></td>
+															<td><?=ucfirst($value['status'])?></td>
+															<td><?=convertDateTime($value['created_at'])?></td>
+															
+														</tr>
+
 													<?php
-													
+													}
 												}
-											}
-										?>
-									</select>
-									<label for="status">Baranggay:  </label>
-									<select name="baranggay_id" id="baranggay_id" class ="form-control filter" >
-										<option value="">------</option>
-										<?php 
-												$data = getBaranggayCollection();
-												foreach($data as $key=>$value){
-													?>
-											<option value="<?=$value['id']?>"><?=html_entity_decode($value['name'])?></option>
-													<?php
-													
-												}
-										?>
-									</select>
-									<label for="month">Month:  </label>
-									<select name="month" id="month" class ="form-control filter">
-										<option value="">------</option>
-										<option value="1">January</option>
-										<option value="2">February</option>
-										<option value="3">March</option>
-										<option value="4">April</option>
-										<option value="5">May</option>
-										<option value="6">June</option>
-										<option value="7">July</option>
-										<option value="8">August</option>
-										<option value="9">September</option>
-										<option value="10">October</option>
-										<option value="11">November</option>
-										<option value="12">December</option>
-									</select>						
-									<label for="year">Year:  </label>
-									<select name="year" id="year" class ="form-control filter">
-										<option value="">------</option>
-										<?php
-											$years= getYears();
-											
-											foreach ($years as $key => $value) {
-											?>
-											<option value="<?=$value['year']?>"><?=$value['year']?></option>
-											<?php
-											}
-										 ?>
-									</select>
-									<button type="submit" class="btn" style="background-color:#30a5ff;border-color:#30a5ff;color: white;float:right;width: 110px">Enter</button>
-									<a href="reports/disease_report.php?<?=$_SERVER['QUERY_STRING']?>" onClick=""><button type="button" class="btn btn-warning" style="float:right;"><i class="fa fa-print fa-2" aria-hidden="true">  Print Result</i></button></a>
-								</div>
-							</form>
-						</div>
-						<div class="clearfix" style="padding-bottom: 10px"></div>
+											?>	
 
-						<table class="table table-striped" id="myTable">
-							<thead>
-								<th>First Name</th>
-								<th>Last Name</th>
-								<th>Gender</th>
-								<th>Age</th>
-								<th>Diseases</th>
-								<th>Baranggay</th>
-								<th>Status</th>
-
-								<th>Encoded On</th>
-							</thead>
-							<?php 
-								$data = qryOutbreak($_GET);
-								$_SESSION['QRY_STRING'] = $_GET;
-								if($count = count($data) > 0){
-
-									foreach($data as $key=>$value){
-									?>
-										<tr>
-											<td><?=$value['firstname']?></td>
-											<td><?=$value['lastname']?></td>
-											<td><?=$value['gender']?></td>
-											<td><?=computeAge($value['birthday'])?></td>
-											<td><?=$value['disease_name']?></td>
-											<td><?=$value['name']?></td>
-											<td><?=ucfirst($value['status'])?></td>
-											<td><?=$value['created_at']?></td>
-											
-										</tr>
-
-									<?php
-									}
-								}
-							?>	
-
-						</table>
-						<hr>
-						<div class="clearfix"></div>
-						<div class="canvas-wrapper">
-							<h3 style="text-align: center"> Mortality Graph </h3>
-							<canvas class="main-chart" id="mortalityGraph" height="100" width="600"></canvas>
-						</div>						
-						<div class="canvas-wrapper">
-							<h3 style="text-align: center"> Morbidity Graph </h3>
-							<canvas class="main-chart" id="morbidityGraph" height="100" width="600"></canvas>
-						</div>						
-						<div class="canvas-wrapper">
-							<h3 style="text-align: center"> Age Morbidity Graph </h3>
-							<canvas class="main-chart" id="AgeMorbidityGraph" height="300" width="600"></canvas>
-						</div>						
-						<div class="canvas-wrapper">
-							<h3 style="text-align: center"> Age Mortality Graph </h3>
-							<canvas class="main-chart" id="AgeMortalityGraph" height="300" width="600"></canvas>
-						</div>
-						<div class="clearfix"></div>
-						<div class="col-xs-12 col-lg-12 col-md-12">
-						<h3> <center> Map Information </center> </h3>
-						<iframe src="heatmap.php" width="100%" height="500px"></iframe>
-						</div>						
-						<div class="col-xs-12 col-lg-6 col-md-6">
-						<h3>  <center>Morbidty Rankings</center> </h3>
-						<?php 
-							$morbidity = rankings('morbidity');
-							
-							$ctr=1;
-						?>
-						<table class="table table-striped">
-							<thead>
-								<th>#</th>
-								<th>Name</th>
-								<th>Count</th>
-								<th>Rank</th>
-							</thead>
-							<tbody>	
-								<?php
-									foreach ($morbidity as $key => $value) {
-									?> 
-									<tr class="<?=trClassViaID($value['disease_id'],'morbidity',$value['disease_name'])?>">
-										<td><?=$ctr++?></td>
-										<td><?=$value['disease_name']?></td>
-										<td><?=$value['total_count']?></td>
-										<td><?=$value['rank']?></td>
-									</tr>
-									<?php
-								}
-							?>
-							</tbody>
-						</table>
-						</div>						
-						<div class="col-xs-12 col-lg-6 col-md-6">
-						<h3> <center>Mortality Rankings</center> </h3>
+										</table>
+				                  </div>
+				                  <div id="bgraph" class="tab-pane fade in ">
+										<div class="canvas-wrapper">
+											<h3 style="text-align: center"> Mortality Graph </h3>
+											<canvas class="main-chart" id="mortalityGraph" height="100" width="600"></canvas>
+										</div>
+										<div class="canvas-wrapper">
+											<h3 style="text-align: center"> Morbidity Graph </h3>
+											<canvas class="main-chart" id="morbidityGraph" height="100" width="600"></canvas>
+										</div>				
+				                  </div>
+				                  <div id="agraph" class="tab-pane fade in ">
+										<div class="canvas-wrapper">
+											<h3 style="text-align: center"> Age Morbidity Graph </h3>
+											<canvas class="main-chart" id="AgeMorbidityGraph" height="300" width="600"></canvas>
+										</div>						
+										<div class="canvas-wrapper">
+											<h3 style="text-align: center"> Age Mortality Graph </h3>
+											<canvas class="main-chart" id="AgeMortalityGraph" height="300" width="600"></canvas>
+										</div>
+				                  </div>
+				                  <div id="outbreak" class="tab-pane fade in ">
+										<div class="col-xs-12 col-lg-12 col-md-12">
+											<h3> <center> Map Information </center> </h3>
+											<iframe src="heatmap.php" width="100%" height="500px"></iframe>
+										</div>	
+				                  </div>
+				                  <div id="rankings" class="tab-pane fade in ">
+											<div class="col-xs-12 col-lg-6 col-md-6">
+												<h3>  <center>Morbidty Rankings</center> </h3>
 												<?php 
-							$mortality = rankings('mortality');
-							$ctr=1;
-						?>
-						<table class="table table-striped">
-							<thead>
-								<th>#</th>
-								<th>Name</th>
-								<th>Count</th>
-								<th>Rank</th>
-							</thead>
-							<tbody>	
-								<?php
-									foreach ($mortality as $key => $value) {
+													$morbidity = rankings('morbidity');
+													
+													$ctr=1;
+												?>
+												<table class="table table-striped">
+													<thead>
+														<th>#</th>
+														<th>Name</th>
+														<th>Count</th>
+														<th>Rank</th>
+													</thead>
+													<tbody>	
+														<?php
+															foreach ($morbidity as $key => $value) {
+															?> 
+															<tr class="<?=trClassViaID($value['disease_id'],'morbidity',$value['disease_name'])?>">
+																<td><?=$ctr++?></td>
+																<td><?=$value['disease_name']?></td>
+																<td><?=$value['total_count']?></td>
+																<td><?=$value['rank']?></td>
+															</tr>
+															<?php
+														}
+													?>
+													</tbody>
+												</table>
+												</div>						
+												<div class="col-xs-12 col-lg-6 col-md-6">
+												<h3> <center>Mortality Rankings</center> </h3>
+																		<?php 
+													$mortality = rankings('mortality');
+													$ctr=1;
+												?>
+												<table class="table table-striped">
+													<thead>
+														<th>#</th>
+														<th>Name</th>
+														<th>Count</th>
+														<th>Rank</th>
+													</thead>
+													<tbody>	
+														<?php
+															foreach ($mortality as $key => $value) {
+															?> 
+															<tr class="<?=trClassViaID($value['disease_id'],'mortality',$value['disease_name'])?>">
+																<td><?=$ctr++?></td>
+																<td><?=$value['disease_name']?></td>
+																<td><?=$value['total_count']?></td>
+																<td><?=$value['rank']?></td>
+															</tr>
+															<?php
+														}
+													?>
+													</tbody>
+												</table>
+												</div>
+											</div>
+				                  </div>
+				                 </div>
 
-									?> 
-									<tr class="<?=trClassViaID($value['disease_id'],'mortality',$value['disease_name'])?>">
-										<td><?=$ctr++?></td>
-										<td><?=$value['disease_name']?></td>
-										<td><?=$value['total_count']?></td>
-										<td><?=$value['rank']?></td>
-									</tr>
-									<?php
-								}
-							?>
-							</tbody>
-						</table>
-						</div>
-					</div>
+
+
+					
+						
 				</div>
 			</div>
 		</div><!--/.row-->
@@ -348,7 +361,6 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	<script src="../js/datatables.js"></script>
 	<script src="../js/ashbee.js"></script>
 	<script>
-
 	var mt_labels = <?php 
 		$mt_label=array();
 		$mb_label=array();
@@ -356,7 +368,6 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 		$mb_disease = qryOutbreakPerBaranggay($_GET,'morbidity');
 		$mt_colors =array();
 		$mb_colors =array();
-
 		$totalCountMortality =array();
 		$totalCountMorbidity =array();
 		
@@ -374,13 +385,11 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			array_push($mb_colors,generateColor());
 			}
 		}
-
 		$mortality_counts =array();	
 		
 		echo json_encode($mt_label);
 	?>;
 	var mb_labels = <?php echo json_encode($mb_label)?>;
-
 	var mt_colors = <?php echo json_encode($mt_colors)?>;
 	var mb_colors = <?php echo json_encode($mb_colors)?>;
 	
@@ -409,7 +418,6 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	        hoverBackgroundColor: ["#66A2EB", "#FCCE56"]
 	    }]
 	};
-
 	var mbGraph = new Chart(morbidityGraph, {
 	    type: 'bar',
 	    data: mbData,
@@ -424,7 +432,6 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	            	stacked: true
 	            }]
 	        }
-
 	    }
 	});
 	var mtGraph = new Chart(mortalityGraph, {
@@ -441,13 +448,11 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	            	stacked: true
 	            }]
 	        }
-
 	    }
 	});
 	var male_values_morbidity=<?php 	
 		 echo json_encode(getAgeCountMorbidity($_GET,'male'));
 	?>;
-
 	var female_values_morbidity=<?php 	
 		 echo json_encode(getAgeCountMorbidity($_GET,'female'));
 	?>;
@@ -457,7 +462,6 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	var female_values_mortality=<?php 	
 		 echo json_encode(getAgeCountMortality($_GET,'female'));
 	?>;
-
 	var ageDataMorbidity = {
 	    labels: ["Under 1","1 to 4","5 to 9","10 to 14"," 15 to 19","20 to 24","25 to 29","30-34","35 to 39","40 to 44","45 to 49","50 to 54","55-59","60 to 64", "65 & above"],
 	    datasets: [
@@ -471,7 +475,6 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	            backgroundColor: "#fb8c29",
 	            data: female_values_morbidity 
 	        }
-
 	        
 	        
 	    ]
@@ -489,12 +492,10 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	            backgroundColor: "#fb8c29",
 	            data: female_values_mortality
 	        }
-
 	        
 	        
 	    ]
 	};
-
 	var myBarChartMorbidity = new Chart(ageMorbidityGraph, {
 	    type: 'horizontalBar',
 	    data: ageDataMorbidity,
@@ -525,12 +526,10 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	        }
 	    }
 	});
-
 	</script>
 	<script>
 		
 		$(function(){
-
 			 $('#myTable').DataTable();
 			 <?php 
 			 	$params = count($_GET);
@@ -540,7 +539,6 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			 		?>
 		$('#<?=$key?>').val('<?=$value?>')
 						<?php
-
 						}
 					}
 				?>
@@ -550,27 +548,21 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			$('.filter').each(function(){
 				if($(this).val()==""){
 					$(this).attr('disabled','disabled')
-
 			}
 			})
 		})
-
 	function generateReport(){
 		var qry = '<?=$_SERVER['PHP_SELF'].'/'.$_SERVER['QUERY_STRING']?>';
 		var data = '<?=$_SERVER['QUERY_STRING']?>'
 		var type = 'all'
-
 		/*$.ajax({
 			url:'',
 			type:'GET',
 			success:function(data){
-
 			}
 		})*/
 		location.href="reports/disease_report.php?"+data
-
 	}
-
 </script>
 
 		

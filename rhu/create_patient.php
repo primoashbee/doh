@@ -58,23 +58,19 @@ if(checkIfLoggedIn()==false){
 		<div class="divider"></div>
 	
 		<ul class="nav menu">
-			<li class="parent "><a data-toggle="collapse" href="#sub-item-1">
-				<em class="fa fa-user">&nbsp;</em> Patients <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
-				</a>
-				<ul class="children collapse" id="sub-item-1">
-					<li><a class="" href="index.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> View Patients
-					</a></li>
-					<li><a class="" href="create_patient.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Patient
-					</a></li>
-					
-				</ul>
-			</li>
+
 			<li class="parent "><a data-toggle="collapse" href="#sub-item-2">
-				<em class="fa fa-navicon">&nbsp;</em> Outbreak Mgmt <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
+				<em class="fa fa-navicon">&nbsp;</em> Outbreak Management <span data-toggle="collapse" href="#sub-item-2" class="icon pull-right"><em class="fa fa-plus"></em></span>
 				</a>
 				<ul class="children collapse" id="sub-item-2">
+					<li>
+					<a class="" href="index.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> View Patients
+					</a>
+					</li>
+					<li><a class="" href="create_patient.php">
+						<span class="fa fa-arrow-right">&nbsp;</span> Create New Patient
+					</a></li>
 					<li><a class="" href="outbreaks.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Outbreaks
 					</a></li>
@@ -132,12 +128,12 @@ if(checkIfLoggedIn()==false){
 								<input type="date" class="form-control" id="birthday" name ="birthday" placeholder="birthday" required="" >
 							</div>
 							<div class="form-group col-md-9">
-								<label class="control-label" for="address">Address</label>
+								<label class="control-label" for="address">Home no./Street/Zone/ Block</label>
 								<input type="text" id="address" name="address" class="form-control" required="">
 							</div>
 							<div class="form-group col-md-6">
-								<label class="control-label" for="contact">Contact # <i>(09191234567)</i></label>
-								<input type="tel" id="contact" name="contact" class="form-control" required="">
+								<label class="control-label" for="contact">Contact # <i>(639191234567)</i></label>
+								<input type="text" id="contact" name="contact" class="form-control" required="">
 							</div>
 							<div class="form-group col-md-3">
 								<label class="control-label" for="gender">Gender</label>
@@ -183,8 +179,25 @@ if(checkIfLoggedIn()==false){
 	<script src="../js/easypiechart-data.js"></script>
 	<script src="../js/bootstrap-datepicker.js"></script>
 	<script src="../js/custom.js"></script>
+	<script src="../js/mask.js"></script>
+	<script src="../js/bootstrap-inputmask.min.js"></script>
+	<script src="../js/jquery-validate.js"></script>
 	<script>
+
+		$(function(){
+			$('#contact').mask('639999999999');
 	
+		      $( "#frmCreatePatient" ).validate({
+		          rules: {
+		            contact: {
+		              required: true,
+		              maxlength: 12,
+		              minlength: 12
+		            }
+		          }
+		        });
+
+		})
 		$("#frmCreateAccount").submit(function(e){
 			var errors = 0
 			$.ajax({
