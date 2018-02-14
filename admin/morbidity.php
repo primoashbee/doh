@@ -285,7 +285,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 													
 													$ctr=1;
 												?>
-												<table class="table table-striped">
+												<table class="table table-striped" id="tblMorbidityRankings">
 													<thead>
 														<th>#</th>
 														<th>Name</th>
@@ -314,7 +314,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 													$mortality = rankings('mortality');
 													$ctr=1;
 												?>
-												<table class="table table-striped">
+												<table class="table table-striped" id="tblMortalityRankings">
 													<thead>
 														<th>#</th>
 														<th>Name</th>
@@ -531,6 +531,8 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 		
 		$(function(){
 			 $('#myTable').DataTable();
+			 $('#tblMortalityRankings').DataTable();
+			 $('#tblMorbidityRankings').DataTable();
 			 <?php 
 			 	$params = count($_GET);
 			 	

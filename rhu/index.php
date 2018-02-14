@@ -74,9 +74,9 @@ if(checkIfLoggedIn()==false){
 					<li><a class="" href="outbreaks.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Outbreaks
 					</a></li>
-					<li><a class="" href="create_outbreak.php">
+					<!--<li><a class="" href="create_outbreak.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> Create Outbreaks
-					</a></li>
+					</a></li>-->
 				</ul>
 			</li>
 			

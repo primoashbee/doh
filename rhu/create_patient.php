@@ -74,9 +74,9 @@ if(checkIfLoggedIn()==false){
 					<li><a class="" href="outbreaks.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Outbreaks
 					</a></li>
-					<li><a class="" href="create_outbreak.php">
+					<!--<li><a class="" href="create_outbreak.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> Create Outbreaks
-					</a></li>
+					</a></li>-->
 				</ul>
 			</li>
 			
@@ -169,11 +169,47 @@ if(checkIfLoggedIn()==false){
 											}
 									?>
 								</select>
-							</div>							
+							</div>	
+
+							<div class="form-group col-md-6">
+								<label class="control-label" for="disease_id">Disease</label>
+								<select name="disease_id" id="disease_id" class="form-control" style="height:46px" required="">
+									<option value="">------</option>
+									<?php 
+											$data = getDiseaseCollection();
+											if($count = count($data) > 0){
+
+												foreach($data as $key=>$value){
+												?>
+										<option value="<?=$value['id']?>"><?=($value['disease_name'])?></option>
+												<?php
+												
+											}
+										}
+									?>
+								</select>
+								<br>
+								<label class="control-label" for="status">Status</label>
+								<select name="status" id="status" class="form-control" style="height:46px" required="">
+									<option value="">------</option>
+									<option value="mortality">Mortality</option>
+									<option value="morbidity">Morbidity</option>
+									
+								</select>
+							</div>						
+							<div class="col-md-6" >
+								<span class="lead"> Disease Description </span>
+								<p id="disease_description" > </p>
+							</div> 
+
+							<div class="clearfix"></dataiv>
+							<iframe src="sample.php" width="100%" height="500px" id="frameMap"></iframe>						
 							
 							<div class="clearfix"></div>
 							<hr>
-							<button type="submit" class="btn btn-success">Submit</button>
+						    <input type="hidden" id="lat" name="lat" >
+						    <input type="hidden" id="long" name="long">
+							<button type="submit" class="btn btn-success" id="btnSubmitCreate">Submit</button>
 						</form>
 					</div>
 				</div>
@@ -199,19 +235,86 @@ if(checkIfLoggedIn()==false){
 		$(function(){
 			$('#contact').mask('639999999999');
 	
-		      $( "#frmCreatePatient" ).validate({
+		      $("#frmCreatePatient").validate({
 		          rules: {
 		            contact: {
 		              required: true,
 		              maxlength: 12,
 		              minlength: 12
 		            }
-		          }
+		          },
+		           submitHandler: function(form) {
+		    			var lat = $('#frameMap').contents().find('#lat').val()
+						var long = $('#frameMap').contents().find('#long').val()
+						var errors = 0;
+							$.ajax({
+									url:'../api.php',
+									data:{request:'checkIfUsernameExists',username:$('#username').val()},
+									type:'POST',
+									success:function(data){
+										console.log(data)
+										if(data==200){
+											console.log('existing')
+											$("#divUsername").addClass('has-error')
+											$("#lblUsername").html('Username (Username already existing)')
+											errors++
+										}else{
+											console.log('pwede')
+											$("#divUsername").removeClass('has-error')
+											$("#lblUsername").html('Username')}
+										
+									}
+								})
+							
+							if(!checkPasswordIfMatched($("#password").val(),$('#password_confirm').val())){
+								$('#lblPassword').html('Password (Password must match)');
+								$('.divPassword').addClass('has-error')
+								errors++
+							}else{
+								$('#lblPassword').html('Password ');
+								$('.divPassword').removeClass('has-error')
+							}
+
+							
+							$('#lat').val(lat)
+							$('#long').val(long)
+							
+							if(lat==""||long==""){
+								errors++
+								alert('Please use map to set location of the patient')
+							}
+							$("#lat").val(lat);
+							$("#long").val(long);
+					   
+							if(errors>0){
+								alert('Please fill all fields')
+
+							}else{
+								form.submit();
+							}
+					}
+
 		        });
+		      
+		})
+
+		$("#disease_id").change(function(){
+
+			var id=$(this).val()	
+			$.ajax({
+				url:'../api.php',
+				data:{request:"getDiseaseViaID",id:id},
+				dataType:'JSON',
+				type:'POST',
+				success:function(data){
+					$('#disease_description').html(data.description)
+				}
+			});
 
 		})
-		$("#frmCreateAccount").submit(function(e){
-			var errors = 0
+
+		$("#btnSubmitCreate2").click(function(e){
+			var errors = 0;
 			$.ajax({
 					url:'../api.php',
 					data:{request:'checkIfUsernameExists',username:$('#username').val()},
@@ -239,11 +342,20 @@ if(checkIfLoggedIn()==false){
 				$('#lblPassword').html('Password ');
 				$('.divPassword').removeClass('has-error')
 			}
-
+			var lat = $('#frameMap').contents().find('#lat').val()
+			var long = $('#frameMap').contents().find('#long').val()
+			
+			if(lat==""||long==""){
+				errors++
+				alert('Please use map to set location of the patient')
+			}
+			e.preventDefault();
 			if(errors>0){
 				e.preventDefault()
 			}
 
+			$("#lat").val(lat);
+			$("#long").val(long);
 		})
 
 	
