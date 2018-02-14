@@ -130,8 +130,9 @@ function getAgeCountMortality(array $arr = array(),$gender){
 }
 function generateColor() {
 	$colors = ['#4b36f6','#7bc636','#c52085'];
-	$index = rand(0,2);
-	return $colors[$index];
+	//$index = rand(0,2);
+
+	return $colors[0];
     return '#'.random_color_part() . random_color_part() . random_color_part();
 }
 function trClassViaID($disease_id, $status, $disease_name){
@@ -377,6 +378,45 @@ function convertDateTime($datetime){
 function qryOutbreak(array $arr=array()){
 	require 'config.php';
 	$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` ";
+	$filter="";
+	$rows = count($arr);
+	$ctr=0;
+	if($rows>0){
+		$filter = "where ";
+		foreach($arr as $key=>$value){
+			if($key!="myTable_length"){
+
+				if($value!=""){
+
+					$ctr++;
+					if($ctr!=$rows){
+
+						$filter.=$key.=" = '".$value."' and ";
+					}else{
+						$filter.=$key.=" = '".$value."' ";
+					}
+
+				}
+			}
+		}
+	
+	}
+	$sql = $sql.$filter. " order by created_at DESC";
+		//Execute the query and put data into a result
+	$result = mysqli_query($conn,$sql);
+	
+	return mysqli_fetch_all($result,MYSQLI_ASSOC);
+}
+function qryOutbreakRHU(array $arr=array(),$rhu_id=""){
+	require 'config.php';
+	if($rhu_id==""){
+	$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` ";
+		
+	}else{
+		$sql = "SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,b.name, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age, o.status,o.`lattitude`,o.`longitude`,o.created_at FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` where o.`created_by` ='$rhu_id'";
+	
+	}
+
 	$filter="";
 	$rows = count($arr);
 	$ctr=0;

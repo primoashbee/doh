@@ -133,7 +133,7 @@ if(checkIfLoggedIn()==false){
 								<th>Encoded On</th>
 							</thead>
 							<?php 
-								$data = qryOutbreak();
+								$data = qryOutbreakRHU($array=array(),$_SESSION['user']['id']);
 								if($count = count($data) > 0){
 
 									foreach($data as $key=>$value){
