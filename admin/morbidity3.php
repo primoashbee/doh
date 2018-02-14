@@ -170,6 +170,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 											}
 									?>
 								</select>
+								<br>
 								<label for="month">Month:  </label>
 								<select name="month" id="month" class ="form-control filter">
 									<option value="">------</option>
@@ -185,26 +186,10 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 									<option value="10">October</option>
 									<option value="11">November</option>
 									<option value="12">December</option>
-								</select>														
-
-									<label for="month">Month:  </label>
-								<select name="month2" id="month2" class ="form-control filter">
-									<option value="">------</option>
-									<option value="1">January</option>
-									<option value="2">February</option>
-									<option value="3">March</option>
-									<option value="4">April</option>
-									<option value="5">May</option>
-									<option value="6">June</option>
-									<option value="7">July</option>
-									<option value="8">August</option>
-									<option value="9">September</option>
-									<option value="10">October</option>
-									<option value="11">November</option>
-									<option value="12">December</option>
-								</select>						
-								<label for="year">Year:  </label>
-								<select name="year" id="year" class ="form-control filter">
+								</select>		
+								<br>				
+								<label for="year">Year:    </label>
+								<select name="year" id="year" class ="form-control filter" style="margin-left:12px">
 									<option value="">------</option>
 									<?php
 										$years= getYears();
@@ -302,7 +287,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 													
 													$ctr=1;
 												?>
-												<table class="table table-striped">
+												<table class="table table-striped" id="tblMorbidityRankings">
 													<thead>
 														<th>#</th>
 														<th>Name</th>
@@ -331,7 +316,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 													$mortality = rankings('mortality');
 													$ctr=1;
 												?>
-												<table class="table table-striped">
+												<table class="table table-striped" id="tblMortalityRankings">
 													<thead>
 														<th>#</th>
 														<th>Name</th>
@@ -548,6 +533,8 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 		
 		$(function(){
 			 $('#myTable').DataTable();
+			 $('#tblMortalityRankings').DataTable();
+			 $('#tblMorbidityRankings').DataTable();
 			 <?php 
 			 	$params = count($_GET);
 			 	

@@ -9,6 +9,14 @@ if($request=="checkIfUsernameExists"){
 	echo checkIfUsernameExists($username);
 	return checkIfUsernameExists($username);
 }
+if($request=="baranggayListRanking"){
+	$id = addslashes($_POST['disease_id']);
+	$status = addslashes($_POST['status']);
+	$sql ="SELECT b.`name`,COUNT(b.id) AS total FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.id LEFT JOIN baranggays b ON p.`baranggay_id` = b.id WHERE disease_id ='$id' and status ='$status' GROUP BY b.id order by total DESC";
+			
+	echo json_encode(mysqli_fetch_all(mysqli_query($conn,$sql),MYSQLI_ASSOC));
+	exit;
+}
 if($request=="deleteAccountViaID"){
 	$id = addslashes($_POST['id']);
 	$sql="Update accounts set isDeleted = true where id ='$id'";

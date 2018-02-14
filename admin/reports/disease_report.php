@@ -3,7 +3,7 @@
 // It will be called file.xls
 require '../../vendor/autoload.php';
 require '../../config.php';
-require '../../functions.php';
+require '../../functions2.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 date_default_timezone_set('Asia/Manila');

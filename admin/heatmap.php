@@ -1,6 +1,6 @@
 <?php 
 require "../config.php";
-require "../functions.php";
+require "../functions2.php";
 session_start();
 if(isset($_SESSION['old_user'])){
 unset($_SESSION['old_user']);

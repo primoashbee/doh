@@ -1,6 +1,6 @@
 <?php 
 require "../config.php";
-require "../functions.php";
+require "../functions2.php";
 if(isset($_SESSION['old_user'])){
 unset($_SESSION['old_user']);
 };
@@ -170,6 +170,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 											}
 									?>
 								</select>
+								<br>
 								<label for="month">Month:  </label>
 								<select name="month" id="month" class ="form-control filter">
 									<option value="">------</option>
@@ -185,9 +186,26 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 									<option value="10">October</option>
 									<option value="11">November</option>
 									<option value="12">December</option>
-								</select>						
-								<label for="year">Year:  </label>
-								<select name="year" id="year" class ="form-control filter">
+								</select>	
+								<label for="month2">Month:  </label>
+								<select name="month2" id="month2" class ="form-control filter">
+									<option value="">------</option>
+									<option value="1">January</option>
+									<option value="2">February</option>
+									<option value="3">March</option>
+									<option value="4">April</option>
+									<option value="5">May</option>
+									<option value="6">June</option>
+									<option value="7">July</option>
+									<option value="8">August</option>
+									<option value="9">September</option>
+									<option value="10">October</option>
+									<option value="11">November</option>
+									<option value="12">December</option>
+								</select>		
+								<br>				
+								<label for="year">Year:    </label>
+								<select name="year" id="year" class ="form-control filter" style="margin-left:12px">
 									<option value="">------</option>
 									<?php
 										$years= getYears();
@@ -200,7 +218,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 									 ?>
 								</select>
 								<button type="submit" class="btn" style="background-color:#30a5ff;border-color:#30a5ff;color: white;float:right;width: 110px">Enter</button>
-								<a href="reports/disease_report.php?<?=$_SERVER['QUERY_STRING']?>" onClick=""><button type="button" class="btn btn-warning" style="float:right;"><i class="fa fa-print fa-2" aria-hidden="true">  Print Result</i></button></a>
+								<button id="btnGenerateReport" type="button" class="btn btn-warning" style="float:right;"><i class="fa fa-print fa-2" aria-hidden="true">  Print Result</i></button>
 							</div>
 						</form>
 
@@ -296,7 +314,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 														<?php
 															foreach ($morbidity as $key => $value) {
 															?> 
-															<tr class="<?=trClassViaID($value['disease_id'],'morbidity',$value['disease_name'])?>">
+															<tr total ="<?=$value['total_count']?>" status ="morbidity" d_name = "<?=$value['disease_name']?>" disease_id="<?=$value['disease_id']?>" class="viewCount <?=trClassViaID($value['disease_id'],'morbidity',$value['disease_name'])?>">
 																<td><?=$ctr++?></td>
 																<td><?=$value['disease_name']?></td>
 																<td><?=$value['total_count']?></td>
@@ -325,7 +343,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 														<?php
 															foreach ($mortality as $key => $value) {
 															?> 
-															<tr class="<?=trClassViaID($value['disease_id'],'mortality',$value['disease_name'])?>">
+															<tr total ="<?=$value['total_count']?>" status ="mortality" d_name = "<?=$value['disease_name']?>" disease_id="<?=$value['disease_id']?>" class="viewCount <?=trClassViaID($value['disease_id'],'mortality',$value['disease_name'])?>">
 																<td><?=$ctr++?></td>
 																<td><?=$value['disease_name']?></td>
 																<td><?=$value['total_count']?></td>
@@ -348,6 +366,34 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 				</div>
 			</div>
 		</div><!--/.row-->
+
+<div id="rankingModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><center><span id="mdl_disease_name">Disease Name</span></center></h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-condesed">
+        	<thead>
+        		<th> Baranggay Name </th>
+        		<th> Count</th>
+        	</thead>
+        	<tbody id="rankingTable">
+        		
+        	</tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 		
 	</div>	<!--/.main-->
 	
@@ -531,6 +577,43 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 		
 		$(function(){
 			 $('#myTable').DataTable();
+
+			 $('.viewCount').click(function(){
+			 	var disease = ($(this).attr('d_name'));
+			 	var total =($(this).attr('total'))
+			 	var status =($(this).attr('status'))
+			 	$.ajax({
+			 		url:'../api.php',
+			 		data:{request:'baranggayListRanking',disease_id:$(this).attr('disease_id'),status:status},
+			 		dataType:'JSON',
+			 		type:'POST',
+			 		success:function(data){
+			 			$('#mdl_disease_name').html(status.toUpperCase()+'-'+disease)
+			 			$('#rankingTable').empty();
+			 			$.each(data,function(k,v){
+			 				$('#rankingTable').append('<tr><td>'+v.name+'</td><td>'+v.total+'</td></tr>')
+			 			})
+			 			$('#rankingTable').append('<tr><td></td><td>'+total+'</td></tr>')
+			 			$('#rankingModal').modal('show');
+			 			console.log(data);
+			 		}
+			 	})
+			 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			 $('#tblMortalityRankings').DataTable();
 			 $('#tblMorbidityRankings').DataTable();
 			 <?php 
@@ -546,14 +629,41 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 				?>
 		})
 		
-		$('#frmFilter').submit(function(){
+		$('#frmFilter').submit(function(e){
+			if($('#month2').val() !=""){
+				if($('#month').val() =="" || $('#year').val()==""){
+					alert('Please select Month(from) and Year')
+					e.preventDefault()
+					return false;
+				}
+
+			 }
 			$('.filter').each(function(){
 				if($(this).val()==""){
 					$(this).attr('disabled','disabled')
 			}
 			})
 		})
+		$('#btnGenerateReport').click(function(){
+			if(!validateParams()){
+				return false;
+			}
+			window.location ="reports/disease_report.php?<?=$_SERVER['QUERY_STRING']?>"
+		})
+		function validateParams(){
+						if($('#month2').val() !=""){
+				if($('#month').val() =="" || $('#year').val()==""){
+					alert('Please select Month(from) and Year')
+					
+					return false;
+				}
+
+			 }
+			 return true;
+
+		}
 	function generateReport(){
+		return false;
 		var qry = '<?=$_SERVER['PHP_SELF'].'/'.$_SERVER['QUERY_STRING']?>';
 		var data = '<?=$_SERVER['QUERY_STRING']?>'
 		var type = 'all'
