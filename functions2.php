@@ -247,7 +247,14 @@ function getAgeCountMortality(array $arr = array(),$gender){
 		return $list;
 }
 function generateColor() {
-	$colors = ['#4b36f6','#7bc636','#c52085'];
+	$colors = ['#0000FF','#7bc636','#c52085'];
+	//$index = rand(0,2);
+
+	return $colors[0];
+    return '#'.random_color_part() . random_color_part() . random_color_part();
+}
+function generateColor2() {
+	$colors = ['#ffb6c1','#7bc636','#c52085'];
 	//$index = rand(0,2);
 
 	return $colors[0];

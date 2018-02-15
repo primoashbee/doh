@@ -296,7 +296,17 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 										</div>	
 				                  </div>
 				                  <div id="rankings" class="tab-pane fade in ">
-											<div class="col-xs-12 col-lg-6 col-md-6">
+				                  			<h3><center> Legend</center></h3>
+											<div class="col-xs-12 col-md-4 col-lg-4">	
+				                  			<label for="">Safe Level </label><span class ="green-mo-bes" style="width: 50px;margin-left: 5px"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				                  			</div>
+											<div class="col-xs-12 col-md-4 col-lg-4">	
+				                  			<label for="">Warning Level </label><span class ="orange-mo-bes" style="width: 50px;margin-left: 5px"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				                  			</div>
+											<div class="col-xs-12 col-md-4 col-lg-4">	
+				                  			<label for="">Danger Level </label><span class ="red-mo-bes" style="width: 50px;margin-left: 5px"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				                  			</div>
+				                  			<div class="col-xs-12 col-lg-6 col-md-6">
 												<h3>  <center>Morbidty Rankings</center> </h3>
 												<?php 
 													$morbidity = rankings('morbidity');
@@ -428,7 +438,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			if(!is_null($value['baranggay_name'])){
 			array_push($mb_label,$value['baranggay_name']);
 			array_push($totalCountMorbidity,$value['total_count']);
-			array_push($mb_colors,generateColor());
+			array_push($mb_colors,generateColor2());
 			}
 		}
 		$mortality_counts =array();	
