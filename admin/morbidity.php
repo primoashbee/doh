@@ -83,7 +83,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 						<span class="fa fa-arrow-right">&nbsp;</span> View Accounts
 					</a></li>
 					<li><a class="" href="create_account.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Accounts
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Account
 					</a></li>
 					
 				</ul>
@@ -96,7 +96,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 						<span class="fa fa-arrow-right">&nbsp;</span> View Diseases
 					</a></li>
 					<li><a class="" href="create_disease.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Disease
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Disease
 					</a></li>
 				</ul>
 			</li>
@@ -138,13 +138,13 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 							<div class="form-inline">
 								<label for="status">Status:  </label>
 								<select name="status" id="status" class ="form-control filter">
-									<option value="">------</option>
+									<option value="">ALL</option>
 									<option value="morbidity">Morbidity</option>
 									<option value="mortality">Mortality</option>
 								</select>	
 								<label class="control-label" for="disease_id">Disease</label>
 								<select name="disease_id" id="disease_id" class="form-control filter" >
-									<option value="">------</option>
+									<option value="">ALL</option>
 									<?php 
 											$data = getDiseaseCollection();
 											if($count = count($data) > 0){
@@ -159,7 +159,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 								</select>
 								<label for="status">Baranggay:  </label>
 								<select name="baranggay_id" id="baranggay_id" class ="form-control filter" >
-									<option value="">------</option>
+									<option value="">ALL</option>
 									<?php 
 											$data = getBaranggayCollection();
 											foreach($data as $key=>$value){
@@ -171,9 +171,9 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 									?>
 								</select>
 								<br>
-								<label for="month">Month:  </label>
+								<label for="month">Month From:  </label>
 								<select name="month" id="month" class ="form-control filter">
-									<option value="">------</option>
+									<option value="">ALL</option>
 									<option value="1">January</option>
 									<option value="2">February</option>
 									<option value="3">March</option>
@@ -187,9 +187,9 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 									<option value="11">November</option>
 									<option value="12">December</option>
 								</select>	
-								<label for="month2">Month:  </label>
+								<label for="month2">To:  </label>
 								<select name="month2" id="month2" class ="form-control filter">
-									<option value="">------</option>
+									<option value="">ALL</option>
 									<option value="1">January</option>
 									<option value="2">February</option>
 									<option value="3">March</option>
@@ -206,7 +206,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 								<br>				
 								<label for="year">Year:    </label>
 								<select name="year" id="year" class ="form-control filter" style="margin-left:12px">
-									<option value="">------</option>
+									<option value="">ALL</option>
 									<?php
 										$years= getYears();
 										
@@ -469,7 +469,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	    labels:mt_labels,
 	    datasets: [{
 	        label: "Mortality",
-	        data: mb_data,
+	        data: mt_data,
 	        backgroundColor: mt_colors,
 	        hoverBackgroundColor: ["#66A2EB", "#FCCE56"]
 	    }]
@@ -603,7 +603,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			 			$.each(data,function(k,v){
 			 				$('#rankingTable').append('<tr><td>'+v.name+'</td><td>'+v.total+'</td></tr>')
 			 			})
-			 			$('#rankingTable').append('<tr><td></td><td>'+total+'</td></tr>')
+			 			$('#rankingTable').append('<tr><td style="text-align:right"><b>Total</b></td><td><b>'+total+'</b></td></tr>')
 			 			$('#rankingModal').modal('show');
 			 			console.log(data);
 			 		}

@@ -61,6 +61,8 @@ function getAgeCountMorbidity(array $arr = array(),$gender){
 									}
 							}else{
 
+								if(!$key!="month2"){
+
 									$ctr++;
 									if($ctr!=$rows){
 
@@ -68,6 +70,7 @@ function getAgeCountMorbidity(array $arr = array(),$gender){
 									}else{
 										$filter.=$key.=" = '".$value."' ";
 									}
+								}
 							}
 
 						}
@@ -75,8 +78,6 @@ function getAgeCountMorbidity(array $arr = array(),$gender){
 				}
 			
 			}
-
-
 		$sql = "SELECT
 	    SUM(IF(age < 1,1,0)) AS 'under_1',
 	    SUM(IF(age BETWEEN 1 AND 4,1,0)) AS '1-4',
@@ -95,7 +96,7 @@ function getAgeCountMorbidity(array $arr = array(),$gender){
 	    SUM(IF(age>64,1,0)) AS 'over_65',
 	    SUM(IF(age IS NULL, 1, 0)) AS 'NULL'
 		FROM (SELECT o.*,TIMESTAMPDIFF(YEAR, p.`birthday`, CURDATE()) AS `age` FROM outbreak o inner JOIN patients p ON o.`patient_id` = p.`id` ".$filter." and p.gender = '$gender' and status ='morbidity' ";
-	
+		//echo $sql;exit;
 			if($isRanged){
 				$ctr--;
 				$from = $arr['month'];
@@ -106,9 +107,11 @@ function getAgeCountMorbidity(array $arr = array(),$gender){
 						$sql = $sql. " month between '$from' and '$to' order by created_at DESC  ) AS derived";
 				}
 			}else{
-				$sql = $sql.$filter. " order by created_at DESC ) AS derived";
+				//echo $filter;exit;
+				$sql = $sql. " order by created_at DESC ) AS derived";
 			
 			}	//Execute the query and put data into a result
+
 		$res = mysqli_query($conn, $sql);
 		$list = array();
 		
@@ -228,7 +231,7 @@ function getAgeCountMortality(array $arr = array(),$gender){
 						$sql = $sql. " month between '$from' and '$to' order by created_at DESC  ) AS derived";
 				}
 			}else{
-				$sql = $sql.$filter. " order by created_at DESC ) AS derived";
+				$sql = $sql. " order by created_at DESC ) AS derived";
 			
 			}	//Execute the query and put data into a result
 		$res = mysqli_query($conn, $sql);
@@ -525,7 +528,6 @@ function qryOutbreakPerBaranggay(array $arr=array(),$status){
 		$sql = $sql.$filter. " order by created_at DESC";
 	
 	}
-
 	$sql = $sql.") ex GROUP BY baranggay_id";
 		//Execute the query and put data into a result
 	

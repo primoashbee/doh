@@ -56,7 +56,7 @@ session_start();
 						<span class="fa fa-arrow-right">&nbsp;</span> View Accounts
 					</a></li>
 					<li><a class="" href="create_account.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Accounts
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Account
 					</a></li>
 					
 				</ul>
@@ -69,7 +69,7 @@ session_start();
 						<span class="fa fa-arrow-right">&nbsp;</span> View Diseases
 					</a></li>
 					<li><a class="" href="create_disease.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Disease
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Disease
 					</a></li>
 				</ul>
 			</li>
@@ -99,8 +99,8 @@ session_start();
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Create Disease
-						<a href="create_disease.php"><button class="btn btn-success" style="float:right;">Create New Disease</button></a>
+						Add New Disease
+
 					</div>
 					
 					<div class="panel-body">
@@ -119,12 +119,12 @@ session_start();
 						<form action="create_disease1.php" method="POST" id="frmCreateDisease">
 							<div class="form-group" id="divName">
 								<label class="control-label" for="disease" id="lbldisease">Disease Name</label>
-								<input type="text" class="form-control" id="disease" name ="disease" placeholder="Name" required="">
+								<input type="text" class="form-control" id="disease" name ="disease" pholder="Name" required="">
 							</div>
 							<div class="form-group" >
 
 								<label class="control-label" for="description">Description</label>
-								<textarea name="description" id="description" cols="30" rows="10" class="form-control" required="" placeholder="Type Description here..."></textarea>
+								<textarea name="description" id="description" cols="30" rows="10" class="form-control" required="" pholder="Type Description here..."></textarea>
 								
 							</div>						
 							<button type="submit" class="btn btn-success">Submit</button>

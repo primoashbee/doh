@@ -69,7 +69,7 @@ if(checkIfLoggedIn()==false){
 					</a>
 					</li>
 					<li><a class="" href="create_patient.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create New Patient
+						<span class="fa fa-arrow-right">&nbsp;</span> Add New Patient
 					</a></li>
 					<li><a class="" href="outbreaks.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Outbreaks
@@ -98,7 +98,7 @@ if(checkIfLoggedIn()==false){
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						Patients
-						<a href="create_patient.php"><button class="btn btn-success" style="float:right;">Add New Patients Record</button></a>
+						<a href="create_patient.php"><button class="btn btn-success" style="float:right;">Add New Patient Record</button></a>
 					</div>
 					<div class="panel-body">
 						<div class="table-responsive">

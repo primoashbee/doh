@@ -56,7 +56,7 @@ session_start();
 						<span class="fa fa-arrow-right">&nbsp;</span> View Accounts
 					</a></li>
 					<li><a class="" href="create_account.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Accounts
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Account
 					</a></li>
 					
 				</ul>
@@ -69,7 +69,7 @@ session_start();
 						<span class="fa fa-arrow-right">&nbsp;</span> View Diseases
 					</a></li>
 					<li><a class="" href="create_disease.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Disease
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Disease
 					</a></li>
 				</ul>
 			</li>
@@ -100,8 +100,8 @@ session_start();
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Create Account
-						<a href="create_account.php"><button class="btn btn-success" style="float:right;">Create New Account</button></a>
+						Add New Account
+						<a href="create_account.php"><button class="btn btn-success" style="float:right;">Add New Account</button></a>
 					</div>
 					
 					<div class="panel-body">
@@ -120,15 +120,15 @@ session_start();
 						<form action="create_account1.php" method="POST" id="frmCreateAccount">
 							<div class="form-group col-md-6" id="divUsername">
 								<label class="control-label" for="username" id="lblUsername">Username</label>
-								<input type="text" class="form-control" id="username" name ="username" placeholder="username" required="">
+								<input type="text" class="form-control" id="username" name ="username" pholder="username" required="">
 							</div>
 							<div class="form-group col-md-6">
 								<label class="control-label" for="firstname">Firstname</label>
-								<input type="text" class="form-control" id="firstname" name ="firstname" placeholder="firstname" req>
+								<input type="text" class="form-control" id="firstname" name ="firstname" pholder="firstname" req>
 							</div>							
 							<div class="form-group col-md-6">
 								<label class="control-label" for="lastname">Lastname</label>
-								<input type="text" class="form-control" id="lastname" name ="lastname" placeholder="lastname" required="" >
+								<input type="text" class="form-control" id="lastname" name ="lastname" pholder="lastname" required="" >
 							</div>
 							<div class="form-group col-md-3">
 								<label class="control-label" for="birthday">Birthday</label>
@@ -147,11 +147,11 @@ session_start();
 							<hr>
 							<div class="form-group col-md-6 divPassword" >
 								<label class="control-label" for="password" id="lblPassword">Password</label>
-								<input type="password" class="form-control" id="password" name ="password" placeholder="Password required">
+								<input type="password" class="form-control" id="password" name ="password" pholder="Password required">
 							</div>
 							<div class="form-group col-md-6 divPassword">
 								<label class="control-label" for="password_confirm">Password Confirm</label>
-								<input type="password" class="form-control" id="password_confirm" name ="password_confirm" placeholder="Retype Password" required="">
+								<input type="password" class="form-control" id="password_confirm" name ="password_confirm" pholder="Retype Password" required="">
 							</div>
 							<button type="submit" class="btn btn-success">Submit</button>
 						</form>

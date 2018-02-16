@@ -99,7 +99,7 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 						<span class="fa fa-arrow-right">&nbsp;</span> View Accounts
 					</a></li>
 					<li><a class="" href="create_account.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Accounts
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Account
 					</a></li>
 					
 				</ul>
@@ -112,7 +112,7 @@ $me=mysqli_fetch_assoc(mysqli_query($conn,$sql));
 						<span class="fa fa-arrow-right">&nbsp;</span> View Diseases
 					</a></li>
 					<li><a class="" href="create_disease.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Disease
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Disease
 					</a></li>
 				</ul>
 			</li>

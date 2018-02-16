@@ -88,7 +88,7 @@ if(checkIfLoggedIn()==false){
 					</a>
 					</li>
 					<li><a class="" href="create_patient.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Add New Patients
+						<span class="fa fa-arrow-right">&nbsp;</span> Add New Patient
 					</a></li>
 					<li><a class="" href="outbreaks.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Outbreaks
@@ -179,15 +179,15 @@ if(checkIfLoggedIn()==false){
 					<label class="control-label" for="firstname" id="lblfirstname">First Name</label>
 					<input type="hidden" id="patient_id">
 					
-					<input type="text" class="form-control" id="firstname" name ="firstname" placeholder="firstname" disabled="" ="">
+					<input type="text" class="form-control" id="firstname" name ="firstname" pholder="firstname" disabled="" ="">
 				</div>
 				<div class="form-group col-md-6">
 					<label class="control-label" for="lastname">Last Name</label>
-					<input type="text" class="form-control" id="lastname" name ="lastname" placeholder="lastname" disabled>
+					<input type="text" class="form-control" id="lastname" name ="lastname" pholder="lastname" disabled>
 				</div>							
 				<div class="form-group col-md-3">
 					<label class="control-label" for="birthday">Birthday</label>
-					<input type="date" class="form-control" id="birthday" name ="birthday" placeholder="birthday" disabled="" >
+					<input type="date" class="form-control" id="birthday" name ="birthday" pholder="birthday" disabled="" >
 				</div>
 				<div class="form-group col-md-9">
 					<label class="control-label" for="address">Address</label>

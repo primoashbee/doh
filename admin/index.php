@@ -67,7 +67,7 @@ getMortalityGraphPerBaranggay(getBaranggayOutbreak());
 						<span class="fa fa-arrow-right">&nbsp;</span> View Accounts
 					</a></li>
 					<li><a class="" href="create_account.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Accounts
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Account
 					</a></li>
 					
 				</ul>
@@ -80,7 +80,7 @@ getMortalityGraphPerBaranggay(getBaranggayOutbreak());
 						<span class="fa fa-arrow-right">&nbsp;</span> View Diseases
 					</a></li>
 					<li><a class="" href="create_disease.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Disease
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Disease
 					</a></li>
 				</ul>
 			</li>
@@ -112,7 +112,7 @@ getMortalityGraphPerBaranggay(getBaranggayOutbreak());
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						Accounts
-						<a href="create_account.php"><button class="btn btn-success" style="float:right;">Create New Account</button></a>
+						<a href="create_account.php"><button class="btn btn-success" style="float:right;">Add Account</button></a>
 					</div>
 					<div class="panel-body">
 						<table class="table table-striped">

@@ -69,7 +69,7 @@ if(checkIfLoggedIn()==false){
 					</a>
 					</li>
 					<li><a class="" href="create_patient.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Add New Patients
+						<span class="fa fa-arrow-right">&nbsp;</span> Add New Patient
 					</a></li>
 					<li><a class="" href="outbreaks.php">
 						<span class="fa fa-arrow-right">&nbsp;</span> View Outbreaks

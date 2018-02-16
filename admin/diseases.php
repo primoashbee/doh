@@ -62,7 +62,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 						<span class="fa fa-arrow-right">&nbsp;</span> View Accounts
 					</a></li>
 					<li><a class="" href="create_account.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Accounts
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Account
 					</a></li>
 					
 				</ul>
@@ -75,7 +75,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 						<span class="fa fa-arrow-right">&nbsp;</span> View Diseases
 					</a></li>
 					<li><a class="" href="create_disease.php">
-						<span class="fa fa-arrow-right">&nbsp;</span> Create Disease
+						<span class="fa fa-arrow-right">&nbsp;</span> Add Disease
 					</a></li>
 				</ul>
 			</li>
@@ -106,8 +106,8 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Create Disease
-						<a href="create_disease.php"><button class="btn btn-success" style="float:right;">Create New Disease</button></a>
+						Add Disease
+						<a href="create_disease.php"><button class="btn btn-success" style="float:right;">Add  Disease</button></a>
 					</div>
 					<div class="panel-body">
 						<table class="table table-striped">
