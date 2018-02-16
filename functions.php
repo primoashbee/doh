@@ -232,7 +232,7 @@ function getDiseaseCollection(){
 
 function getDiseaseViaID(){
 	require "config.php";
-	$sql="Select description from diseases where isDeleted = false";
+	$sql="Select * from diseases where isDeleted = false";
 
 	$res =	mysqli_fetch_assoc($res);
 	$data=array('description'=>$row['description']);

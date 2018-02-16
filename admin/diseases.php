@@ -159,12 +159,24 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 	          <h4 class="modal-title">Edit Disease</h4>
 	        </div>
 	        <div class="modal-body">
-					<div class="form-group" id="divName">
+					<div class="form-group col-xs-12 col-md-12 col-lg-12" id="divName">
 						<input type="hidden" id="disease_id">
 						<label class="control-label" for="disease" id="lbldisease">Disease Name</label>
 						<input type="text" class="form-control" id="disease" name ="disease" placeholder="Name" required="">
 					</div>
-					<div class="form-group" >
+					<div class="form-group col-xs-12 col-md-4 col-lg-4" id="divName">
+						       	<label for="">Maximum Safe Level </label><span class="green-mo-bes" style="width: 50px;margin-left: 5px"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>								<input type="number" class="form-control" id="green_level" name ="green_level" pholder="Name" required="" min="1">
+							</div>
+							<div class="form-group col-md-4 col-lg-4" id="divName">
+						       	<label for="">Maximum Warning Level </label><span class="orange-mo-bes" style="width: 50px;margin-left: 5px"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+								<input type="number" class="form-control" id="orange_level" name ="orange_level" pholder="Name" required="">
+							</div>
+							<div class="form-group col-md-4 col-lg-4" id="divName">
+
+						       	<label for="">Minimum Danger Level </label><span class="red-mo-bes" style="width: 50px;margin-left: 5px"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				                <input type="number" class="form-control" id="red_level" name ="red_level" pholder="Name" required="">
+							</div>
+					<div class="form-group col-xs-12 col-md-12 col-lg-12" >
 
 						<label class="control-label" for="description">Description</label>
 						<textarea name="description" id="description" cols="30" rows="10" class="form-control" required="" placeholder="Type Description here..."></textarea>
@@ -227,6 +239,9 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 				type:'POST',
 				success:function(data){
 					$('#description').val(data.description)
+					$('#green_level').val(data.info.green_level)
+					$('#orange_level').val(data.info.orange_level)
+					$('#red_level').val(data.info.red_level)
 				}
 			})
 			$('#disease').val($(this).attr('disease'))
@@ -263,9 +278,12 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			 id  = $('#disease_id').val()
 			 name= $('#disease').val()
 			 description= $('#description').val()
+			 green_level= $('#green_level').val()
+			 orange_level= $('#orange_level').val()
+			 red_level= $('#red_level').val()
 			 $.ajax({
 			 	url:'../api.php',
-			 	data:{request:'updateDiseaseViaID',id:id,name:name,description:description},
+			 	data:{request:'updateDiseaseViaID',id:id,name:name,description:description,green_level:green_level,orange_level:orange_level,red_level:red_level},
 			 	dataType:'JSON',
 			 	type:'POST',
 			 	success:function(data){

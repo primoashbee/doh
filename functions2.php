@@ -393,47 +393,54 @@ function trClassViaID($disease_id, $status, $disease_name){
 	$sql = "Select count(disease_id) as total_count from outbreak where status = '$status' and disease_id 
 		='$disease_id' group by disease_id";
 	$res = mysqli_fetch_all(mysqli_query($conn,$sql),MYSQLI_ASSOC);
-	return alertLevel($disease_name,$res[0]['total_count']);
+
+	return alertLevel($disease_id,$res[0]['total_count']);
 }
-function alertLevel($name,$count){
+function alertLevel($id,$count){
 	require "config.php";
-	//check list of low level alerts via config
-	$hasHit = 0;
-	/*
-	foreach ($low_level_alerts as $key => $value) {
-		echo $value;
-		//if passed name is inside the low level alert check the count the return class
-		if (strpos($name, $value)) {
-		 $hasHit++;
-		}
-		if (in_array($name, $))
 
-	}*/
-	if(in_array(strtoupper($name), $low_level_alerts)){
-		$hasHit++;
-	}
+	$sql = "Select * from diseases where id='$id'";
+	
+	$res = mysqli_fetch_assoc(mysqli_query($conn,$sql));
+	
+	$green_level = $res['green_level'];
+	$orange_level = $res['orange_level'];
+	$red_level = $res['red_level'];
 
-	if($hasHit>0){
-		if($count > 2 && $count < 6){
-		//3 - 5
-			return 'orange-mo-bes';
-		}elseif($count >5){
-		//6 pataas
-			return 'red-mo-bes';
-		}elseif($count <2){
-			return 'green-mo-bes';
-		}
+	if($count < $green_level){
+		return 'green-mo-bes';
+	}elseif($count <$orange_level ){
+		return 'orange-mo-bes';
 	}else{
-		if($count > 24 && $count < 51){
-			return 'orange-mo-bes';
-		}elseif($count > 50){
-			return 'red-mo-bes';
-		}elseif($count < 25){
-			return 'green-mo-bes';
+		return 'red-mo-bes';
+	}
+
+	/*
+		if(in_array(strtoupper($name), $low_level_alerts)){
+			$hasHit++;
 		}
 
-	}
-		
+		if($hasHit>0){
+			if($count > 2 && $count < 6){
+			//3 - 5
+				return 'orange-mo-bes';
+			}elseif($count >5){
+			//6 pataas
+				return 'red-mo-bes';
+			}elseif($count <2){
+				return 'green-mo-bes';
+			}
+		}else{
+			if($count > 24 && $count < 51){
+				return 'orange-mo-bes';
+			}elseif($count > 50){
+				return 'red-mo-bes';
+			}elseif($count < 25){
+				return 'green-mo-bes';
+			}
+
+		}
+	*/
 	
 }
 function getPopulation(){

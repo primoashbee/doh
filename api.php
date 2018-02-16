@@ -105,11 +105,11 @@ if($request =="updateAccountViaID"){
 if($request=="getDiseaseViaID"){
 	$id = addslashes($_POST['id']);
 
-	$sql="select description from diseases where id ='$id'";
+	$sql="select * from diseases where id ='$id'";
 
 	if($res = mysqli_query($conn,$sql)){
 		$data =mysqli_fetch_assoc($res);
-		echo json_encode(array('msg'=>200,'description'=>$data['description']));
+		echo json_encode(array('msg'=>200,'description'=>$data['description'],'info'=>$data));
 	}else{
 		echo json_encode(array('msg'=>404));
 	}
@@ -119,7 +119,10 @@ if($request=="updateDiseaseViaID"){
 	$id = addslashes($_POST['id']);
 	$name = addslashes($_POST['name']);
 	$description = addslashes($_POST['description']);
-	$sql="Update diseases set disease_name = '$name', description = '$description' where id ='$id'";
+	$green_level = addslashes($_POST['green_level']);
+	$orange_level = addslashes($_POST['orange_level']);
+	$red_level = addslashes($_POST['red_level']);
+	$sql="Update diseases set disease_name = '$name', description = '$description', green_level = '$green_level', orange_level='$orange_level', red_level = '$red_level' where id ='$id'";
 	if(mysqli_query($conn,$sql)){
 		
 		echo json_encode(array('msg'=>200));

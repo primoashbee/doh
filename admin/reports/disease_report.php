@@ -11,6 +11,7 @@ $date = date('m-d-Y(h-i-s-A)', time());
 $scope = 'ALL';
 $year  = 'ALL';
 $month = 'ALL';
+$isRanged = false;
 if(isset($_GET['month'])){
 	$month = convertToMonthName($_GET['month']);
 }
@@ -21,6 +22,13 @@ if(isset($_GET['year'])){
 if(isset($_GET['baranggay_id'])){
 	$scope = $_GET['baranggay_id'];
 	$scope = getBarangay($scope);
+}
+
+if(isset($_GET['month2'])){
+	//echo 'OKAY THIS IS A RANGED ONE';
+	$month  = convertToMonthName($_GET['month']). " to ".convertToMonthName($_GET['month2']);
+	//echo $month;
+	//exit;
 }
 //GET COLLECTION
 $data = qryOutbreak($_GET);
