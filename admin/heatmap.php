@@ -136,20 +136,21 @@ if(checkIfLoggedIn()==false){
           $ctr=0;
           $total = count($qry);
           foreach ($qry as $key => $value) {
-          $ctr++;
-          if($ctr<$total){
-            ?>
-
-            new google.maps.LatLng(<?=$value['lattitude']?>,<?=$value['longitude']?>),
-            <?php 
-            }else{
-              ?>
             
-             new google.maps.LatLng(<?=$value['lattitude']?>,<?=$value['longitude']?>)
-              <?php
-              } 
-            }
-        ?>
+              $ctr++;
+              if($ctr<$total){
+                ?>
+
+                new google.maps.LatLng(<?=$value['lattitude']?>,<?=$value['longitude']?>),
+                <?php 
+                }else{
+                  ?>
+                
+                 new google.maps.LatLng(<?=$value['lattitude']?>,<?=$value['longitude']?>)
+                  <?php
+                  } 
+                }
+            ?>
         
       ]
     }
