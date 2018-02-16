@@ -128,6 +128,131 @@ function getAgeCountMorbidity(array $arr = array(),$gender){
 		return $list;
 
 }
+function getAgeCountMorbidityAndDisease(array $arr = array(),$gender,$disease_id){
+	require 'config.php';
+	
+		if(isset($arr['status'])){
+			unset($arr['status']);
+		}
+		$filter="";
+		$rows = count($arr);
+		$ctr=0;
+		
+		/*
+		if($rows>0){
+			$filter = "where ";
+			foreach($arr as $key=>$value){
+
+				if($value!=""){
+
+					$ctr++;
+					if($ctr!=$rows){
+
+						$filter.=$key.=" = '".$value."' and ";
+					}else{
+						$filter.=$key.=" = '".$value."' ";
+					}
+
+				}
+			}
+		
+		}*/
+
+			
+	$isRanged = false;
+			if(isset($arr['month']) && isset($arr['month2'])){
+					$isRanged = true;
+			}
+
+
+			if($rows>0){
+				$filter = "where ";
+				foreach($arr as $key=>$value){
+					
+						if($value!=""){
+							if($isRanged){
+
+								//if may ranged na params
+									$ctr++;
+									if($key=="month" || $key=="month2"){
+
+									}else{
+										if($ctr!=$rows){
+
+											$filter.=$key.=" = '".$value."' and ";
+										}else{
+											$filter.=$key.=" = '".$value."' ";
+										}
+									}
+							}else{
+
+								if(!$key!="month2"){
+
+									$ctr++;
+									if($ctr!=$rows){
+
+										$filter.=$key.=" = '".$value."' and ";
+									}else{
+										$filter.=$key.=" = '".$value."' ";
+									}
+								}
+							}
+
+						}
+					
+				}
+			
+			}
+		$sql = "SELECT
+	    SUM(IF(age < 1,1,0)) AS 'under_1',
+	    SUM(IF(age BETWEEN 1 AND 4,1,0)) AS '1-4',
+	    SUM(IF(age BETWEEN 5 AND 9,1,0)) AS '5-9',
+	    SUM(IF(age BETWEEN 10 AND 14,1,0)) AS '10-14',
+	    SUM(IF(age BETWEEN 15 AND 19,1,0)) AS '15-19',
+	    SUM(IF(age BETWEEN 20 AND 24,1,0)) AS '20-24',
+	    SUM(IF(age BETWEEN 25 AND 29,1,0)) AS '25-29',
+	    SUM(IF(age BETWEEN 30 AND 34,1,0)) AS '30-34',    
+	    SUM(IF(age BETWEEN 35 AND 39,1,0)) AS '35-39',
+	    SUM(IF(age BETWEEN 40 AND 44,1,0)) AS '40-44',
+	    SUM(IF(age BETWEEN 45 AND 49,1,0)) AS '45-49',
+	    SUM(IF(age BETWEEN 50 AND 54,1,0)) AS '50-55',
+	    SUM(IF(age BETWEEN 55 AND 59,1,0)) AS '55-59',
+	    SUM(IF(age BETWEEN 60 AND 64,1,0)) AS '60-64',
+	    SUM(IF(age>64,1,0)) AS 'over_65',
+	    SUM(IF(age IS NULL, 1, 0)) AS 'NULL'
+		FROM (SELECT o.*,TIMESTAMPDIFF(YEAR, p.`birthday`, CURDATE()) AS `age` FROM outbreak o inner JOIN patients p ON o.`patient_id` = p.`id` ".$filter." and p.gender = '$gender' and status ='morbidity' and disease_id = '$disease_id'";
+		//echo $sql;exit;
+			if($isRanged){
+				$ctr--;
+				$from = $arr['month'];
+				$to = $arr['month2'];
+				if($ctr>1){
+						$sql = $sql. " and month between '$from' and '$to' order by created_at DESC  ) AS derived";
+				}else{
+						$sql = $sql. " month between '$from' and '$to' order by created_at DESC  ) AS derived";
+				}
+			}else{
+				//echo $filter;exit;
+				$sql = $sql. " order by created_at DESC ) AS derived";
+			
+			}	//Execute the query and put data into a result
+
+		$res = mysqli_query($conn, $sql);
+		$list = array();
+		
+		$columns = mysqli_field_count($conn)-1;
+		$data = mysqli_fetch_array($res);
+	       
+	    for($ctr=0;$ctr<=$columns;$ctr++){
+	    	if(is_null($data[$ctr])){
+				array_push($list,0);
+	    	}else{
+	    	array_push($list,$data[$ctr]);
+	    	}
+	    }
+		return $list;
+
+}
 function getAgeCountMortality(array $arr = array(),$gender){
 		require 'config.php';
 	
@@ -884,6 +1009,7 @@ function getCountOnAge($id,$start,$end,array $arr = array()){
 	return $data;
 
 }
+/*
 function getCountOnAgeMortality($id,$start,$end,array $arr = array()){
 	require "config.php";
 	$data = array();
@@ -893,7 +1019,7 @@ function getCountOnAgeMortality($id,$start,$end,array $arr = array()){
 		$filter="";
 	$rows = count($arr);
 	$ctr=0;
-$isRanged = false;
+	$isRanged = false;
 			if(isset($arr['month']) && isset($arr['month2'])){
 					$isRanged = true;
 			}
@@ -944,7 +1070,7 @@ $isRanged = false;
 	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,p.baranggay_id as baranggay_id, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.month,o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Female' and disease_id = '$id' and status='mortality') p where age between '$start' and '$end'";
 	$rows = count($arr);
 	$ctr=0;
-$isRanged = false;
+	$isRanged = false;
 			if(isset($arr['month']) && isset($arr['month2'])){
 					$isRanged = true;
 			}
@@ -998,6 +1124,7 @@ $isRanged = false;
 	return $data;
 
 }
+*/
 
 function getCountOnAgeMorbidity($id,$start,$end,array $arr = array()){
 	require "config.php";
@@ -1066,7 +1193,7 @@ function getCountOnAgeMorbidity($id,$start,$end,array $arr = array()){
 	}
 
 	$sql = $sql.$filter;
-
+	// 	echo $sql;exit;
 	$total_m = mysqli_num_rows(mysqli_query($conn,$sql));
 
 
@@ -1074,6 +1201,150 @@ function getCountOnAgeMorbidity($id,$start,$end,array $arr = array()){
 
 		
 	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,p.baranggay_id as baranggay_id, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.month,o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Female' and disease_id = '$id' and status='morbidity') p where age between '$start' and '$end'";
+	$rows = count($arr);
+	$ctr=0;
+	$isRanged = false;
+	if(isset($arr['month']) && isset($arr['month2'])){
+			$isRanged = true;
+	}
+
+
+	if($rows>0){
+		$filter = " and ";
+		foreach($arr as $key=>$value){
+			
+				if($value!=""){
+					if($isRanged){
+
+						//if may ranged na params
+							$ctr++;
+							if($key=="month" || $key=="month2"){
+
+							}else{
+								if($ctr!=$rows){
+
+									$filter.=$key.=" = '".$value."' and ";
+								}else{
+									$filter.=$key.=" = '".$value."' ";
+								}
+							}
+					}else{
+
+							$ctr++;
+							if($ctr!=$rows){
+
+								$filter.=$key.=" = '".$value."' and ";
+							}else{
+								$filter.=$key.=" = '".$value."' ";
+							}
+					}
+
+				}
+			
+		}
+	
+	}
+
+
+	if($isRanged){
+		$ctr--;
+		$from = $arr['month'];
+		$to = $arr['month2'];
+		if($ctr>1){
+				$sql = $sql.$filter. " and month between '$from' and '$to' ";
+		}else{
+				$sql = $sql.$filter. " month between '$from' and '$to' ";
+		}
+	}else{
+		$sql = $sql.$filter. "";
+	
+	}
+	
+
+	$total_f = mysqli_num_rows(mysqli_query($conn,$sql));
+	$data[]=array(
+		'Female'=>$total_f,
+		'Male'=>$total_m
+	);
+
+	return $data;
+
+}
+function getCountOnAgeMortality($id,$start,$end,array $arr = array()){
+	require "config.php";
+	$data = array();
+	
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description, p.baranggay_id as baranggay_id,TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.month, o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Male' and disease_id = '$id' and status='mortality') p where age between '$start' and '$end'";
+	
+		$filter="";
+	$rows = count($arr);
+	$ctr=0;
+	$isRanged = false;
+	if(isset($arr['month']) && isset($arr['month2'])){
+			$isRanged = true;
+	}
+
+
+	if($rows>0){
+		$filter = " and ";
+		foreach($arr as $key=>$value){
+			
+				if($value!=""){
+					if($isRanged){
+
+						//if may ranged na params
+							$ctr++;
+							if($key=="month" || $key=="month2"){
+
+							}else{
+								if($ctr!=$rows){
+
+									$filter.=$key.=" = '".$value."' and ";
+								}else{
+									$filter.=$key.=" = '".$value."' ";
+								}
+							}
+					}else{
+
+							$ctr++;
+							if($ctr!=$rows){
+
+								$filter.=$key.=" = '".$value."' and ";
+							}else{
+								$filter.=$key.=" = '".$value."' ";
+							}
+					}
+
+				}
+			
+		}
+	
+	}
+
+
+	if($isRanged){
+		$ctr--;
+		$from = $arr['month'];
+		$to = $arr['month2'];
+		if($ctr>1){
+				$sql = $sql.$filter. " and month between '$from' and '$to' ";
+		}else{
+				$sql = $sql.$filter. " month between '$from' and '$to' ";
+		}
+	}else{
+		$sql = $sql.$filter. "";
+	
+	}
+
+	$sql = $sql.$filter;
+	// 	echo $sql;exit;
+	$total_m = mysqli_num_rows(mysqli_query($conn,$sql));
+
+
+
+
+		
+	$sql ="select  * from (SELECT p.id AS patient_id,o.status,o.id,p.firstname,p.lastname,p.birthday,p.address,p.contact,p.gender,b.name,d.id AS disease_id, d.disease_name,d.description,p.baranggay_id as baranggay_id, TIMESTAMPDIFF(YEAR, p.birthday,CURDATE()) AS age,o.`lattitude`,o.`longitude`,o.created_at,o.month,o.year FROM outbreak o LEFT JOIN patients p ON o.`patient_id` = p.`id` LEFT JOIN diseases d ON o.`disease_id` = d.`id` LEFT JOIN baranggays b ON p.`baranggay_id` = b.`id` WHERE gender ='Female' and disease_id = '$id' and status='mortality') p where age between '$start' and '$end'";
 	$rows = count($arr);
 	$ctr=0;
 	$isRanged = false;

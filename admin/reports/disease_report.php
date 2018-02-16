@@ -80,6 +80,7 @@ $morbidity_rank->getCell('C7')->setValue('');
 $morbidity_rank->getCell('E7')->setValue($year);
 $row = 8;
 $ctr = 1;
+
 	foreach ($reports_morbidity as $key => $value) {
 		
 		$morbidity->getCell('A'.$row)->setValue($ctr);

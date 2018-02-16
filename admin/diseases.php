@@ -106,7 +106,7 @@ if(checkIfLoggedIn()==false || ifLoggedIsAdmin()==false){
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Add Disease
+						 Disease
 						<a href="create_disease.php"><button class="btn btn-success" style="float:right;">Add  Disease</button></a>
 					</div>
 					<div class="panel-body">

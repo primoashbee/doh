@@ -117,7 +117,6 @@ if(checkIfLoggedIn()==false){
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						Outbreaks
-						<a href="create_outbreak.php"><button class="btn btn-success" style="float:right;">Create Outbreak	</button></a>
 					</div>
 					<div class="panel-body">
 						<table class="table table-striped" id="myTable">
