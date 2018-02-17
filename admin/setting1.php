@@ -42,10 +42,11 @@
 
 			if(mysqli_query($conn,$sql)){
 				move_uploaded_file( $_FILES['img_src']['tmp_name'], $target);
+
 				$_SESSION['msg'] = 'Account Succesffuly Upaded';
 				$sql="Select * from accounts where id ='$id'";
 				$_SESSION['user'] = mysqli_fetch_assoc(mysqli_query($conn,$sql));
-
+				//exit;
 				header('location:setting.php');
 			}
 	    } else {
